@@ -1,0 +1,1651 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"BasicIO.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.BIOOpen,"ax",%progbits
+  21              		.align	2
+  22              		.global	BIOOpen
+  23              		.thumb
+  24              		.thumb_func
+  26              	BIOOpen:
+  27              	.LFB116:
+  28              		.file 1 "../Board/BasicIO.c"
+   1:../Board/BasicIO.c **** /*
+   2:../Board/BasicIO.c ****  * BasicIO.c - is a module with public functions used to send and receive
+   3:../Board/BasicIO.c ****  * information from a serial port. In this case UART2 configured for the
+   4:../Board/BasicIO.c ****  * Segger debug USB serial port. K65TWR board.
+   5:../Board/BasicIO.c ****  * v1.1
+   6:../Board/BasicIO.c ****  *  Created by: Todd Morton, 10/09/2014
+   7:../Board/BasicIO.c ****  *  With Contributions by: Jacob Gilbert And Adam Slater
+   8:../Board/BasicIO.c ****  * v2.1
+   9:../Board/BasicIO.c ****  *  Created by Todd Morton
+  10:../Board/BasicIO.c ****  *  Contributions to BIOGetStrg() by Chance Eldridge
+  11:../Board/BasicIO.c ****  * v3.1
+  12:../Board/BasicIO.c ****  *  Created by Todd Morton
+  13:../Board/BasicIO.c ****  *  Deprecated includes.h. Replaced with MCUType.h
+  14:../Board/BasicIO.c ****  */
+  15:../Board/BasicIO.c **** /*********************************************************************
+  16:../Board/BasicIO.c **** * Project master header file
+  17:../Board/BasicIO.c **** ********************************************************************/
+  18:../Board/BasicIO.c **** #include "MCUType.h"
+  19:../Board/BasicIO.c **** #include "BasicIO.h"
+  20:../Board/BasicIO.c **** 
+  21:../Board/BasicIO.c **** /********************************************************************
+  22:../Board/BasicIO.c **** * Private Resources
+  23:../Board/BasicIO.c **** ********************************************************************/
+  24:../Board/BasicIO.c **** static INT8C bioHtoA(INT8U hnib);   //Convert nibble to ascii
+  25:../Board/BasicIO.c **** static INT8U bioIsHex(INT8C c);
+  26:../Board/BasicIO.c **** static INT8U bioHtoB(INT8C c);
+  27:../Board/BasicIO.c **** /********************************************************************
+  28:../Board/BasicIO.c **** * BIOOpen() - Initialization routine for BasicIO()
+  29:../Board/BasicIO.c **** *    MCU: K65, UART2 configured for debugger USB.
+  30:../Board/BasicIO.c **** ********************************************************************/
+  31:../Board/BasicIO.c **** void BIOOpen(void){
+  29              		.loc 1 31 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 7, -4
+  37 0002 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  32:../Board/BasicIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTE(1); /* Enable clock gate for PORTE */
+  39              		.loc 1 32 0
+  40 0004 1E49     		ldr	r1, .L2
+  41 0006 1E4B     		ldr	r3, .L2
+  42 0008 03F58153 		add	r3, r3, #4128
+  43 000c 1833     		adds	r3, r3, #24
+  44 000e 1B68     		ldr	r3, [r3]
+  45 0010 43F40052 		orr	r2, r3, #8192
+  46 0014 01F58153 		add	r3, r1, #4128
+  47 0018 1833     		adds	r3, r3, #24
+  48 001a 1A60     		str	r2, [r3]
+  33:../Board/BasicIO.c ****     SIM_SCGC4 |= SIM_SCGC4_UART2(1); //enables UART2 clock (60MHz)
+  49              		.loc 1 33 0
+  50 001c 1849     		ldr	r1, .L2
+  51 001e 184B     		ldr	r3, .L2
+  52 0020 03F58153 		add	r3, r3, #4128
+  53 0024 1433     		adds	r3, r3, #20
+  54 0026 1B68     		ldr	r3, [r3]
+  55 0028 43F48052 		orr	r2, r3, #4096
+  56 002c 01F58153 		add	r3, r1, #4128
+  57 0030 1433     		adds	r3, r3, #20
+  58 0032 1A60     		str	r2, [r3]
+  34:../Board/BasicIO.c **** 
+  35:../Board/BasicIO.c ****     PORTE_PCR16=PORT_PCR_MUX(3);    //ties peripherals to mux address
+  59              		.loc 1 35 0
+  60 0034 134B     		ldr	r3, .L2+4
+  61 0036 4FF44072 		mov	r2, #768
+  62 003a 1A64     		str	r2, [r3, #64]
+  36:../Board/BasicIO.c ****     PORTE_PCR17=PORT_PCR_MUX(3);
+  63              		.loc 1 36 0
+  64 003c 114B     		ldr	r3, .L2+4
+  65 003e 4FF44072 		mov	r2, #768
+  66 0042 5A64     		str	r2, [r3, #68]
+  37:../Board/BasicIO.c ****     UART2_BDH = 0x01U;               //sets clock divisor for 9600Hz Baud Rate
+  67              		.loc 1 37 0
+  68 0044 104B     		ldr	r3, .L2+8
+  69 0046 0122     		movs	r2, #1
+  70 0048 1A70     		strb	r2, [r3]
+  38:../Board/BasicIO.c ****     UART2_BDL = 0x86U;               //   60M / (16*390.625) = 9600
+  71              		.loc 1 38 0
+  72 004a 0F4B     		ldr	r3, .L2+8
+  73 004c 8622     		movs	r2, #134
+  74 004e 5A70     		strb	r2, [r3, #1]
+  39:../Board/BasicIO.c ****     UART2_C2 |= UART_C2_TE_MASK;    //enables transmission
+  75              		.loc 1 39 0
+  76 0050 0D4B     		ldr	r3, .L2+8
+  77 0052 0D4A     		ldr	r2, .L2+8
+  78 0054 D278     		ldrb	r2, [r2, #3]
+  79 0056 D2B2     		uxtb	r2, r2
+  80 0058 42F00802 		orr	r2, r2, #8
+  81 005c D2B2     		uxtb	r2, r2
+  82 005e DA70     		strb	r2, [r3, #3]
+  40:../Board/BasicIO.c ****     UART2_C2 |= UART_C2_RE_MASK;    //enables receive
+  83              		.loc 1 40 0
+  84 0060 094B     		ldr	r3, .L2+8
+  85 0062 094A     		ldr	r2, .L2+8
+  86 0064 D278     		ldrb	r2, [r2, #3]
+  87 0066 D2B2     		uxtb	r2, r2
+  88 0068 42F00402 		orr	r2, r2, #4
+  89 006c D2B2     		uxtb	r2, r2
+  90 006e DA70     		strb	r2, [r3, #3]
+  41:../Board/BasicIO.c ****     UART2_C4 = 0x14U;                //sets the .625 of divisor
+  91              		.loc 1 41 0
+  92 0070 054B     		ldr	r3, .L2+8
+  93 0072 1422     		movs	r2, #20
+  94 0074 9A72     		strb	r2, [r3, #10]
+  42:../Board/BasicIO.c **** }
+  95              		.loc 1 42 0
+  96 0076 BD46     		mov	sp, r7
+  97              		@ sp needed
+  98 0078 5DF8047B 		ldr	r7, [sp], #4
+  99 007c 7047     		bx	lr
+ 100              	.L3:
+ 101 007e 00BF     		.align	2
+ 102              	.L2:
+ 103 0080 00700440 		.word	1074032640
+ 104 0084 00D00440 		.word	1074057216
+ 105 0088 00C00640 		.word	1074184192
+ 106              		.cfi_endproc
+ 107              	.LFE116:
+ 109              		.section	.text.BIORead,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	BIORead
+ 112              		.thumb
+ 113              		.thumb_func
+ 115              	BIORead:
+ 116              	.LFB117:
+  43:../Board/BasicIO.c **** 
+  44:../Board/BasicIO.c **** /********************************************************************
+  45:../Board/BasicIO.c **** * BIORead() - Checks for a character received
+  46:../Board/BasicIO.c **** *    MCU: K65, UART2
+  47:../Board/BasicIO.c **** *    return: ASCII character received or 0 if no character received
+  48:../Board/BasicIO.c **** ********************************************************************/
+  49:../Board/BasicIO.c **** INT8C BIORead(void){
+ 117              		.loc 1 49 0
+ 118              		.cfi_startproc
+ 119              		@ args = 0, pretend = 0, frame = 8
+ 120              		@ frame_needed = 1, uses_anonymous_args = 0
+ 121              		@ link register save eliminated.
+ 122 0000 80B4     		push	{r7}
+ 123              		.cfi_def_cfa_offset 4
+ 124              		.cfi_offset 7, -4
+ 125 0002 83B0     		sub	sp, sp, #12
+ 126              		.cfi_def_cfa_offset 16
+ 127 0004 00AF     		add	r7, sp, #0
+ 128              		.cfi_def_cfa_register 7
+  50:../Board/BasicIO.c ****     INT8C c;
+  51:../Board/BasicIO.c ****     if ((UART2_S1 & UART_S1_RDRF_MASK) != 0){   //check if char received
+ 129              		.loc 1 51 0
+ 130 0006 0B4B     		ldr	r3, .L8
+ 131 0008 1B79     		ldrb	r3, [r3, #4]
+ 132 000a DBB2     		uxtb	r3, r3
+ 133 000c 03F02003 		and	r3, r3, #32
+ 134 0010 002B     		cmp	r3, #0
+ 135 0012 04D0     		beq	.L5
+  52:../Board/BasicIO.c ****         c = UART2_D;
+ 136              		.loc 1 52 0
+ 137 0014 074B     		ldr	r3, .L8
+ 138 0016 DB79     		ldrb	r3, [r3, #7]
+ 139 0018 DBB2     		uxtb	r3, r3
+ 140 001a FB71     		strb	r3, [r7, #7]
+ 141 001c 01E0     		b	.L6
+ 142              	.L5:
+  53:../Board/BasicIO.c ****     }else{
+  54:../Board/BasicIO.c ****         c = '\0';                           //If not return 0
+ 143              		.loc 1 54 0
+ 144 001e 0023     		movs	r3, #0
+ 145 0020 FB71     		strb	r3, [r7, #7]
+ 146              	.L6:
+  55:../Board/BasicIO.c ****     }
+  56:../Board/BasicIO.c ****     return (c);
+ 147              		.loc 1 56 0
+ 148 0022 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 149 0024 5BB2     		sxtb	r3, r3
+  57:../Board/BasicIO.c **** }
+ 150              		.loc 1 57 0
+ 151 0026 1846     		mov	r0, r3
+ 152 0028 0C37     		adds	r7, r7, #12
+ 153 002a BD46     		mov	sp, r7
+ 154              		@ sp needed
+ 155 002c 5DF8047B 		ldr	r7, [sp], #4
+ 156 0030 7047     		bx	lr
+ 157              	.L9:
+ 158 0032 00BF     		.align	2
+ 159              	.L8:
+ 160 0034 00C00640 		.word	1074184192
+ 161              		.cfi_endproc
+ 162              	.LFE117:
+ 164              		.section	.text.BIOGetChar,"ax",%progbits
+ 165              		.align	2
+ 166              		.global	BIOGetChar
+ 167              		.thumb
+ 168              		.thumb_func
+ 170              	BIOGetChar:
+ 171              	.LFB118:
+  58:../Board/BasicIO.c **** /********************************************************************
+  59:../Board/BasicIO.c **** * BIOGetChar() - Blocks until character is received
+  60:../Board/BasicIO.c **** *    return: INT8C ASCII character
+  61:../Board/BasicIO.c **** ********************************************************************/
+  62:../Board/BasicIO.c **** INT8C BIOGetChar(void){
+ 172              		.loc 1 62 0
+ 173              		.cfi_startproc
+ 174              		@ args = 0, pretend = 0, frame = 8
+ 175              		@ frame_needed = 1, uses_anonymous_args = 0
+ 176 0000 80B5     		push	{r7, lr}
+ 177              		.cfi_def_cfa_offset 8
+ 178              		.cfi_offset 7, -8
+ 179              		.cfi_offset 14, -4
+ 180 0002 82B0     		sub	sp, sp, #8
+ 181              		.cfi_def_cfa_offset 16
+ 182 0004 00AF     		add	r7, sp, #0
+ 183              		.cfi_def_cfa_register 7
+ 184              	.L11:
+  63:../Board/BasicIO.c ****     INT8C c;
+  64:../Board/BasicIO.c ****     do{
+  65:../Board/BasicIO.c ****         c = BIORead();
+ 185              		.loc 1 65 0 discriminator 1
+ 186 0006 FFF7FEFF 		bl	BIORead
+ 187 000a 0346     		mov	r3, r0
+ 188 000c FB71     		strb	r3, [r7, #7]
+  66:../Board/BasicIO.c ****     }while(c == '\0');
+ 189              		.loc 1 66 0 discriminator 1
+ 190 000e 97F90730 		ldrsb	r3, [r7, #7]
+ 191 0012 002B     		cmp	r3, #0
+ 192 0014 F7D0     		beq	.L11
+  67:../Board/BasicIO.c ****     return c;
+ 193              		.loc 1 67 0
+ 194 0016 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 195 0018 5BB2     		sxtb	r3, r3
+  68:../Board/BasicIO.c **** }
+ 196              		.loc 1 68 0
+ 197 001a 1846     		mov	r0, r3
+ 198 001c 0837     		adds	r7, r7, #8
+ 199 001e BD46     		mov	sp, r7
+ 200              		@ sp needed
+ 201 0020 80BD     		pop	{r7, pc}
+ 202              		.cfi_endproc
+ 203              	.LFE118:
+ 205 0022 00BF     		.section	.text.BIOWrite,"ax",%progbits
+ 206              		.align	2
+ 207              		.global	BIOWrite
+ 208              		.thumb
+ 209              		.thumb_func
+ 211              	BIOWrite:
+ 212              	.LFB119:
+  69:../Board/BasicIO.c **** 
+  70:../Board/BasicIO.c **** /********************************************************************
+  71:../Board/BasicIO.c **** * BIOWrite() - Sends an ASCII character
+  72:../Board/BasicIO.c **** *              Blocks as much as one character time
+  73:../Board/BasicIO.c **** *    MCU: K65, UART2
+  74:../Board/BasicIO.c **** *    parameter: c is the ASCII character to be sent
+  75:../Board/BasicIO.c **** ********************************************************************/
+  76:../Board/BasicIO.c **** void BIOWrite(INT8C c){
+ 213              		.loc 1 76 0
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 8
+ 216              		@ frame_needed = 1, uses_anonymous_args = 0
+ 217              		@ link register save eliminated.
+ 218 0000 80B4     		push	{r7}
+ 219              		.cfi_def_cfa_offset 4
+ 220              		.cfi_offset 7, -4
+ 221 0002 83B0     		sub	sp, sp, #12
+ 222              		.cfi_def_cfa_offset 16
+ 223 0004 00AF     		add	r7, sp, #0
+ 224              		.cfi_def_cfa_register 7
+ 225 0006 0346     		mov	r3, r0
+ 226 0008 FB71     		strb	r3, [r7, #7]
+  77:../Board/BasicIO.c ****     while ((UART2_S1 & UART_S1_TDRE_MASK)==0){} //waits until transmission
+ 227              		.loc 1 77 0
+ 228 000a 00BF     		nop
+ 229              	.L14:
+ 230              		.loc 1 77 0 is_stmt 0 discriminator 1
+ 231 000c 074B     		ldr	r3, .L15
+ 232 000e 1B79     		ldrb	r3, [r3, #4]
+ 233 0010 DBB2     		uxtb	r3, r3
+ 234 0012 DBB2     		uxtb	r3, r3
+ 235 0014 5BB2     		sxtb	r3, r3
+ 236 0016 002B     		cmp	r3, #0
+ 237 0018 F8DA     		bge	.L14
+  78:../Board/BasicIO.c ****     UART2_D = (INT8U)c;                             //is ready
+ 238              		.loc 1 78 0 is_stmt 1
+ 239 001a 044B     		ldr	r3, .L15
+ 240 001c FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 241 001e DA71     		strb	r2, [r3, #7]
+  79:../Board/BasicIO.c **** }
+ 242              		.loc 1 79 0
+ 243 0020 0C37     		adds	r7, r7, #12
+ 244 0022 BD46     		mov	sp, r7
+ 245              		@ sp needed
+ 246 0024 5DF8047B 		ldr	r7, [sp], #4
+ 247 0028 7047     		bx	lr
+ 248              	.L16:
+ 249 002a 00BF     		.align	2
+ 250              	.L15:
+ 251 002c 00C00640 		.word	1074184192
+ 252              		.cfi_endproc
+ 253              	.LFE119:
+ 255              		.section	.text.BIOPutStrg,"ax",%progbits
+ 256              		.align	2
+ 257              		.global	BIOPutStrg
+ 258              		.thumb
+ 259              		.thumb_func
+ 261              	BIOPutStrg:
+ 262              	.LFB120:
+  80:../Board/BasicIO.c **** 
+  81:../Board/BasicIO.c **** /********************************************************************
+  82:../Board/BasicIO.c **** * BIOPutStrg() - Writes a string to monitor
+  83:../Board/BasicIO.c **** *    parameter: strg is a pointer to the ASCII string
+  84:../Board/BasicIO.c **** ********************************************************************/
+  85:../Board/BasicIO.c **** void BIOPutStrg(const INT8C *const strg){
+ 263              		.loc 1 85 0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 16
+ 266              		@ frame_needed = 1, uses_anonymous_args = 0
+ 267 0000 80B5     		push	{r7, lr}
+ 268              		.cfi_def_cfa_offset 8
+ 269              		.cfi_offset 7, -8
+ 270              		.cfi_offset 14, -4
+ 271 0002 84B0     		sub	sp, sp, #16
+ 272              		.cfi_def_cfa_offset 24
+ 273 0004 00AF     		add	r7, sp, #0
+ 274              		.cfi_def_cfa_register 7
+ 275 0006 7860     		str	r0, [r7, #4]
+  86:../Board/BasicIO.c ****     const INT8C *strgptr = strg;
+ 276              		.loc 1 86 0
+ 277 0008 7B68     		ldr	r3, [r7, #4]
+ 278 000a FB60     		str	r3, [r7, #12]
+  87:../Board/BasicIO.c ****     while (*strgptr != '\0'){              //until a null is reached
+ 279              		.loc 1 87 0
+ 280 000c 08E0     		b	.L18
+ 281              	.L19:
+  88:../Board/BasicIO.c ****         BIOWrite(*strgptr);
+ 282              		.loc 1 88 0
+ 283 000e FB68     		ldr	r3, [r7, #12]
+ 284 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 285 0012 5BB2     		sxtb	r3, r3
+ 286 0014 1846     		mov	r0, r3
+ 287 0016 FFF7FEFF 		bl	BIOWrite
+  89:../Board/BasicIO.c ****         strgptr++;
+ 288              		.loc 1 89 0
+ 289 001a FB68     		ldr	r3, [r7, #12]
+ 290 001c 0133     		adds	r3, r3, #1
+ 291 001e FB60     		str	r3, [r7, #12]
+ 292              	.L18:
+  87:../Board/BasicIO.c ****     while (*strgptr != '\0'){              //until a null is reached
+ 293              		.loc 1 87 0 discriminator 1
+ 294 0020 FB68     		ldr	r3, [r7, #12]
+ 295 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 296 0024 002B     		cmp	r3, #0
+ 297 0026 F2D1     		bne	.L19
+  90:../Board/BasicIO.c ****     }
+  91:../Board/BasicIO.c **** }
+ 298              		.loc 1 91 0
+ 299 0028 1037     		adds	r7, r7, #16
+ 300 002a BD46     		mov	sp, r7
+ 301              		@ sp needed
+ 302 002c 80BD     		pop	{r7, pc}
+ 303              		.cfi_endproc
+ 304              	.LFE120:
+ 306 002e 00BF     		.section	.text.BIOOutDecByte,"ax",%progbits
+ 307              		.align	2
+ 308              		.global	BIOOutDecByte
+ 309              		.thumb
+ 310              		.thumb_func
+ 312              	BIOOutDecByte:
+ 313              	.LFB121:
+  92:../Board/BasicIO.c **** 
+  93:../Board/BasicIO.c **** /********************************************************************
+  94:../Board/BasicIO.c **** * BIOOutDecByte() - Outputs the decimal value of a byte.
+  95:../Board/BasicIO.c **** *    Parameters: bin is the byte to be sent,
+  96:../Board/BasicIO.c **** *                lz is true if leading zeros are sent
+  97:../Board/BasicIO.c **** ********************************************************************/
+  98:../Board/BasicIO.c **** void BIOOutDecByte (INT8U bin, INT8U lz){
+ 314              		.loc 1 98 0
+ 315              		.cfi_startproc
+ 316              		@ args = 0, pretend = 0, frame = 16
+ 317              		@ frame_needed = 1, uses_anonymous_args = 0
+ 318 0000 80B5     		push	{r7, lr}
+ 319              		.cfi_def_cfa_offset 8
+ 320              		.cfi_offset 7, -8
+ 321              		.cfi_offset 14, -4
+ 322 0002 84B0     		sub	sp, sp, #16
+ 323              		.cfi_def_cfa_offset 24
+ 324 0004 00AF     		add	r7, sp, #0
+ 325              		.cfi_def_cfa_register 7
+ 326 0006 0246     		mov	r2, r0
+ 327 0008 0B46     		mov	r3, r1
+ 328 000a FA71     		strb	r2, [r7, #7]
+ 329 000c BB71     		strb	r3, [r7, #6]
+  99:../Board/BasicIO.c ****     INT8C digits[3];
+ 100:../Board/BasicIO.c ****     INT8U lbin = bin;
+ 330              		.loc 1 100 0
+ 331 000e FB79     		ldrb	r3, [r7, #7]
+ 332 0010 BB73     		strb	r3, [r7, #14]
+ 101:../Board/BasicIO.c ****     INT8U zon = lz;
+ 333              		.loc 1 101 0
+ 334 0012 BB79     		ldrb	r3, [r7, #6]
+ 335 0014 FB73     		strb	r3, [r7, #15]
+ 102:../Board/BasicIO.c ****     digits[0]=(INT8C)((lbin%10) + '0');
+ 336              		.loc 1 102 0
+ 337 0016 BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 338 0018 274B     		ldr	r3, .L25
+ 339 001a A3FB0213 		umull	r1, r3, r3, r2
+ 340 001e D908     		lsrs	r1, r3, #3
+ 341 0020 0B46     		mov	r3, r1
+ 342 0022 9B00     		lsls	r3, r3, #2
+ 343 0024 0B44     		add	r3, r3, r1
+ 344 0026 5B00     		lsls	r3, r3, #1
+ 345 0028 D31A     		subs	r3, r2, r3
+ 346 002a DBB2     		uxtb	r3, r3
+ 347 002c 3033     		adds	r3, r3, #48
+ 348 002e DBB2     		uxtb	r3, r3
+ 349 0030 DBB2     		uxtb	r3, r3
+ 350 0032 3B72     		strb	r3, [r7, #8]
+ 103:../Board/BasicIO.c ****     lbin = lbin/10;
+ 351              		.loc 1 103 0
+ 352 0034 BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 353 0036 204B     		ldr	r3, .L25
+ 354 0038 A3FB0213 		umull	r1, r3, r3, r2
+ 355 003c DB08     		lsrs	r3, r3, #3
+ 356 003e BB73     		strb	r3, [r7, #14]
+ 104:../Board/BasicIO.c ****     digits[1]=(INT8C)((lbin%10)+'0');
+ 357              		.loc 1 104 0
+ 358 0040 BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 359 0042 1D4B     		ldr	r3, .L25
+ 360 0044 A3FB0213 		umull	r1, r3, r3, r2
+ 361 0048 D908     		lsrs	r1, r3, #3
+ 362 004a 0B46     		mov	r3, r1
+ 363 004c 9B00     		lsls	r3, r3, #2
+ 364 004e 0B44     		add	r3, r3, r1
+ 365 0050 5B00     		lsls	r3, r3, #1
+ 366 0052 D31A     		subs	r3, r2, r3
+ 367 0054 DBB2     		uxtb	r3, r3
+ 368 0056 3033     		adds	r3, r3, #48
+ 369 0058 DBB2     		uxtb	r3, r3
+ 370 005a DBB2     		uxtb	r3, r3
+ 371 005c 7B72     		strb	r3, [r7, #9]
+ 105:../Board/BasicIO.c ****     digits[2]=(INT8C)((lbin/10) +'0');
+ 372              		.loc 1 105 0
+ 373 005e BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 374 0060 154B     		ldr	r3, .L25
+ 375 0062 A3FB0213 		umull	r1, r3, r3, r2
+ 376 0066 DB08     		lsrs	r3, r3, #3
+ 377 0068 DBB2     		uxtb	r3, r3
+ 378 006a 3033     		adds	r3, r3, #48
+ 379 006c DBB2     		uxtb	r3, r3
+ 380 006e DBB2     		uxtb	r3, r3
+ 381 0070 BB72     		strb	r3, [r7, #10]
+ 106:../Board/BasicIO.c **** 
+ 107:../Board/BasicIO.c ****     if((digits[2] != '0') || (zon != 0)){
+ 382              		.loc 1 107 0
+ 383 0072 BB7A     		ldrb	r3, [r7, #10]	@ zero_extendqisi2
+ 384 0074 5BB2     		sxtb	r3, r3
+ 385 0076 302B     		cmp	r3, #48
+ 386 0078 02D1     		bne	.L21
+ 387              		.loc 1 107 0 is_stmt 0 discriminator 1
+ 388 007a FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 389 007c 002B     		cmp	r3, #0
+ 390 007e 06D0     		beq	.L22
+ 391              	.L21:
+ 108:../Board/BasicIO.c ****         BIOWrite(digits[2]);
+ 392              		.loc 1 108 0 is_stmt 1
+ 393 0080 BB7A     		ldrb	r3, [r7, #10]	@ zero_extendqisi2
+ 394 0082 5BB2     		sxtb	r3, r3
+ 395 0084 1846     		mov	r0, r3
+ 396 0086 FFF7FEFF 		bl	BIOWrite
+ 109:../Board/BasicIO.c ****         zon = TRUE;
+ 397              		.loc 1 109 0
+ 398 008a 0123     		movs	r3, #1
+ 399 008c FB73     		strb	r3, [r7, #15]
+ 400              	.L22:
+ 110:../Board/BasicIO.c ****     }else{
+ 111:../Board/BasicIO.c ****     }
+ 112:../Board/BasicIO.c ****     if((digits[1] != '0') || (zon != 0)){
+ 401              		.loc 1 112 0
+ 402 008e 7B7A     		ldrb	r3, [r7, #9]	@ zero_extendqisi2
+ 403 0090 5BB2     		sxtb	r3, r3
+ 404 0092 302B     		cmp	r3, #48
+ 405 0094 02D1     		bne	.L23
+ 406              		.loc 1 112 0 is_stmt 0 discriminator 1
+ 407 0096 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 408 0098 002B     		cmp	r3, #0
+ 409 009a 04D0     		beq	.L24
+ 410              	.L23:
+ 113:../Board/BasicIO.c ****         BIOWrite(digits[1]);
+ 411              		.loc 1 113 0 is_stmt 1
+ 412 009c 7B7A     		ldrb	r3, [r7, #9]	@ zero_extendqisi2
+ 413 009e 5BB2     		sxtb	r3, r3
+ 414 00a0 1846     		mov	r0, r3
+ 415 00a2 FFF7FEFF 		bl	BIOWrite
+ 416              	.L24:
+ 114:../Board/BasicIO.c ****     }else{
+ 115:../Board/BasicIO.c ****     }
+ 116:../Board/BasicIO.c ****     BIOWrite(digits[0]);
+ 417              		.loc 1 116 0
+ 418 00a6 3B7A     		ldrb	r3, [r7, #8]	@ zero_extendqisi2
+ 419 00a8 5BB2     		sxtb	r3, r3
+ 420 00aa 1846     		mov	r0, r3
+ 421 00ac FFF7FEFF 		bl	BIOWrite
+ 117:../Board/BasicIO.c **** }
+ 422              		.loc 1 117 0
+ 423 00b0 1037     		adds	r7, r7, #16
+ 424 00b2 BD46     		mov	sp, r7
+ 425              		@ sp needed
+ 426 00b4 80BD     		pop	{r7, pc}
+ 427              	.L26:
+ 428 00b6 00BF     		.align	2
+ 429              	.L25:
+ 430 00b8 CDCCCCCC 		.word	-858993459
+ 431              		.cfi_endproc
+ 432              	.LFE121:
+ 434              		.section	.text.BIOOutDecHWord,"ax",%progbits
+ 435              		.align	2
+ 436              		.global	BIOOutDecHWord
+ 437              		.thumb
+ 438              		.thumb_func
+ 440              	BIOOutDecHWord:
+ 441              	.LFB122:
+ 118:../Board/BasicIO.c **** 
+ 119:../Board/BasicIO.c **** /********************************************************************
+ 120:../Board/BasicIO.c **** * BIOOutDecHWord() - Outputs a decimal value of two bytes.
+ 121:../Board/BasicIO.c **** *    Parameters: bin is the half word to be sent,
+ 122:../Board/BasicIO.c **** *                lz is true if leading zeros are sent
+ 123:../Board/BasicIO.c **** ********************************************************************/
+ 124:../Board/BasicIO.c **** void BIOOutDecHWord (INT16U bin, INT8U lz){
+ 442              		.loc 1 124 0
+ 443              		.cfi_startproc
+ 444              		@ args = 0, pretend = 0, frame = 24
+ 445              		@ frame_needed = 1, uses_anonymous_args = 0
+ 446 0000 80B5     		push	{r7, lr}
+ 447              		.cfi_def_cfa_offset 8
+ 448              		.cfi_offset 7, -8
+ 449              		.cfi_offset 14, -4
+ 450 0002 86B0     		sub	sp, sp, #24
+ 451              		.cfi_def_cfa_offset 32
+ 452 0004 00AF     		add	r7, sp, #0
+ 453              		.cfi_def_cfa_register 7
+ 454 0006 0246     		mov	r2, r0
+ 455 0008 0B46     		mov	r3, r1
+ 456 000a FA80     		strh	r2, [r7, #6]	@ movhi
+ 457 000c 7B71     		strb	r3, [r7, #5]
+ 125:../Board/BasicIO.c ****     INT8C digits[5];
+ 126:../Board/BasicIO.c ****     INT16U lbin = bin;
+ 458              		.loc 1 126 0
+ 459 000e FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 460 0010 BB82     		strh	r3, [r7, #20]	@ movhi
+ 127:../Board/BasicIO.c ****     INT8U zon = lz;
+ 461              		.loc 1 127 0
+ 462 0012 7B79     		ldrb	r3, [r7, #5]
+ 463 0014 FB75     		strb	r3, [r7, #23]
+ 128:../Board/BasicIO.c ****     digits[0]=(INT8C)((lbin%10) +'0');
+ 464              		.loc 1 128 0
+ 465 0016 BA8A     		ldrh	r2, [r7, #20]
+ 466 0018 4C4B     		ldr	r3, .L36
+ 467 001a A3FB0213 		umull	r1, r3, r3, r2
+ 468 001e D908     		lsrs	r1, r3, #3
+ 469 0020 0B46     		mov	r3, r1
+ 470 0022 9B00     		lsls	r3, r3, #2
+ 471 0024 0B44     		add	r3, r3, r1
+ 472 0026 5B00     		lsls	r3, r3, #1
+ 473 0028 D31A     		subs	r3, r2, r3
+ 474 002a 9BB2     		uxth	r3, r3
+ 475 002c DBB2     		uxtb	r3, r3
+ 476 002e 3033     		adds	r3, r3, #48
+ 477 0030 DBB2     		uxtb	r3, r3
+ 478 0032 DBB2     		uxtb	r3, r3
+ 479 0034 3B73     		strb	r3, [r7, #12]
+ 129:../Board/BasicIO.c ****     lbin = lbin/10;
+ 480              		.loc 1 129 0
+ 481 0036 BA8A     		ldrh	r2, [r7, #20]
+ 482 0038 444B     		ldr	r3, .L36
+ 483 003a A3FB0213 		umull	r1, r3, r3, r2
+ 484 003e DB08     		lsrs	r3, r3, #3
+ 485 0040 BB82     		strh	r3, [r7, #20]	@ movhi
+ 130:../Board/BasicIO.c ****     digits[1]=(INT8C)((lbin%10)+'0');
+ 486              		.loc 1 130 0
+ 487 0042 BA8A     		ldrh	r2, [r7, #20]
+ 488 0044 414B     		ldr	r3, .L36
+ 489 0046 A3FB0213 		umull	r1, r3, r3, r2
+ 490 004a D908     		lsrs	r1, r3, #3
+ 491 004c 0B46     		mov	r3, r1
+ 492 004e 9B00     		lsls	r3, r3, #2
+ 493 0050 0B44     		add	r3, r3, r1
+ 494 0052 5B00     		lsls	r3, r3, #1
+ 495 0054 D31A     		subs	r3, r2, r3
+ 496 0056 9BB2     		uxth	r3, r3
+ 497 0058 DBB2     		uxtb	r3, r3
+ 498 005a 3033     		adds	r3, r3, #48
+ 499 005c DBB2     		uxtb	r3, r3
+ 500 005e DBB2     		uxtb	r3, r3
+ 501 0060 7B73     		strb	r3, [r7, #13]
+ 131:../Board/BasicIO.c ****     lbin = lbin/10;
+ 502              		.loc 1 131 0
+ 503 0062 BA8A     		ldrh	r2, [r7, #20]
+ 504 0064 394B     		ldr	r3, .L36
+ 505 0066 A3FB0213 		umull	r1, r3, r3, r2
+ 506 006a DB08     		lsrs	r3, r3, #3
+ 507 006c BB82     		strh	r3, [r7, #20]	@ movhi
+ 132:../Board/BasicIO.c ****     digits[2]=(INT8C)((lbin%10)+'0');
+ 508              		.loc 1 132 0
+ 509 006e BA8A     		ldrh	r2, [r7, #20]
+ 510 0070 364B     		ldr	r3, .L36
+ 511 0072 A3FB0213 		umull	r1, r3, r3, r2
+ 512 0076 D908     		lsrs	r1, r3, #3
+ 513 0078 0B46     		mov	r3, r1
+ 514 007a 9B00     		lsls	r3, r3, #2
+ 515 007c 0B44     		add	r3, r3, r1
+ 516 007e 5B00     		lsls	r3, r3, #1
+ 517 0080 D31A     		subs	r3, r2, r3
+ 518 0082 9BB2     		uxth	r3, r3
+ 519 0084 DBB2     		uxtb	r3, r3
+ 520 0086 3033     		adds	r3, r3, #48
+ 521 0088 DBB2     		uxtb	r3, r3
+ 522 008a DBB2     		uxtb	r3, r3
+ 523 008c BB73     		strb	r3, [r7, #14]
+ 133:../Board/BasicIO.c ****     lbin = lbin/10;
+ 524              		.loc 1 133 0
+ 525 008e BA8A     		ldrh	r2, [r7, #20]
+ 526 0090 2E4B     		ldr	r3, .L36
+ 527 0092 A3FB0213 		umull	r1, r3, r3, r2
+ 528 0096 DB08     		lsrs	r3, r3, #3
+ 529 0098 BB82     		strh	r3, [r7, #20]	@ movhi
+ 134:../Board/BasicIO.c ****     digits[3]=(INT8C)((lbin%10)+'0');
+ 530              		.loc 1 134 0
+ 531 009a BA8A     		ldrh	r2, [r7, #20]
+ 532 009c 2B4B     		ldr	r3, .L36
+ 533 009e A3FB0213 		umull	r1, r3, r3, r2
+ 534 00a2 D908     		lsrs	r1, r3, #3
+ 535 00a4 0B46     		mov	r3, r1
+ 536 00a6 9B00     		lsls	r3, r3, #2
+ 537 00a8 0B44     		add	r3, r3, r1
+ 538 00aa 5B00     		lsls	r3, r3, #1
+ 539 00ac D31A     		subs	r3, r2, r3
+ 540 00ae 9BB2     		uxth	r3, r3
+ 541 00b0 DBB2     		uxtb	r3, r3
+ 542 00b2 3033     		adds	r3, r3, #48
+ 543 00b4 DBB2     		uxtb	r3, r3
+ 544 00b6 DBB2     		uxtb	r3, r3
+ 545 00b8 FB73     		strb	r3, [r7, #15]
+ 135:../Board/BasicIO.c ****     digits[4]=(INT8C)((lbin/10) +'0');
+ 546              		.loc 1 135 0
+ 547 00ba BA8A     		ldrh	r2, [r7, #20]
+ 548 00bc 234B     		ldr	r3, .L36
+ 549 00be A3FB0213 		umull	r1, r3, r3, r2
+ 550 00c2 DB08     		lsrs	r3, r3, #3
+ 551 00c4 9BB2     		uxth	r3, r3
+ 552 00c6 DBB2     		uxtb	r3, r3
+ 553 00c8 3033     		adds	r3, r3, #48
+ 554 00ca DBB2     		uxtb	r3, r3
+ 555 00cc DBB2     		uxtb	r3, r3
+ 556 00ce 3B74     		strb	r3, [r7, #16]
+ 136:../Board/BasicIO.c **** 
+ 137:../Board/BasicIO.c ****     if((digits[4] != '0') || (zon != 0)){
+ 557              		.loc 1 137 0
+ 558 00d0 3B7C     		ldrb	r3, [r7, #16]	@ zero_extendqisi2
+ 559 00d2 5BB2     		sxtb	r3, r3
+ 560 00d4 302B     		cmp	r3, #48
+ 561 00d6 02D1     		bne	.L28
+ 562              		.loc 1 137 0 is_stmt 0 discriminator 1
+ 563 00d8 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 564 00da 002B     		cmp	r3, #0
+ 565 00dc 06D0     		beq	.L29
+ 566              	.L28:
+ 138:../Board/BasicIO.c ****         BIOWrite(digits[4]);
+ 567              		.loc 1 138 0 is_stmt 1
+ 568 00de 3B7C     		ldrb	r3, [r7, #16]	@ zero_extendqisi2
+ 569 00e0 5BB2     		sxtb	r3, r3
+ 570 00e2 1846     		mov	r0, r3
+ 571 00e4 FFF7FEFF 		bl	BIOWrite
+ 139:../Board/BasicIO.c ****         zon = TRUE;
+ 572              		.loc 1 139 0
+ 573 00e8 0123     		movs	r3, #1
+ 574 00ea FB75     		strb	r3, [r7, #23]
+ 575              	.L29:
+ 140:../Board/BasicIO.c ****     }else{
+ 141:../Board/BasicIO.c ****     }
+ 142:../Board/BasicIO.c ****     if((digits[3] != '0') || (zon != 0)){
+ 576              		.loc 1 142 0
+ 577 00ec FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 578 00ee 5BB2     		sxtb	r3, r3
+ 579 00f0 302B     		cmp	r3, #48
+ 580 00f2 02D1     		bne	.L30
+ 581              		.loc 1 142 0 is_stmt 0 discriminator 1
+ 582 00f4 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 583 00f6 002B     		cmp	r3, #0
+ 584 00f8 06D0     		beq	.L31
+ 585              	.L30:
+ 143:../Board/BasicIO.c ****         BIOWrite(digits[3]);
+ 586              		.loc 1 143 0 is_stmt 1
+ 587 00fa FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 588 00fc 5BB2     		sxtb	r3, r3
+ 589 00fe 1846     		mov	r0, r3
+ 590 0100 FFF7FEFF 		bl	BIOWrite
+ 144:../Board/BasicIO.c ****         zon = TRUE;
+ 591              		.loc 1 144 0
+ 592 0104 0123     		movs	r3, #1
+ 593 0106 FB75     		strb	r3, [r7, #23]
+ 594              	.L31:
+ 145:../Board/BasicIO.c ****     }else{
+ 146:../Board/BasicIO.c ****     }
+ 147:../Board/BasicIO.c ****     if((digits[2] != '0') || (zon != 0)){
+ 595              		.loc 1 147 0
+ 596 0108 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 597 010a 5BB2     		sxtb	r3, r3
+ 598 010c 302B     		cmp	r3, #48
+ 599 010e 02D1     		bne	.L32
+ 600              		.loc 1 147 0 is_stmt 0 discriminator 1
+ 601 0110 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 602 0112 002B     		cmp	r3, #0
+ 603 0114 06D0     		beq	.L33
+ 604              	.L32:
+ 148:../Board/BasicIO.c ****         BIOWrite(digits[2]);
+ 605              		.loc 1 148 0 is_stmt 1
+ 606 0116 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 607 0118 5BB2     		sxtb	r3, r3
+ 608 011a 1846     		mov	r0, r3
+ 609 011c FFF7FEFF 		bl	BIOWrite
+ 149:../Board/BasicIO.c ****         zon = TRUE;
+ 610              		.loc 1 149 0
+ 611 0120 0123     		movs	r3, #1
+ 612 0122 FB75     		strb	r3, [r7, #23]
+ 613              	.L33:
+ 150:../Board/BasicIO.c ****     }else{
+ 151:../Board/BasicIO.c ****     }
+ 152:../Board/BasicIO.c ****     if((digits[1] != '0') || (zon != 0)){
+ 614              		.loc 1 152 0
+ 615 0124 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 616 0126 5BB2     		sxtb	r3, r3
+ 617 0128 302B     		cmp	r3, #48
+ 618 012a 02D1     		bne	.L34
+ 619              		.loc 1 152 0 is_stmt 0 discriminator 1
+ 620 012c FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 621 012e 002B     		cmp	r3, #0
+ 622 0130 04D0     		beq	.L35
+ 623              	.L34:
+ 153:../Board/BasicIO.c ****         BIOWrite(digits[1]);
+ 624              		.loc 1 153 0 is_stmt 1
+ 625 0132 7B7B     		ldrb	r3, [r7, #13]	@ zero_extendqisi2
+ 626 0134 5BB2     		sxtb	r3, r3
+ 627 0136 1846     		mov	r0, r3
+ 628 0138 FFF7FEFF 		bl	BIOWrite
+ 629              	.L35:
+ 154:../Board/BasicIO.c ****     }else{
+ 155:../Board/BasicIO.c ****     }
+ 156:../Board/BasicIO.c ****     BIOWrite(digits[0]);
+ 630              		.loc 1 156 0
+ 631 013c 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 632 013e 5BB2     		sxtb	r3, r3
+ 633 0140 1846     		mov	r0, r3
+ 634 0142 FFF7FEFF 		bl	BIOWrite
+ 157:../Board/BasicIO.c ****     }
+ 635              		.loc 1 157 0
+ 636 0146 1837     		adds	r7, r7, #24
+ 637 0148 BD46     		mov	sp, r7
+ 638              		@ sp needed
+ 639 014a 80BD     		pop	{r7, pc}
+ 640              	.L37:
+ 641              		.align	2
+ 642              	.L36:
+ 643 014c CDCCCCCC 		.word	-858993459
+ 644              		.cfi_endproc
+ 645              	.LFE122:
+ 647              		.section	.text.BIOGetStrg,"ax",%progbits
+ 648              		.align	2
+ 649              		.global	BIOGetStrg
+ 650              		.thumb
+ 651              		.thumb_func
+ 653              	BIOGetStrg:
+ 654              	.LFB123:
+ 158:../Board/BasicIO.c **** 
+ 159:../Board/BasicIO.c **** /********************************************************************
+ 160:../Board/BasicIO.c **** * BIOGetStrg() - Inputs a string and stores it into an array.
+ 161:../Board/BasicIO.c **** *
+ 162:../Board/BasicIO.c **** * Descritpion: A routine that inputs a character string to an array
+ 163:../Board/BasicIO.c **** *              until a carraige return is received or strglen is exceeded.
+ 164:../Board/BasicIO.c **** *              Only printable characters are recognized except carriage
+ 165:../Board/BasicIO.c **** *              return and backspace.
+ 166:../Board/BasicIO.c **** *              Backspace erases displayed character and array character.
+ 167:../Board/BasicIO.c **** *              A NULL is always placed at the end of the string.
+ 168:../Board/BasicIO.c **** *              All printable characters are echoed.
+ 169:../Board/BasicIO.c **** * Return value: 0 -> if ended with CR
+ 170:../Board/BasicIO.c **** *               1 -> if strglen exceeded.
+ 171:../Board/BasicIO.c **** * Arguments: *strg is a pointer to the string array
+ 172:../Board/BasicIO.c **** *            strglen is the max string length, includes CR/NULL.
+ 173:../Board/BasicIO.c **** ********************************************************************/
+ 174:../Board/BasicIO.c **** INT8U BIOGetStrg(INT8U strglen,INT8C *const strg){
+ 655              		.loc 1 174 0
+ 656              		.cfi_startproc
+ 657              		@ args = 0, pretend = 0, frame = 24
+ 658              		@ frame_needed = 1, uses_anonymous_args = 0
+ 659 0000 80B5     		push	{r7, lr}
+ 660              		.cfi_def_cfa_offset 8
+ 661              		.cfi_offset 7, -8
+ 662              		.cfi_offset 14, -4
+ 663 0002 86B0     		sub	sp, sp, #24
+ 664              		.cfi_def_cfa_offset 32
+ 665 0004 00AF     		add	r7, sp, #0
+ 666              		.cfi_def_cfa_register 7
+ 667 0006 0346     		mov	r3, r0
+ 668 0008 3960     		str	r1, [r7]
+ 669 000a FB71     		strb	r3, [r7, #7]
+ 175:../Board/BasicIO.c ****    INT8U charnum = 0;
+ 670              		.loc 1 175 0
+ 671 000c 0023     		movs	r3, #0
+ 672 000e FB75     		strb	r3, [r7, #23]
+ 176:../Board/BasicIO.c ****    INT8C c;
+ 177:../Board/BasicIO.c ****    INT8C *strgp = strg;
+ 673              		.loc 1 177 0
+ 674 0010 3B68     		ldr	r3, [r7]
+ 675 0012 3B61     		str	r3, [r7, #16]
+ 178:../Board/BasicIO.c ****    INT8U rvalue;
+ 179:../Board/BasicIO.c ****    c = BIOGetChar();
+ 676              		.loc 1 179 0
+ 677 0014 FFF7FEFF 		bl	BIOGetChar
+ 678 0018 0346     		mov	r3, r0
+ 679 001a BB75     		strb	r3, [r7, #22]
+ 180:../Board/BasicIO.c ****    while((c != '\r') && ((charnum <= (strglen-1)))){
+ 680              		.loc 1 180 0
+ 681 001c 42E0     		b	.L39
+ 682              	.L43:
+ 181:../Board/BasicIO.c ****        if((' ' <= c) && ('~' >= c) && (charnum < (strglen-1))){
+ 683              		.loc 1 181 0
+ 684 001e 97F91630 		ldrsb	r3, [r7, #22]
+ 685 0022 1F2B     		cmp	r3, #31
+ 686 0024 1BDD     		ble	.L40
+ 687              		.loc 1 181 0 is_stmt 0 discriminator 1
+ 688 0026 97F91630 		ldrsb	r3, [r7, #22]
+ 689 002a 7F2B     		cmp	r3, #127
+ 690 002c 17D0     		beq	.L40
+ 691 002e FA7D     		ldrb	r2, [r7, #23]	@ zero_extendqisi2
+ 692 0030 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 693 0032 013B     		subs	r3, r3, #1
+ 694 0034 9A42     		cmp	r2, r3
+ 695 0036 12DA     		bge	.L40
+ 182:../Board/BasicIO.c ****            BIOWrite(c);
+ 696              		.loc 1 182 0 is_stmt 1
+ 697 0038 97F91630 		ldrsb	r3, [r7, #22]
+ 698 003c 1846     		mov	r0, r3
+ 699 003e FFF7FEFF 		bl	BIOWrite
+ 183:../Board/BasicIO.c ****            *strgp = c;
+ 700              		.loc 1 183 0
+ 701 0042 3B69     		ldr	r3, [r7, #16]
+ 702 0044 BA7D     		ldrb	r2, [r7, #22]
+ 703 0046 1A70     		strb	r2, [r3]
+ 184:../Board/BasicIO.c ****            strgp++;
+ 704              		.loc 1 184 0
+ 705 0048 3B69     		ldr	r3, [r7, #16]
+ 706 004a 0133     		adds	r3, r3, #1
+ 707 004c 3B61     		str	r3, [r7, #16]
+ 185:../Board/BasicIO.c ****            charnum++;
+ 708              		.loc 1 185 0
+ 709 004e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 710 0050 0133     		adds	r3, r3, #1
+ 711 0052 FB75     		strb	r3, [r7, #23]
+ 186:../Board/BasicIO.c ****            c=BIOGetChar();
+ 712              		.loc 1 186 0
+ 713 0054 FFF7FEFF 		bl	BIOGetChar
+ 714 0058 0346     		mov	r3, r0
+ 715 005a BB75     		strb	r3, [r7, #22]
+ 716 005c 22E0     		b	.L39
+ 717              	.L40:
+ 187:../Board/BasicIO.c ****        }else if(c == '\b'){
+ 718              		.loc 1 187 0
+ 719 005e 97F91630 		ldrsb	r3, [r7, #22]
+ 720 0062 082B     		cmp	r3, #8
+ 721 0064 13D1     		bne	.L41
+ 188:../Board/BasicIO.c ****            BIOWrite('\b');
+ 722              		.loc 1 188 0
+ 723 0066 0820     		movs	r0, #8
+ 724 0068 FFF7FEFF 		bl	BIOWrite
+ 189:../Board/BasicIO.c ****            BIOWrite(' ');
+ 725              		.loc 1 189 0
+ 726 006c 2020     		movs	r0, #32
+ 727 006e FFF7FEFF 		bl	BIOWrite
+ 190:../Board/BasicIO.c ****            BIOWrite('\b');
+ 728              		.loc 1 190 0
+ 729 0072 0820     		movs	r0, #8
+ 730 0074 FFF7FEFF 		bl	BIOWrite
+ 191:../Board/BasicIO.c ****            strgp--;
+ 731              		.loc 1 191 0
+ 732 0078 3B69     		ldr	r3, [r7, #16]
+ 733 007a 013B     		subs	r3, r3, #1
+ 734 007c 3B61     		str	r3, [r7, #16]
+ 192:../Board/BasicIO.c ****            charnum--;
+ 735              		.loc 1 192 0
+ 736 007e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 737 0080 013B     		subs	r3, r3, #1
+ 738 0082 FB75     		strb	r3, [r7, #23]
+ 193:../Board/BasicIO.c ****            c=BIOGetChar();
+ 739              		.loc 1 193 0
+ 740 0084 FFF7FEFF 		bl	BIOGetChar
+ 741 0088 0346     		mov	r3, r0
+ 742 008a BB75     		strb	r3, [r7, #22]
+ 743 008c 0AE0     		b	.L39
+ 744              	.L41:
+ 194:../Board/BasicIO.c ****        }else if((' ' <= c) && ('~' >= c)){
+ 745              		.loc 1 194 0
+ 746 008e 97F91630 		ldrsb	r3, [r7, #22]
+ 747 0092 1F2B     		cmp	r3, #31
+ 748 0094 06DD     		ble	.L39
+ 749              		.loc 1 194 0 is_stmt 0 discriminator 1
+ 750 0096 97F91630 		ldrsb	r3, [r7, #22]
+ 751 009a 7F2B     		cmp	r3, #127
+ 752 009c 02D0     		beq	.L39
+ 195:../Board/BasicIO.c ****            charnum++;
+ 753              		.loc 1 195 0 is_stmt 1
+ 754 009e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 755 00a0 0133     		adds	r3, r3, #1
+ 756 00a2 FB75     		strb	r3, [r7, #23]
+ 757              	.L39:
+ 180:../Board/BasicIO.c ****    while((c != '\r') && ((charnum <= (strglen-1)))){
+ 758              		.loc 1 180 0 discriminator 1
+ 759 00a4 97F91630 		ldrsb	r3, [r7, #22]
+ 760 00a8 0D2B     		cmp	r3, #13
+ 761 00aa 04D0     		beq	.L42
+ 180:../Board/BasicIO.c ****    while((c != '\r') && ((charnum <= (strglen-1)))){
+ 762              		.loc 1 180 0 is_stmt 0 discriminator 2
+ 763 00ac FA7D     		ldrb	r2, [r7, #23]	@ zero_extendqisi2
+ 764 00ae FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 765 00b0 013B     		subs	r3, r3, #1
+ 766 00b2 9A42     		cmp	r2, r3
+ 767 00b4 B3DD     		ble	.L43
+ 768              	.L42:
+ 196:../Board/BasicIO.c ****        }else{ /*non-printable character - ignore */
+ 197:../Board/BasicIO.c ****        }
+ 198:../Board/BasicIO.c ****    }
+ 199:../Board/BasicIO.c ****    BIOOutCRLF();
+ 769              		.loc 1 199 0 is_stmt 1
+ 770 00b6 FFF7FEFF 		bl	BIOOutCRLF
+ 200:../Board/BasicIO.c ****    *strgp = '\0';
+ 771              		.loc 1 200 0
+ 772 00ba 3B69     		ldr	r3, [r7, #16]
+ 773 00bc 0022     		movs	r2, #0
+ 774 00be 1A70     		strb	r2, [r3]
+ 201:../Board/BasicIO.c ****    if(c == '\r'){
+ 775              		.loc 1 201 0
+ 776 00c0 97F91630 		ldrsb	r3, [r7, #22]
+ 777 00c4 0D2B     		cmp	r3, #13
+ 778 00c6 02D1     		bne	.L44
+ 202:../Board/BasicIO.c ****        rvalue = 0;
+ 779              		.loc 1 202 0
+ 780 00c8 0023     		movs	r3, #0
+ 781 00ca FB73     		strb	r3, [r7, #15]
+ 782 00cc 01E0     		b	.L45
+ 783              	.L44:
+ 203:../Board/BasicIO.c ****    }else{
+ 204:../Board/BasicIO.c ****        rvalue = 1;
+ 784              		.loc 1 204 0
+ 785 00ce 0123     		movs	r3, #1
+ 786 00d0 FB73     		strb	r3, [r7, #15]
+ 787              	.L45:
+ 205:../Board/BasicIO.c ****    }
+ 206:../Board/BasicIO.c ****    return rvalue;
+ 788              		.loc 1 206 0
+ 789 00d2 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 207:../Board/BasicIO.c **** }
+ 790              		.loc 1 207 0
+ 791 00d4 1846     		mov	r0, r3
+ 792 00d6 1837     		adds	r7, r7, #24
+ 793 00d8 BD46     		mov	sp, r7
+ 794              		@ sp needed
+ 795 00da 80BD     		pop	{r7, pc}
+ 796              		.cfi_endproc
+ 797              	.LFE123:
+ 799              		.section	.rodata
+ 800              		.align	2
+ 801              	.LC0:
+ 802 0000 0D0A00   		.ascii	"\015\012\000"
+ 803 0003 00       		.section	.text.BIOOutCRLF,"ax",%progbits
+ 804              		.align	2
+ 805              		.global	BIOOutCRLF
+ 806              		.thumb
+ 807              		.thumb_func
+ 809              	BIOOutCRLF:
+ 810              	.LFB124:
+ 208:../Board/BasicIO.c **** 
+ 209:../Board/BasicIO.c **** /********************************************************************
+ 210:../Board/BasicIO.c **** * BIOOutCRLF() - Outputs a carriage return and line feed.
+ 211:../Board/BasicIO.c **** *
+ 212:../Board/BasicIO.c **** ********************************************************************/
+ 213:../Board/BasicIO.c **** void BIOOutCRLF(void){
+ 811              		.loc 1 213 0
+ 812              		.cfi_startproc
+ 813              		@ args = 0, pretend = 0, frame = 0
+ 814              		@ frame_needed = 1, uses_anonymous_args = 0
+ 815 0000 80B5     		push	{r7, lr}
+ 816              		.cfi_def_cfa_offset 8
+ 817              		.cfi_offset 7, -8
+ 818              		.cfi_offset 14, -4
+ 819 0002 00AF     		add	r7, sp, #0
+ 820              		.cfi_def_cfa_register 7
+ 214:../Board/BasicIO.c ****     BIOPutStrg("\r\n");
+ 821              		.loc 1 214 0
+ 822 0004 0148     		ldr	r0, .L48
+ 823 0006 FFF7FEFF 		bl	BIOPutStrg
+ 215:../Board/BasicIO.c **** }
+ 824              		.loc 1 215 0
+ 825 000a 80BD     		pop	{r7, pc}
+ 826              	.L49:
+ 827              		.align	2
+ 828              	.L48:
+ 829 000c 00000000 		.word	.LC0
+ 830              		.cfi_endproc
+ 831              	.LFE124:
+ 833              		.section	.text.BIOHexStrgtoWord,"ax",%progbits
+ 834              		.align	2
+ 835              		.global	BIOHexStrgtoWord
+ 836              		.thumb
+ 837              		.thumb_func
+ 839              	BIOHexStrgtoWord:
+ 840              	.LFB125:
+ 216:../Board/BasicIO.c **** 
+ 217:../Board/BasicIO.c **** /********************************************************************
+ 218:../Board/BasicIO.c **** * BIOHexStrgtoWord() - Converts a string of hex characters to a 32-bit
+ 219:../Board/BasicIO.c **** *                      word until NULL is reached.
+ 220:../Board/BasicIO.c **** * Return value: 0 -> if no error.
+ 221:../Board/BasicIO.c **** *               1 -> if string is too long for word.
+ 222:../Board/BasicIO.c **** *               2 -> if a non-hex character is in the string.
+ 223:../Board/BasicIO.c **** *               3 -> No characters in string. Started with NULL.
+ 224:../Board/BasicIO.c **** * Arguments: *strg is a pointer to the string array
+ 225:../Board/BasicIO.c **** *            *bin is the word that will hold the converted string.
+ 226:../Board/BasicIO.c **** ********************************************************************/
+ 227:../Board/BasicIO.c **** INT8U BIOHexStrgtoWord(INT8C *const strg,INT32U *bin){
+ 841              		.loc 1 227 0
+ 842              		.cfi_startproc
+ 843              		@ args = 0, pretend = 0, frame = 24
+ 844              		@ frame_needed = 1, uses_anonymous_args = 0
+ 845 0000 90B5     		push	{r4, r7, lr}
+ 846              		.cfi_def_cfa_offset 12
+ 847              		.cfi_offset 4, -12
+ 848              		.cfi_offset 7, -8
+ 849              		.cfi_offset 14, -4
+ 850 0002 87B0     		sub	sp, sp, #28
+ 851              		.cfi_def_cfa_offset 40
+ 852 0004 00AF     		add	r7, sp, #0
+ 853              		.cfi_def_cfa_register 7
+ 854 0006 7860     		str	r0, [r7, #4]
+ 855 0008 3960     		str	r1, [r7]
+ 228:../Board/BasicIO.c ****     INT8U cnt = 0;
+ 856              		.loc 1 228 0
+ 857 000a 0023     		movs	r3, #0
+ 858 000c FB75     		strb	r3, [r7, #23]
+ 229:../Board/BasicIO.c ****     INT32U lbin = 0;
+ 859              		.loc 1 229 0
+ 860 000e 0023     		movs	r3, #0
+ 861 0010 3B61     		str	r3, [r7, #16]
+ 230:../Board/BasicIO.c ****     INT8C *strgptr = strg;
+ 862              		.loc 1 230 0
+ 863 0012 7B68     		ldr	r3, [r7, #4]
+ 864 0014 FB60     		str	r3, [r7, #12]
+ 231:../Board/BasicIO.c ****     INT8U rval = 0;
+ 865              		.loc 1 231 0
+ 866 0016 0023     		movs	r3, #0
+ 867 0018 FB72     		strb	r3, [r7, #11]
+ 232:../Board/BasicIO.c ****     if(*strgptr == '\0'){
+ 868              		.loc 1 232 0
+ 869 001a FB68     		ldr	r3, [r7, #12]
+ 870 001c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 871 001e 002B     		cmp	r3, #0
+ 872 0020 02D1     		bne	.L51
+ 233:../Board/BasicIO.c ****         rval = 3;
+ 873              		.loc 1 233 0
+ 874 0022 0323     		movs	r3, #3
+ 875 0024 FB72     		strb	r3, [r7, #11]
+ 876 0026 29E0     		b	.L52
+ 877              	.L51:
+ 234:../Board/BasicIO.c ****     }else{
+ 235:../Board/BasicIO.c ****         while(*strgptr != '\0'){
+ 878              		.loc 1 235 0
+ 879 0028 21E0     		b	.L53
+ 880              	.L56:
+ 236:../Board/BasicIO.c ****             if(bioIsHex(*strgptr) != 0){
+ 881              		.loc 1 236 0
+ 882 002a FB68     		ldr	r3, [r7, #12]
+ 883 002c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 884 002e 5BB2     		sxtb	r3, r3
+ 885 0030 1846     		mov	r0, r3
+ 886 0032 FFF7FEFF 		bl	bioIsHex
+ 887 0036 0346     		mov	r3, r0
+ 888 0038 002B     		cmp	r3, #0
+ 889 003a 0BD0     		beq	.L54
+ 237:../Board/BasicIO.c ****                 lbin = (lbin << 4) | (INT32U)(bioHtoB(*strgptr));
+ 890              		.loc 1 237 0
+ 891 003c 3B69     		ldr	r3, [r7, #16]
+ 892 003e 1C01     		lsls	r4, r3, #4
+ 893 0040 FB68     		ldr	r3, [r7, #12]
+ 894 0042 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 895 0044 5BB2     		sxtb	r3, r3
+ 896 0046 1846     		mov	r0, r3
+ 897 0048 FFF7FEFF 		bl	bioHtoB
+ 898 004c 0346     		mov	r3, r0
+ 899 004e 2343     		orrs	r3, r3, r4
+ 900 0050 3B61     		str	r3, [r7, #16]
+ 901 0052 01E0     		b	.L55
+ 902              	.L54:
+ 238:../Board/BasicIO.c ****             }else{
+ 239:../Board/BasicIO.c ****                 rval = 2;
+ 903              		.loc 1 239 0
+ 904 0054 0223     		movs	r3, #2
+ 905 0056 FB72     		strb	r3, [r7, #11]
+ 906              	.L55:
+ 240:../Board/BasicIO.c ****             }
+ 241:../Board/BasicIO.c ****             strgptr++;
+ 907              		.loc 1 241 0
+ 908 0058 FB68     		ldr	r3, [r7, #12]
+ 909 005a 0133     		adds	r3, r3, #1
+ 910 005c FB60     		str	r3, [r7, #12]
+ 242:../Board/BasicIO.c ****             cnt++;
+ 911              		.loc 1 242 0
+ 912 005e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 913 0060 0133     		adds	r3, r3, #1
+ 914 0062 FB75     		strb	r3, [r7, #23]
+ 243:../Board/BasicIO.c ****             if(cnt > 8){
+ 915              		.loc 1 243 0
+ 916 0064 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 917 0066 082B     		cmp	r3, #8
+ 918 0068 01D9     		bls	.L53
+ 244:../Board/BasicIO.c ****                 rval = 1;
+ 919              		.loc 1 244 0
+ 920 006a 0123     		movs	r3, #1
+ 921 006c FB72     		strb	r3, [r7, #11]
+ 922              	.L53:
+ 235:../Board/BasicIO.c ****         while(*strgptr != '\0'){
+ 923              		.loc 1 235 0 discriminator 1
+ 924 006e FB68     		ldr	r3, [r7, #12]
+ 925 0070 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 926 0072 002B     		cmp	r3, #0
+ 927 0074 D9D1     		bne	.L56
+ 245:../Board/BasicIO.c ****             }else{
+ 246:../Board/BasicIO.c ****             }
+ 247:../Board/BasicIO.c ****         }
+ 248:../Board/BasicIO.c ****         *bin = lbin;
+ 928              		.loc 1 248 0
+ 929 0076 3B68     		ldr	r3, [r7]
+ 930 0078 3A69     		ldr	r2, [r7, #16]
+ 931 007a 1A60     		str	r2, [r3]
+ 932              	.L52:
+ 249:../Board/BasicIO.c ****     }
+ 250:../Board/BasicIO.c ****     return rval;
+ 933              		.loc 1 250 0
+ 934 007c FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 251:../Board/BasicIO.c **** }
+ 935              		.loc 1 251 0
+ 936 007e 1846     		mov	r0, r3
+ 937 0080 1C37     		adds	r7, r7, #28
+ 938 0082 BD46     		mov	sp, r7
+ 939              		@ sp needed
+ 940 0084 90BD     		pop	{r4, r7, pc}
+ 941              		.cfi_endproc
+ 942              	.LFE125:
+ 944 0086 00BF     		.section	.text.BIOOutHexByte,"ax",%progbits
+ 945              		.align	2
+ 946              		.global	BIOOutHexByte
+ 947              		.thumb
+ 948              		.thumb_func
+ 950              	BIOOutHexByte:
+ 951              	.LFB126:
+ 252:../Board/BasicIO.c **** 
+ 253:../Board/BasicIO.c **** /************************************************************************
+ 254:../Board/BasicIO.c **** * BIOOutHexByte() - Output one byte in hex.
+ 255:../Board/BasicIO.c **** * bin is the byte to be sent
+ 256:../Board/BasicIO.c **** *************************************************************************/
+ 257:../Board/BasicIO.c **** void BIOOutHexByte(INT8U bin){
+ 952              		.loc 1 257 0
+ 953              		.cfi_startproc
+ 954              		@ args = 0, pretend = 0, frame = 8
+ 955              		@ frame_needed = 1, uses_anonymous_args = 0
+ 956 0000 80B5     		push	{r7, lr}
+ 957              		.cfi_def_cfa_offset 8
+ 958              		.cfi_offset 7, -8
+ 959              		.cfi_offset 14, -4
+ 960 0002 82B0     		sub	sp, sp, #8
+ 961              		.cfi_def_cfa_offset 16
+ 962 0004 00AF     		add	r7, sp, #0
+ 963              		.cfi_def_cfa_register 7
+ 964 0006 0346     		mov	r3, r0
+ 965 0008 FB71     		strb	r3, [r7, #7]
+ 258:../Board/BasicIO.c ****     BIOWrite(bioHtoA(bin>>4));
+ 966              		.loc 1 258 0
+ 967 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 968 000c 1B09     		lsrs	r3, r3, #4
+ 969 000e DBB2     		uxtb	r3, r3
+ 970 0010 1846     		mov	r0, r3
+ 971 0012 FFF7FEFF 		bl	bioHtoA
+ 972 0016 0346     		mov	r3, r0
+ 973 0018 1846     		mov	r0, r3
+ 974 001a FFF7FEFF 		bl	BIOWrite
+ 259:../Board/BasicIO.c ****     BIOWrite(bioHtoA(bin & 0x0fu));
+ 975              		.loc 1 259 0
+ 976 001e FB79     		ldrb	r3, [r7, #7]
+ 977 0020 03F00F03 		and	r3, r3, #15
+ 978 0024 DBB2     		uxtb	r3, r3
+ 979 0026 1846     		mov	r0, r3
+ 980 0028 FFF7FEFF 		bl	bioHtoA
+ 981 002c 0346     		mov	r3, r0
+ 982 002e 1846     		mov	r0, r3
+ 983 0030 FFF7FEFF 		bl	BIOWrite
+ 260:../Board/BasicIO.c **** }
+ 984              		.loc 1 260 0
+ 985 0034 0837     		adds	r7, r7, #8
+ 986 0036 BD46     		mov	sp, r7
+ 987              		@ sp needed
+ 988 0038 80BD     		pop	{r7, pc}
+ 989              		.cfi_endproc
+ 990              	.LFE126:
+ 992 003a 00BF     		.section	.text.BIOOutHexHWord,"ax",%progbits
+ 993              		.align	2
+ 994              		.global	BIOOutHexHWord
+ 995              		.thumb
+ 996              		.thumb_func
+ 998              	BIOOutHexHWord:
+ 999              	.LFB127:
+ 261:../Board/BasicIO.c **** 
+ 262:../Board/BasicIO.c **** /************************************************************************
+ 263:../Board/BasicIO.c **** * BIOOutHexHWord() - Output 16-bit word in hex.
+ 264:../Board/BasicIO.c **** * bin is the word to be sent
+ 265:../Board/BasicIO.c **** *************************************************************************/
+ 266:../Board/BasicIO.c **** void BIOOutHexHWord(INT16U bin){
+ 1000              		.loc 1 266 0
+ 1001              		.cfi_startproc
+ 1002              		@ args = 0, pretend = 0, frame = 8
+ 1003              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1004 0000 80B5     		push	{r7, lr}
+ 1005              		.cfi_def_cfa_offset 8
+ 1006              		.cfi_offset 7, -8
+ 1007              		.cfi_offset 14, -4
+ 1008 0002 82B0     		sub	sp, sp, #8
+ 1009              		.cfi_def_cfa_offset 16
+ 1010 0004 00AF     		add	r7, sp, #0
+ 1011              		.cfi_def_cfa_register 7
+ 1012 0006 0346     		mov	r3, r0
+ 1013 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 267:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin>>8));
+ 1014              		.loc 1 267 0
+ 1015 000a FB88     		ldrh	r3, [r7, #6]
+ 1016 000c 1B0A     		lsrs	r3, r3, #8
+ 1017 000e 9BB2     		uxth	r3, r3
+ 1018 0010 DBB2     		uxtb	r3, r3
+ 1019 0012 1846     		mov	r0, r3
+ 1020 0014 FFF7FEFF 		bl	BIOOutHexByte
+ 268:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin & 0x00ffu));
+ 1021              		.loc 1 268 0
+ 1022 0018 FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 1023 001a DBB2     		uxtb	r3, r3
+ 1024 001c 1846     		mov	r0, r3
+ 1025 001e FFF7FEFF 		bl	BIOOutHexByte
+ 269:../Board/BasicIO.c **** }
+ 1026              		.loc 1 269 0
+ 1027 0022 0837     		adds	r7, r7, #8
+ 1028 0024 BD46     		mov	sp, r7
+ 1029              		@ sp needed
+ 1030 0026 80BD     		pop	{r7, pc}
+ 1031              		.cfi_endproc
+ 1032              	.LFE127:
+ 1034              		.section	.text.BIOOutHexWord,"ax",%progbits
+ 1035              		.align	2
+ 1036              		.global	BIOOutHexWord
+ 1037              		.thumb
+ 1038              		.thumb_func
+ 1040              	BIOOutHexWord:
+ 1041              	.LFB128:
+ 270:../Board/BasicIO.c **** /************************************************************************
+ 271:../Board/BasicIO.c **** * BIOOutHexWord() - Output 32-bit word in hex.
+ 272:../Board/BasicIO.c **** * bin is the word to be sent
+ 273:../Board/BasicIO.c **** * Todd Morton, 10/14/2014
+ 274:../Board/BasicIO.c **** *************************************************************************/
+ 275:../Board/BasicIO.c **** void BIOOutHexWord(INT32U bin){
+ 1042              		.loc 1 275 0
+ 1043              		.cfi_startproc
+ 1044              		@ args = 0, pretend = 0, frame = 8
+ 1045              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1046 0000 80B5     		push	{r7, lr}
+ 1047              		.cfi_def_cfa_offset 8
+ 1048              		.cfi_offset 7, -8
+ 1049              		.cfi_offset 14, -4
+ 1050 0002 82B0     		sub	sp, sp, #8
+ 1051              		.cfi_def_cfa_offset 16
+ 1052 0004 00AF     		add	r7, sp, #0
+ 1053              		.cfi_def_cfa_register 7
+ 1054 0006 7860     		str	r0, [r7, #4]
+ 276:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin>>24));
+ 1055              		.loc 1 276 0
+ 1056 0008 7B68     		ldr	r3, [r7, #4]
+ 1057 000a 1B0E     		lsrs	r3, r3, #24
+ 1058 000c DBB2     		uxtb	r3, r3
+ 1059 000e 1846     		mov	r0, r3
+ 1060 0010 FFF7FEFF 		bl	BIOOutHexByte
+ 277:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin>>16));
+ 1061              		.loc 1 277 0
+ 1062 0014 7B68     		ldr	r3, [r7, #4]
+ 1063 0016 1B0C     		lsrs	r3, r3, #16
+ 1064 0018 DBB2     		uxtb	r3, r3
+ 1065 001a 1846     		mov	r0, r3
+ 1066 001c FFF7FEFF 		bl	BIOOutHexByte
+ 278:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin>>8));
+ 1067              		.loc 1 278 0
+ 1068 0020 7B68     		ldr	r3, [r7, #4]
+ 1069 0022 1B0A     		lsrs	r3, r3, #8
+ 1070 0024 DBB2     		uxtb	r3, r3
+ 1071 0026 1846     		mov	r0, r3
+ 1072 0028 FFF7FEFF 		bl	BIOOutHexByte
+ 279:../Board/BasicIO.c ****     BIOOutHexByte((INT8U)(bin & 0x000000ff));
+ 1073              		.loc 1 279 0
+ 1074 002c 7B68     		ldr	r3, [r7, #4]
+ 1075 002e DBB2     		uxtb	r3, r3
+ 1076 0030 1846     		mov	r0, r3
+ 1077 0032 FFF7FEFF 		bl	BIOOutHexByte
+ 280:../Board/BasicIO.c **** }
+ 1078              		.loc 1 280 0
+ 1079 0036 0837     		adds	r7, r7, #8
+ 1080 0038 BD46     		mov	sp, r7
+ 1081              		@ sp needed
+ 1082 003a 80BD     		pop	{r7, pc}
+ 1083              		.cfi_endproc
+ 1084              	.LFE128:
+ 1086              		.section	.text.bioIsHex,"ax",%progbits
+ 1087              		.align	2
+ 1088              		.thumb
+ 1089              		.thumb_func
+ 1091              	bioIsHex:
+ 1092              	.LFB129:
+ 281:../Board/BasicIO.c **** /************************************************************************
+ 282:../Board/BasicIO.c **** * bioIsHex() - Checks for hex ascii character - private
+ 283:../Board/BasicIO.c **** * returns 1 if hex and 0 if not hex.
+ 284:../Board/BasicIO.c **** * Todd Morton, 10/14/2014
+ 285:../Board/BasicIO.c **** *************************************************************************/
+ 286:../Board/BasicIO.c **** static INT8U bioIsHex(INT8C c){
+ 1093              		.loc 1 286 0
+ 1094              		.cfi_startproc
+ 1095              		@ args = 0, pretend = 0, frame = 16
+ 1096              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1097              		@ link register save eliminated.
+ 1098 0000 80B4     		push	{r7}
+ 1099              		.cfi_def_cfa_offset 4
+ 1100              		.cfi_offset 7, -4
+ 1101 0002 85B0     		sub	sp, sp, #20
+ 1102              		.cfi_def_cfa_offset 24
+ 1103 0004 00AF     		add	r7, sp, #0
+ 1104              		.cfi_def_cfa_register 7
+ 1105 0006 0346     		mov	r3, r0
+ 1106 0008 FB71     		strb	r3, [r7, #7]
+ 287:../Board/BasicIO.c ****     INT8U rval;
+ 288:../Board/BasicIO.c ****     if((('0' <= c) && ('9' >= c)) || (('a' <= c) && ('f' >= c)) || (('A' <= c) && ('F' >= c))){
+ 1107              		.loc 1 288 0
+ 1108 000a 97F90730 		ldrsb	r3, [r7, #7]
+ 1109 000e 2F2B     		cmp	r3, #47
+ 1110 0010 03DD     		ble	.L62
+ 1111              		.loc 1 288 0 is_stmt 0 discriminator 1
+ 1112 0012 97F90730 		ldrsb	r3, [r7, #7]
+ 1113 0016 392B     		cmp	r3, #57
+ 1114 0018 0FDD     		ble	.L63
+ 1115              	.L62:
+ 1116              		.loc 1 288 0 discriminator 2
+ 1117 001a 97F90730 		ldrsb	r3, [r7, #7]
+ 1118 001e 602B     		cmp	r3, #96
+ 1119 0020 03DD     		ble	.L64
+ 1120              		.loc 1 288 0 discriminator 1
+ 1121 0022 97F90730 		ldrsb	r3, [r7, #7]
+ 1122 0026 662B     		cmp	r3, #102
+ 1123 0028 07DD     		ble	.L63
+ 1124              	.L64:
+ 1125              		.loc 1 288 0 discriminator 2
+ 1126 002a 97F90730 		ldrsb	r3, [r7, #7]
+ 1127 002e 402B     		cmp	r3, #64
+ 1128 0030 06DD     		ble	.L65
+ 1129              		.loc 1 288 0 discriminator 1
+ 1130 0032 97F90730 		ldrsb	r3, [r7, #7]
+ 1131 0036 462B     		cmp	r3, #70
+ 1132 0038 02DC     		bgt	.L65
+ 1133              	.L63:
+ 289:../Board/BasicIO.c ****         rval = 1;
+ 1134              		.loc 1 289 0 is_stmt 1
+ 1135 003a 0123     		movs	r3, #1
+ 1136 003c FB73     		strb	r3, [r7, #15]
+ 1137 003e 01E0     		b	.L66
+ 1138              	.L65:
+ 290:../Board/BasicIO.c ****     }else{
+ 291:../Board/BasicIO.c ****         rval = 0;
+ 1139              		.loc 1 291 0
+ 1140 0040 0023     		movs	r3, #0
+ 1141 0042 FB73     		strb	r3, [r7, #15]
+ 1142              	.L66:
+ 292:../Board/BasicIO.c ****     }
+ 293:../Board/BasicIO.c ****     return rval;
+ 1143              		.loc 1 293 0
+ 1144 0044 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 294:../Board/BasicIO.c **** }
+ 1145              		.loc 1 294 0
+ 1146 0046 1846     		mov	r0, r3
+ 1147 0048 1437     		adds	r7, r7, #20
+ 1148 004a BD46     		mov	sp, r7
+ 1149              		@ sp needed
+ 1150 004c 5DF8047B 		ldr	r7, [sp], #4
+ 1151 0050 7047     		bx	lr
+ 1152              		.cfi_endproc
+ 1153              	.LFE129:
+ 1155 0052 00BF     		.section	.text.bioHtoB,"ax",%progbits
+ 1156              		.align	2
+ 1157              		.thumb
+ 1158              		.thumb_func
+ 1160              	bioHtoB:
+ 1161              	.LFB130:
+ 295:../Board/BasicIO.c **** 
+ 296:../Board/BasicIO.c **** /************************************************************************
+ 297:../Board/BasicIO.c **** * bioHtoB() - Converts a hex ascii character to a binary byte - private
+ 298:../Board/BasicIO.c **** * c is the ascii character to be converted.
+ 299:../Board/BasicIO.c **** * returns the binary value.
+ 300:../Board/BasicIO.c **** * Note: it returns a 0 if it is not a hex character - this should be fixed.
+ 301:../Board/BasicIO.c **** * Todd Morton, 10/14/2014
+ 302:../Board/BasicIO.c **** *************************************************************************/
+ 303:../Board/BasicIO.c **** static INT8U bioHtoB(INT8C c){
+ 1162              		.loc 1 303 0
+ 1163              		.cfi_startproc
+ 1164              		@ args = 0, pretend = 0, frame = 16
+ 1165              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1166              		@ link register save eliminated.
+ 1167 0000 80B4     		push	{r7}
+ 1168              		.cfi_def_cfa_offset 4
+ 1169              		.cfi_offset 7, -4
+ 1170 0002 85B0     		sub	sp, sp, #20
+ 1171              		.cfi_def_cfa_offset 24
+ 1172 0004 00AF     		add	r7, sp, #0
+ 1173              		.cfi_def_cfa_register 7
+ 1174 0006 0346     		mov	r3, r0
+ 1175 0008 FB71     		strb	r3, [r7, #7]
+ 304:../Board/BasicIO.c ****     INT8U bin;
+ 305:../Board/BasicIO.c ****     if(('0' <= c) && ('9' >= c)){
+ 1176              		.loc 1 305 0
+ 1177 000a 97F90730 		ldrsb	r3, [r7, #7]
+ 1178 000e 2F2B     		cmp	r3, #47
+ 1179 0010 07DD     		ble	.L69
+ 1180              		.loc 1 305 0 is_stmt 0 discriminator 1
+ 1181 0012 97F90730 		ldrsb	r3, [r7, #7]
+ 1182 0016 392B     		cmp	r3, #57
+ 1183 0018 03DC     		bgt	.L69
+ 306:../Board/BasicIO.c ****         bin = (INT8U)(c - '0');
+ 1184              		.loc 1 306 0 is_stmt 1
+ 1185 001a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1186 001c 303B     		subs	r3, r3, #48
+ 1187 001e FB73     		strb	r3, [r7, #15]
+ 1188 0020 19E0     		b	.L70
+ 1189              	.L69:
+ 307:../Board/BasicIO.c ****     }else if(('a' <= c) && ('f' >= c)){
+ 1190              		.loc 1 307 0
+ 1191 0022 97F90730 		ldrsb	r3, [r7, #7]
+ 1192 0026 602B     		cmp	r3, #96
+ 1193 0028 07DD     		ble	.L71
+ 1194              		.loc 1 307 0 is_stmt 0 discriminator 1
+ 1195 002a 97F90730 		ldrsb	r3, [r7, #7]
+ 1196 002e 662B     		cmp	r3, #102
+ 1197 0030 03DC     		bgt	.L71
+ 308:../Board/BasicIO.c ****         bin = (INT8U)(c - 'a' + 0xa);
+ 1198              		.loc 1 308 0 is_stmt 1
+ 1199 0032 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1200 0034 573B     		subs	r3, r3, #87
+ 1201 0036 FB73     		strb	r3, [r7, #15]
+ 1202 0038 0DE0     		b	.L70
+ 1203              	.L71:
+ 309:../Board/BasicIO.c ****     }else if(('A' <= c) && ('F' >= c)){
+ 1204              		.loc 1 309 0
+ 1205 003a 97F90730 		ldrsb	r3, [r7, #7]
+ 1206 003e 402B     		cmp	r3, #64
+ 1207 0040 07DD     		ble	.L72
+ 1208              		.loc 1 309 0 is_stmt 0 discriminator 1
+ 1209 0042 97F90730 		ldrsb	r3, [r7, #7]
+ 1210 0046 462B     		cmp	r3, #70
+ 1211 0048 03DC     		bgt	.L72
+ 310:../Board/BasicIO.c ****         bin = (INT8U)(c - 'A' + 0xa);
+ 1212              		.loc 1 310 0 is_stmt 1
+ 1213 004a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1214 004c 373B     		subs	r3, r3, #55
+ 1215 004e FB73     		strb	r3, [r7, #15]
+ 1216 0050 01E0     		b	.L70
+ 1217              	.L72:
+ 311:../Board/BasicIO.c ****     }else{
+ 312:../Board/BasicIO.c ****         bin = 0;
+ 1218              		.loc 1 312 0
+ 1219 0052 0023     		movs	r3, #0
+ 1220 0054 FB73     		strb	r3, [r7, #15]
+ 1221              	.L70:
+ 313:../Board/BasicIO.c ****     }
+ 314:../Board/BasicIO.c ****     return bin;
+ 1222              		.loc 1 314 0
+ 1223 0056 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 315:../Board/BasicIO.c **** }
+ 1224              		.loc 1 315 0
+ 1225 0058 1846     		mov	r0, r3
+ 1226 005a 1437     		adds	r7, r7, #20
+ 1227 005c BD46     		mov	sp, r7
+ 1228              		@ sp needed
+ 1229 005e 5DF8047B 		ldr	r7, [sp], #4
+ 1230 0062 7047     		bx	lr
+ 1231              		.cfi_endproc
+ 1232              	.LFE130:
+ 1234              		.section	.text.bioHtoA,"ax",%progbits
+ 1235              		.align	2
+ 1236              		.thumb
+ 1237              		.thumb_func
+ 1239              	bioHtoA:
+ 1240              	.LFB131:
+ 316:../Board/BasicIO.c **** /************************************************************************
+ 317:../Board/BasicIO.c **** * bioHtoA() - Converts a hex nibble to ASCII - private
+ 318:../Board/BasicIO.c **** * hnib is the byte with the LSN to be sent
+ 319:../Board/BasicIO.c **** * Todd Morton, 10/14/2014
+ 320:../Board/BasicIO.c **** *************************************************************************/
+ 321:../Board/BasicIO.c **** static INT8C bioHtoA(INT8U hnib){
+ 1241              		.loc 1 321 0
+ 1242              		.cfi_startproc
+ 1243              		@ args = 0, pretend = 0, frame = 16
+ 1244              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1245              		@ link register save eliminated.
+ 1246 0000 80B4     		push	{r7}
+ 1247              		.cfi_def_cfa_offset 4
+ 1248              		.cfi_offset 7, -4
+ 1249 0002 85B0     		sub	sp, sp, #20
+ 1250              		.cfi_def_cfa_offset 24
+ 1251 0004 00AF     		add	r7, sp, #0
+ 1252              		.cfi_def_cfa_register 7
+ 1253 0006 0346     		mov	r3, r0
+ 1254 0008 FB71     		strb	r3, [r7, #7]
+ 322:../Board/BasicIO.c ****     INT8C asciic;
+ 323:../Board/BasicIO.c ****     INT8U hnmask = hnib & 0x0fu; /* Take care of any upper nibbles */
+ 1255              		.loc 1 323 0
+ 1256 000a FB79     		ldrb	r3, [r7, #7]
+ 1257 000c 03F00F03 		and	r3, r3, #15
+ 1258 0010 BB73     		strb	r3, [r7, #14]
+ 324:../Board/BasicIO.c ****     if(hnmask <= 9U){
+ 1259              		.loc 1 324 0
+ 1260 0012 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 1261 0014 092B     		cmp	r3, #9
+ 1262 0016 04D8     		bhi	.L75
+ 325:../Board/BasicIO.c ****         asciic = (INT8C)(hnmask + 0x30U);
+ 1263              		.loc 1 325 0
+ 1264 0018 BB7B     		ldrb	r3, [r7, #14]
+ 1265 001a 3033     		adds	r3, r3, #48
+ 1266 001c DBB2     		uxtb	r3, r3
+ 1267 001e FB73     		strb	r3, [r7, #15]
+ 1268 0020 03E0     		b	.L76
+ 1269              	.L75:
+ 326:../Board/BasicIO.c ****     }else{
+ 327:../Board/BasicIO.c ****         asciic = (INT8C)(hnmask + 0x37U);
+ 1270              		.loc 1 327 0
+ 1271 0022 BB7B     		ldrb	r3, [r7, #14]
+ 1272 0024 3733     		adds	r3, r3, #55
+ 1273 0026 DBB2     		uxtb	r3, r3
+ 1274 0028 FB73     		strb	r3, [r7, #15]
+ 1275              	.L76:
+ 328:../Board/BasicIO.c ****     }
+ 329:../Board/BasicIO.c ****     return asciic;
+ 1276              		.loc 1 329 0
+ 1277 002a FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1278 002c 5BB2     		sxtb	r3, r3
+ 330:../Board/BasicIO.c **** }
+ 1279              		.loc 1 330 0
+ 1280 002e 1846     		mov	r0, r3
+ 1281 0030 1437     		adds	r7, r7, #20
+ 1282 0032 BD46     		mov	sp, r7
+ 1283              		@ sp needed
+ 1284 0034 5DF8047B 		ldr	r7, [sp], #4
+ 1285 0038 7047     		bx	lr
+ 1286              		.cfi_endproc
+ 1287              	.LFE131:
+ 1289 003a 00BF     		.text
+ 1290              	.Letext0:
+ 1291              		.file 2 "c:\\freescale\\kds_3.0.0\\toolchain\\lib\\gcc\\arm-none-eabi\\4.8.4\\include\\stdint-gcc.
+ 1292              		.file 3 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/MK65F18.h"
+ 1293              		.file 4 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\Sources/MCUType.h"
+ 1294              		.file 5 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/core_cm4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 BasicIO.c
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:21     .text.BIOOpen:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:26     .text.BIOOpen:00000000 BIOOpen
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:103    .text.BIOOpen:00000080 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:110    .text.BIORead:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:115    .text.BIORead:00000000 BIORead
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:160    .text.BIORead:00000034 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:165    .text.BIOGetChar:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:170    .text.BIOGetChar:00000000 BIOGetChar
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:206    .text.BIOWrite:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:211    .text.BIOWrite:00000000 BIOWrite
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:251    .text.BIOWrite:0000002c $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:256    .text.BIOPutStrg:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:261    .text.BIOPutStrg:00000000 BIOPutStrg
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:307    .text.BIOOutDecByte:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:312    .text.BIOOutDecByte:00000000 BIOOutDecByte
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:430    .text.BIOOutDecByte:000000b8 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:435    .text.BIOOutDecHWord:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:440    .text.BIOOutDecHWord:00000000 BIOOutDecHWord
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:643    .text.BIOOutDecHWord:0000014c $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:648    .text.BIOGetStrg:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:653    .text.BIOGetStrg:00000000 BIOGetStrg
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:809    .text.BIOOutCRLF:00000000 BIOOutCRLF
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:800    .rodata:00000000 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:804    .text.BIOOutCRLF:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:829    .text.BIOOutCRLF:0000000c $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:834    .text.BIOHexStrgtoWord:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:839    .text.BIOHexStrgtoWord:00000000 BIOHexStrgtoWord
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1091   .text.bioIsHex:00000000 bioIsHex
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1160   .text.bioHtoB:00000000 bioHtoB
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:945    .text.BIOOutHexByte:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:950    .text.BIOOutHexByte:00000000 BIOOutHexByte
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1239   .text.bioHtoA:00000000 bioHtoA
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:993    .text.BIOOutHexHWord:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:998    .text.BIOOutHexHWord:00000000 BIOOutHexHWord
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1035   .text.BIOOutHexWord:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1040   .text.BIOOutHexWord:00000000 BIOOutHexWord
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1087   .text.bioIsHex:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1156   .text.bioHtoB:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccyDjenY.s:1235   .text.bioHtoA:00000000 $t
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.984e0eb9c436e6355edc0c15c5d0e316
+                           .group:00000000 wm4.MK65F18.h.88.5a87102c5ae84e796ad9a9d4464add2f
+                           .group:00000000 wm4.stdintgcc.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.MK65F18.h.101.f25d722507d56a43c64dd0a4bd7a5491
+                           .group:00000000 wm4.core_cm4.h.43.2c09f0fcaaed3bb5f3b9ab18546b570c
+                           .group:00000000 wm4.core_cmInstr.h.39.c66a1c911732cf6be44e58f2bee25308
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.3619de371a4f0fc7a1d8fbc60105c36c
+                           .group:00000000 wm4.system_MK65F18.h.86.82b4026cc9cfc80560089b2cb91b3357
+                           .group:00000000 wm4.MK65F18.h.375.844d7b6b5fc479e2554e03026fdf0451
+                           .group:00000000 wm4.MCUType.h.16.8f8f3202c3b2c0f354d42b0ca7c7a208
+
+NO UNDEFINED SYMBOLS

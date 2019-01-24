@@ -1,0 +1,680 @@
+Archive member included because of file (symbol)
+
+c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+                              c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o (exit)
+c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+                              c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o) (_global_impure_ptr)
+c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+                              c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o (__libc_init_array)
+c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+                              c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o (memset)
+c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+                              c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o) (_exit)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+ .data          0x00000000        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+ .ARM.extab     0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+ .data          0x00000000        0x0 ./Startup/startup_MK65F18.o
+ .bss           0x00000000        0x0 ./Startup/startup_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Startup/system_MK65F18.o
+ .text          0x00000000        0x0 ./Startup/system_MK65F18.o
+ .data          0x00000000        0x0 ./Startup/system_MK65F18.o
+ .bss           0x00000000        0x0 ./Startup/system_MK65F18.o
+ .data.SystemCoreClock
+                0x00000000        0x4 ./Startup/system_MK65F18.o
+ .text.SystemCoreClockUpdate
+                0x00000000      0x2f4 ./Startup/system_MK65F18.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Sources/Lab3.o
+ .text          0x00000000        0x0 ./Sources/Lab3.o
+ .data          0x00000000        0x0 ./Sources/Lab3.o
+ .bss           0x00000000        0x0 ./Sources/Lab3.o
+ .debug_macro   0x00000000      0x850 ./Sources/Lab3.o
+ .debug_macro   0x00000000      0x34e ./Sources/Lab3.o
+ .debug_macro   0x00000000       0x3b ./Sources/Lab3.o
+ .debug_macro   0x00000000       0x2d ./Sources/Lab3.o
+ .debug_macro   0x00000000       0x26 ./Sources/Lab3.o
+ .debug_macro   0x00000000      0xc13 ./Sources/Lab3.o
+ .debug_macro   0x00000000       0xf6 ./Sources/Lab3.o
+ .debug_macro   0x00000000    0x222c6 ./Sources/Lab3.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/BasicIO.o
+ .text          0x00000000        0x0 ./Board/BasicIO.o
+ .data          0x00000000        0x0 ./Board/BasicIO.o
+ .bss           0x00000000        0x0 ./Board/BasicIO.o
+ .text.BIOOutDecByte
+                0x00000000       0xbc ./Board/BasicIO.o
+ .text.BIOGetStrg
+                0x00000000       0xdc ./Board/BasicIO.o
+ .rodata        0x00000000        0x4 ./Board/BasicIO.o
+ .text.BIOOutCRLF
+                0x00000000       0x10 ./Board/BasicIO.o
+ .text.BIOHexStrgtoWord
+                0x00000000       0x88 ./Board/BasicIO.o
+ .text.bioIsHex
+                0x00000000       0x54 ./Board/BasicIO.o
+ .text.bioHtoB  0x00000000       0x64 ./Board/BasicIO.o
+ .debug_macro   0x00000000      0x850 ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x16 ./Board/BasicIO.o
+ .debug_macro   0x00000000      0x34e ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x53 ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x3b ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x2d ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x26 ./Board/BasicIO.o
+ .debug_macro   0x00000000      0xc13 ./Board/BasicIO.o
+ .debug_macro   0x00000000       0xf6 ./Board/BasicIO.o
+ .debug_macro   0x00000000    0x222c6 ./Board/BasicIO.o
+ .debug_macro   0x00000000       0x28 ./Board/BasicIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .group         0x00000000        0x8 ./Board/K65TWR_GPIO.o
+ .text          0x00000000        0x0 ./Board/K65TWR_GPIO.o
+ .data          0x00000000        0x0 ./Board/K65TWR_GPIO.o
+ .bss           0x00000000        0x0 ./Board/K65TWR_GPIO.o
+ .text.GpioSw3Init
+                0x00000000       0x48 ./Board/K65TWR_GPIO.o
+ .text.GpioLED8Init
+                0x00000000       0x50 ./Board/K65TWR_GPIO.o
+ .text.GpioLED9Init
+                0x00000000       0x50 ./Board/K65TWR_GPIO.o
+ .text.GpioDBugBitsInit
+                0x00000000       0xb0 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000      0x850 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x16 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000      0x34e ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x53 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x3b ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x2d ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x26 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000      0xc13 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0xf6 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000    0x222c6 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000       0x28 ./Board/K65TWR_GPIO.o
+ .debug_macro   0x00000000      0x12a ./Board/K65TWR_GPIO.o
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x00000000        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+ .eh_frame      0x00000000        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+ .text          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+ .data          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+ .bss           0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+m_interrupts     0x00000000         0x00000400         xr
+m_flash_config   0x00000400         0x00000010         xr
+m_text           0x00000410         0x001ffbf0         xr
+m_data           0x1fff0000         0x00010000         rw
+m_data_2         0x20000000         0x00030000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+LOAD ./Startup/startup_MK65F18.o
+LOAD ./Startup/system_MK65F18.o
+LOAD ./Sources/Lab3.o
+LOAD ./Board/BasicIO.o
+LOAD ./Board/K65TWR_GPIO.o
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libstdc++_s.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libm.a
+START GROUP
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc_s.a
+END GROUP
+START GROUP
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc_s.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a
+END GROUP
+START GROUP
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu\libgcc.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libc_s.a
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a
+END GROUP
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+LOAD c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+                0x00000400                HEAP_SIZE = DEFINED (__heap_size__)?__heap_size__:0x400
+                0x00000400                STACK_SIZE = DEFINED (__stack_size__)?__stack_size__:0x400
+
+.interrupts     0x00000000      0x400
+                0x00000000                __VECTOR_TABLE = .
+                0x00000000                . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x00000000      0x400 ./Startup/startup_MK65F18.o
+                0x00000000                __isr_vector
+                0x00000400                . = ALIGN (0x4)
+
+.flash_config   0x00000400       0x10
+                0x00000400                . = ALIGN (0x4)
+ *(.FlashConfig)
+ .FlashConfig   0x00000400       0x10 ./Startup/startup_MK65F18.o
+                0x00000410                . = ALIGN (0x4)
+
+.text           0x00000410      0xd68
+                0x00000410                . = ALIGN (0x4)
+ *(.text)
+ .text          0x00000410       0x54 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ .text          0x00000464       0x74 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+                0x00000464                _start
+                0x00000464                _mainCRTStartup
+ .text          0x000004d8       0x30 ./Startup/startup_MK65F18.o
+                0x000004d8                Reset_Handler
+                0x00000504                DMA2_DMA18_IRQHandler
+                0x00000504                DebugMon_Handler
+                0x00000504                I2C0_IRQHandler
+                0x00000504                HardFault_Handler
+                0x00000504                CAN1_ORed_Message_buffer_IRQHandler
+                0x00000504                Reserved85_IRQHandler
+                0x00000504                DMA3_DMA19_IRQHandler
+                0x00000504                SysTick_Handler
+                0x00000504                UART3_RX_TX_IRQHandler
+                0x00000504                PendSV_Handler
+                0x00000504                NMI_Handler
+                0x00000504                UART0_RX_TX_IRQHandler
+                0x00000504                I2C1_IRQHandler
+                0x00000504                DMA14_DMA30_IRQHandler
+                0x00000504                ENET_Error_IRQHandler
+                0x00000504                USBHS_IRQHandler
+                0x00000504                CAN0_Tx_Warning_IRQHandler
+                0x00000504                DMA4_DMA20_IRQHandler
+                0x00000504                PIT0_IRQHandler
+                0x00000504                CAN0_ORed_Message_buffer_IRQHandler
+                0x00000504                CMP2_IRQHandler
+                0x00000504                LLWU_IRQHandler
+                0x00000504                Reserved84_IRQHandler
+                0x00000504                DMA6_DMA22_IRQHandler
+                0x00000504                TSI0_IRQHandler
+                0x00000504                DMA9_DMA25_IRQHandler
+                0x00000504                ENET_Receive_IRQHandler
+                0x00000504                ENET_1588_Timer_IRQHandler
+                0x00000504                CAN1_Error_IRQHandler
+                0x00000504                UART2_RX_TX_IRQHandler
+                0x00000504                DMA8_DMA24_IRQHandler
+                0x00000504                SWI_IRQHandler
+                0x00000504                ADC0_IRQHandler
+                0x00000504                UsageFault_Handler
+                0x00000504                I2S0_Tx_IRQHandler
+                0x00000504                CMT_IRQHandler
+                0x00000504                UART4_RX_TX_IRQHandler
+                0x00000504                SPI1_IRQHandler
+                0x00000504                DefaultISR
+                0x00000504                CMP1_IRQHandler
+                0x00000504                Reserved71_IRQHandler
+                0x00000504                PORTD_IRQHandler
+                0x00000504                PORTB_IRQHandler
+                0x00000504                UART4_ERR_IRQHandler
+                0x00000504                ADC1_IRQHandler
+                0x00000504                I2C2_IRQHandler
+                0x00000504                TPM2_IRQHandler
+                0x00000504                PIT2_IRQHandler
+                0x00000504                I2S0_Rx_IRQHandler
+                0x00000504                RTC_IRQHandler
+                0x00000504                PDB0_IRQHandler
+                0x00000504                CAN1_Bus_Off_IRQHandler
+                0x00000504                CMP3_IRQHandler
+                0x00000504                CAN0_Rx_Warning_IRQHandler
+                0x00000504                FTM1_IRQHandler
+                0x00000504                UART3_ERR_IRQHandler
+                0x00000504                PIT3_IRQHandler
+                0x00000504                DMA5_DMA21_IRQHandler
+                0x00000504                DMA11_DMA27_IRQHandler
+                0x00000504                SDHC_IRQHandler
+                0x00000504                RTC_Seconds_IRQHandler
+                0x00000504                MCG_IRQHandler
+                0x00000504                FTFE_IRQHandler
+                0x00000504                UART2_ERR_IRQHandler
+                0x00000504                Read_Collision_IRQHandler
+                0x00000504                USBHSDCD_IRQHandler
+                0x00000504                DMA12_DMA28_IRQHandler
+                0x00000504                ENET_Transmit_IRQHandler
+                0x00000504                USBDCD_IRQHandler
+                0x00000504                CAN1_Tx_Warning_IRQHandler
+                0x00000504                USB0_IRQHandler
+                0x00000504                I2C3_IRQHandler
+                0x00000504                SPI2_IRQHandler
+                0x00000504                WDOG_EWM_IRQHandler
+                0x00000504                MemManage_Handler
+                0x00000504                CAN1_Rx_Warning_IRQHandler
+                0x00000504                SVC_Handler
+                0x00000504                CAN1_Wake_Up_IRQHandler
+                0x00000504                RNG_IRQHandler
+                0x00000504                LPUART0_IRQHandler
+                0x00000504                DAC0_IRQHandler
+                0x00000504                DMA13_DMA29_IRQHandler
+                0x00000504                Reserved46_IRQHandler
+                0x00000504                CAN0_Error_IRQHandler
+                0x00000504                TPM1_IRQHandler
+                0x00000504                PIT1_IRQHandler
+                0x00000504                DMA7_DMA23_IRQHandler
+                0x00000504                UART0_ERR_IRQHandler
+                0x00000504                DMA_Error_IRQHandler
+                0x00000504                LVD_LVW_IRQHandler
+                0x00000504                SPI0_IRQHandler
+                0x00000504                FTM0_IRQHandler
+                0x00000504                DAC1_IRQHandler
+                0x00000504                MCM_IRQHandler
+                0x00000504                CAN0_Bus_Off_IRQHandler
+                0x00000504                FTM3_IRQHandler
+                0x00000504                PORTE_IRQHandler
+                0x00000504                DMA15_DMA31_IRQHandler
+                0x00000504                FTM2_IRQHandler
+                0x00000504                LPTMR0_IRQHandler
+                0x00000504                BusFault_Handler
+                0x00000504                CAN0_Wake_Up_IRQHandler
+                0x00000504                DMA10_DMA26_IRQHandler
+                0x00000504                UART1_ERR_IRQHandler
+                0x00000504                UART1_RX_TX_IRQHandler
+                0x00000504                DMA0_DMA16_IRQHandler
+                0x00000504                CMP0_IRQHandler
+                0x00000504                PORTC_IRQHandler
+                0x00000504                DMA1_DMA17_IRQHandler
+ *(.text*)
+ .text.SystemInit
+                0x00000508      0x270 ./Startup/system_MK65F18.o
+                0x00000508                SystemInit
+ .text.NVIC_EnableIRQ
+                0x00000778       0x30 ./Sources/Lab3.o
+ .text.NVIC_DisableIRQ
+                0x000007a8       0x34 ./Sources/Lab3.o
+ .text.NVIC_ClearPendingIRQ
+                0x000007dc       0x34 ./Sources/Lab3.o
+ .text.main     0x00000810      0x104 ./Sources/Lab3.o
+                0x00000810                main
+ .text.CalcChkSum
+                0x00000914       0x58 ./Sources/Lab3.o
+                0x00000914                CalcChkSum
+ .text.SoftwareCounter
+                0x0000096c       0x78 ./Sources/Lab3.o
+                0x0000096c                SoftwareCounter
+ .text.SoftwareHardwareCounter
+                0x000009e4       0x78 ./Sources/Lab3.o
+                0x000009e4                SoftwareHardwareCounter
+ .text.HardwareCounter
+                0x00000a5c       0x8c ./Sources/Lab3.o
+                0x00000a5c                HardwareCounter
+ .text.PORTA_IRQHandler
+                0x00000ae8       0x2c ./Sources/Lab3.o
+                0x00000ae8                PORTA_IRQHandler
+ .text.BIOOpen  0x00000b14       0x8c ./Board/BasicIO.o
+                0x00000b14                BIOOpen
+ .text.BIORead  0x00000ba0       0x38 ./Board/BasicIO.o
+                0x00000ba0                BIORead
+ .text.BIOGetChar
+                0x00000bd8       0x24 ./Board/BasicIO.o
+                0x00000bd8                BIOGetChar
+ .text.BIOWrite
+                0x00000bfc       0x30 ./Board/BasicIO.o
+                0x00000bfc                BIOWrite
+ .text.BIOPutStrg
+                0x00000c2c       0x30 ./Board/BasicIO.o
+                0x00000c2c                BIOPutStrg
+ .text.BIOOutDecHWord
+                0x00000c5c      0x150 ./Board/BasicIO.o
+                0x00000c5c                BIOOutDecHWord
+ .text.BIOOutHexByte
+                0x00000dac       0x3c ./Board/BasicIO.o
+                0x00000dac                BIOOutHexByte
+ .text.BIOOutHexHWord
+                0x00000de8       0x28 ./Board/BasicIO.o
+                0x00000de8                BIOOutHexHWord
+ .text.BIOOutHexWord
+                0x00000e10       0x3c ./Board/BasicIO.o
+                0x00000e10                BIOOutHexWord
+ .text.bioHtoA  0x00000e4c       0x3c ./Board/BasicIO.o
+ .text.GpioSw2Init
+                0x00000e88       0x48 ./Board/K65TWR_GPIO.o
+                0x00000e88                GpioSw2Init
+ .text.exit     0x00000ed0       0x28 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+                0x00000ed0                exit
+ .text.__libc_init_array
+                0x00000ef8       0x4c c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+                0x00000ef8                __libc_init_array
+ .text.memset   0x00000f44       0x10 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+                0x00000f44                memset
+ .text._exit    0x00000f54        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+                0x00000f54                _exit
+ *(.rodata)
+ .rodata        0x00000f58       0x20 ./Sources/Lab3.o
+ *(.rodata*)
+ .rodata.CharError
+                0x00000f78       0x44 ./Sources/Lab3.o
+                0x00000f78                CharError
+ .rodata.MenuPrompt
+                0x00000fbc       0x30 ./Sources/Lab3.o
+                0x00000fbc                MenuPrompt
+ .rodata.CharOption1
+                0x00000fec       0x30 ./Sources/Lab3.o
+                0x00000fec                CharOption1
+ .rodata.CharOption2
+                0x0000101c       0x40 ./Sources/Lab3.o
+                0x0000101c                CharOption2
+ .rodata.CharOption3
+                0x0000105c       0x34 ./Sources/Lab3.o
+                0x0000105c                CharOption3
+ .rodata.SoftwarePrompt
+                0x00001090       0x40 ./Sources/Lab3.o
+                0x00001090                SoftwarePrompt
+ .rodata.SoftwareHardwarePrompt
+                0x000010d0       0x48 ./Sources/Lab3.o
+                0x000010d0                SoftwareHardwarePrompt
+ .rodata.HardwarePrompt
+                0x00001118       0x40 ./Sources/Lab3.o
+                0x00001118                HardwarePrompt
+ .rodata.str1.1
+                0x00001158        0x2 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ *fill*         0x0000115a        0x2 
+ .rodata._global_impure_ptr
+                0x0000115c        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+                0x0000115c                _global_impure_ptr
+ *(.glue_7)
+ .glue_7        0x00000000        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x00000000        0x0 linker stubs
+ *(.eh_frame)
+ .eh_frame      0x00001160        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ *(.init)
+ .init          0x00001160        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+                0x00001160                _init
+ .init          0x00001164        0x8 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+ *(.fini)
+ .fini          0x0000116c        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+                0x0000116c                _fini
+ .fini          0x00001170        0x8 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+                0x00001178                . = ALIGN (0x4)
+
+.vfp11_veneer   0x00001178        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x00001178        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x00001178        0x0
+ .iplt          0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+
+.ARM            0x00001178        0x8
+                0x00001178                __exidx_start = .
+ *(.ARM.exidx*)
+ .ARM.exidx     0x00001178        0x8 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+                0x00001180                __exidx_end = .
+
+.rel.dyn        0x00001180        0x0
+ .rel.iplt      0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+
+.ctors          0x00001180        0x0
+                0x00001180                __CTOR_LIST__ = .
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+                0x00001180                __CTOR_END__ = .
+
+.dtors          0x00001180        0x0
+                0x00001180                __DTOR_LIST__ = .
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+                0x00001180                __DTOR_END__ = .
+
+.preinit_array  0x00001180        0x0
+                0x00001180                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array*)
+                0x00001180                PROVIDE (__preinit_array_end, .)
+
+.init_array     0x00001180        0x4
+                0x00001180                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array*)
+ .init_array    0x00001180        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+                0x00001184                PROVIDE (__init_array_end, .)
+
+.fini_array     0x00001184        0x4
+                0x00001184                PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*))
+ *(.fini_array*)
+ .fini_array    0x00001184        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+                0x00001188                PROVIDE (__fini_array_end, .)
+                0x00001188                __etext = .
+                0x00001188                __DATA_ROM = .
+
+.data           0x20000000       0x64 load address 0x00001188
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                __DATA_RAM = .
+                0x20000000                __data_start__ = .
+ *(.data)
+ *(.data*)
+ .data.impure_data
+                0x20000000       0x60 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ *(.jcr*)
+ .jcr           0x20000060        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ .jcr           0x20000060        0x4 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+                0x20000064                . = ALIGN (0x4)
+                0x20000064                __data_end__ = .
+                0x000011ec                __DATA_END = (__DATA_ROM + (__data_end__ - __data_start__))
+
+.igot.plt       0x20000064        0x0 load address 0x000011ec
+ .igot.plt      0x00000000        0x0 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+
+.bss            0x20000064       0x20 load address 0x000011ec
+                0x20000064                . = ALIGN (0x4)
+                0x20000064                __START_BSS = .
+                0x20000064                __bss_start__ = .
+ *(.bss)
+ .bss           0x20000064       0x1c c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ *(.bss*)
+ .bss.hardware_count
+                0x20000080        0x2 ./Sources/Lab3.o
+                0x20000080                hardware_count
+ *(COMMON)
+                0x20000084                . = ALIGN (0x4)
+ *fill*         0x20000082        0x2 
+                0x20000084                __bss_end__ = .
+                0x20000084                __END_BSS = .
+
+.heap           0x20000084      0x404 load address 0x0000120c
+                0x20000088                . = ALIGN (0x8)
+ *fill*         0x20000084        0x4 
+                0x20000088                __end__ = .
+                0x20000088                PROVIDE (end, .)
+                0x20000088                __HeapBase = .
+                0x20000488                . = (. + HEAP_SIZE)
+ *fill*         0x20000088      0x400 
+                0x20000488                __HeapLimit = .
+
+.stack          0x20000488      0x400 load address 0x00001610
+                0x20000488                . = ALIGN (0x8)
+                0x20000888                . = (. + STACK_SIZE)
+ *fill*         0x20000488      0x400 
+                0x20030000                __StackTop = (ORIGIN (m_data_2) + 0x30000)
+                0x2002fc00                __StackLimit = (__StackTop - STACK_SIZE)
+                0x20030000                PROVIDE (__stack, __StackTop)
+
+.ARM.attributes
+                0x00000000       0x30
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x22 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crti.o
+ .ARM.attributes
+                0x00000022       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtbegin.o
+ .ARM.attributes
+                0x00000056       0x20 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu/crt0.o
+ .ARM.attributes
+                0x00000076       0x1f ./Startup/startup_MK65F18.o
+ .ARM.attributes
+                0x00000095       0x39 ./Startup/system_MK65F18.o
+ .ARM.attributes
+                0x000000ce       0x39 ./Sources/Lab3.o
+ .ARM.attributes
+                0x00000107       0x39 ./Board/BasicIO.o
+ .ARM.attributes
+                0x00000140       0x39 ./Board/K65TWR_GPIO.o
+ .ARM.attributes
+                0x00000179       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+ .ARM.attributes
+                0x000001ad       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-impure.o)
+ .ARM.attributes
+                0x000001e1       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+ .ARM.attributes
+                0x00000215       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+ .ARM.attributes
+                0x00000249       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)
+ .ARM.attributes
+                0x0000027d       0x34 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtend.o
+ .ARM.attributes
+                0x000002b1       0x22 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/armv7e-m/fpu/crtn.o
+                0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region m_data_2 overflowed with stack and heap)
+OUTPUT(Lab3.elf elf32-littlearm)
+
+.debug_line     0x00000000      0xa3b
+ .debug_line    0x00000000       0x62 ./Startup/startup_MK65F18.o
+ .debug_line    0x00000062      0x203 ./Startup/system_MK65F18.o
+ .debug_line    0x00000265      0x293 ./Sources/Lab3.o
+ .debug_line    0x000004f8      0x376 ./Board/BasicIO.o
+ .debug_line    0x0000086e      0x1cd ./Board/K65TWR_GPIO.o
+
+.debug_info     0x00000000     0x271f
+ .debug_info    0x00000000       0x67 ./Startup/startup_MK65F18.o
+ .debug_info    0x00000067      0xf38 ./Startup/system_MK65F18.o
+ .debug_info    0x00000f9f      0x969 ./Sources/Lab3.o
+ .debug_info    0x00001908      0x9cd ./Board/BasicIO.o
+ .debug_info    0x000022d5      0x44a ./Board/K65TWR_GPIO.o
+
+.debug_abbrev   0x00000000      0x63f
+ .debug_abbrev  0x00000000       0x14 ./Startup/startup_MK65F18.o
+ .debug_abbrev  0x00000014      0x141 ./Startup/system_MK65F18.o
+ .debug_abbrev  0x00000155      0x1a5 ./Sources/Lab3.o
+ .debug_abbrev  0x000002fa      0x23c ./Board/BasicIO.o
+ .debug_abbrev  0x00000536      0x109 ./Board/K65TWR_GPIO.o
+
+.debug_aranges  0x00000000      0x180
+ .debug_aranges
+                0x00000000       0x20 ./Startup/startup_MK65F18.o
+ .debug_aranges
+                0x00000020       0x28 ./Startup/system_MK65F18.o
+ .debug_aranges
+                0x00000048       0x60 ./Sources/Lab3.o
+ .debug_aranges
+                0x000000a8       0x98 ./Board/BasicIO.o
+ .debug_aranges
+                0x00000140       0x40 ./Board/K65TWR_GPIO.o
+
+.debug_ranges   0x00000000      0x120
+ .debug_ranges  0x00000000       0x18 ./Startup/system_MK65F18.o
+ .debug_ranges  0x00000018       0x50 ./Sources/Lab3.o
+ .debug_ranges  0x00000068       0x88 ./Board/BasicIO.o
+ .debug_ranges  0x000000f0       0x30 ./Board/K65TWR_GPIO.o
+
+.debug_macro    0x00000000    0x24031
+ .debug_macro   0x00000000       0x6a ./Startup/system_MK65F18.o
+ .debug_macro   0x0000006a      0x850 ./Startup/system_MK65F18.o
+ .debug_macro   0x000008ba      0x34e ./Startup/system_MK65F18.o
+ .debug_macro   0x00000c08       0x65 ./Startup/system_MK65F18.o
+ .debug_macro   0x00000c6d       0x3b ./Startup/system_MK65F18.o
+ .debug_macro   0x00000ca8       0x2d ./Startup/system_MK65F18.o
+ .debug_macro   0x00000cd5       0x26 ./Startup/system_MK65F18.o
+ .debug_macro   0x00000cfb      0xc13 ./Startup/system_MK65F18.o
+ .debug_macro   0x0000190e       0xf6 ./Startup/system_MK65F18.o
+ .debug_macro   0x00001a04    0x222c6 ./Startup/system_MK65F18.o
+ .debug_macro   0x00023cca       0x9d ./Sources/Lab3.o
+ .debug_macro   0x00023d67       0x16 ./Sources/Lab3.o
+ .debug_macro   0x00023d7d       0x53 ./Sources/Lab3.o
+ .debug_macro   0x00023dd0       0x28 ./Sources/Lab3.o
+ .debug_macro   0x00023df8      0x12a ./Sources/Lab3.o
+ .debug_macro   0x00023f22       0x88 ./Board/BasicIO.o
+ .debug_macro   0x00023faa       0x87 ./Board/K65TWR_GPIO.o
+
+.debug_str      0x00000000    0xd5d1a
+ .debug_str     0x00000000    0xd50a3 ./Startup/system_MK65F18.o
+                              0xd5295 (size before relaxing)
+ .debug_str     0x000d50a3      0xa2d ./Sources/Lab3.o
+                              0xd57ca (size before relaxing)
+ .debug_str     0x000d5ad0      0x1eb ./Board/BasicIO.o
+                              0xd4ab5 (size before relaxing)
+ .debug_str     0x000d5cbb       0x5f ./Board/K65TWR_GPIO.o
+                              0xd507d (size before relaxing)
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 ./Startup/system_MK65F18.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 ./Sources/Lab3.o
+ .comment       0x00000000       0x71 ./Board/BasicIO.o
+ .comment       0x00000000       0x71 ./Board/K65TWR_GPIO.o
+
+.debug_frame    0x00000000      0x48c
+ .debug_frame   0x00000000       0x48 ./Startup/system_MK65F18.o
+ .debug_frame   0x00000048      0x11c ./Sources/Lab3.o
+ .debug_frame   0x00000164      0x1f8 ./Board/BasicIO.o
+ .debug_frame   0x0000035c       0x9c ./Board/K65TWR_GPIO.o
+ .debug_frame   0x000003f8       0x28 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-exit.o)
+ .debug_frame   0x00000420       0x2c c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-init.o)
+ .debug_frame   0x0000044c       0x20 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libg_s.a(lib_a-memset.o)
+ .debug_frame   0x0000046c       0x20 c:/freescale/kds_3.0.0/toolchain/bin/../lib/gcc/arm-none-eabi/4.8.4/../../../../arm-none-eabi/lib/armv7e-m/fpu\libnosys.a(_exit.o)

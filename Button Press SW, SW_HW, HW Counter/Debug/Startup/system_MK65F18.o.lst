@@ -1,0 +1,1324 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"system_MK65F18.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.global	SystemCoreClock
+  21              		.section	.data.SystemCoreClock,"aw",%progbits
+  22              		.align	2
+  25              	SystemCoreClock:
+  26 0000 0095BA0A 		.word	180000000
+  27              		.section	.text.SystemInit,"ax",%progbits
+  28              		.align	2
+  29              		.global	SystemInit
+  30              		.thumb
+  31              		.thumb_func
+  33              	SystemInit:
+  34              	.LFB116:
+  35              		.file 1 "../Startup/system_MK65F18.c"
+   1:../Startup/system_MK65F18.c **** /*
+   2:../Startup/system_MK65F18.c **** ** ###################################################################
+   3:../Startup/system_MK65F18.c **** **     Processors:          MK65FN2M0CAC18
+   4:../Startup/system_MK65F18.c **** **                          MK65FN2M0VMI18
+   5:../Startup/system_MK65F18.c **** **
+   6:../Startup/system_MK65F18.c **** **     Compilers:           Keil ARM C/C++ Compiler
+   7:../Startup/system_MK65F18.c **** **                          Freescale C/C++ for Embedded ARM
+   8:../Startup/system_MK65F18.c **** **                          GNU C Compiler
+   9:../Startup/system_MK65F18.c **** **                          GNU C Compiler - CodeSourcery Sourcery G++
+  10:../Startup/system_MK65F18.c **** **                          IAR ANSI C/C++ Compiler for ARM
+  11:../Startup/system_MK65F18.c **** **
+  12:../Startup/system_MK65F18.c **** **     Reference manual:    K65P169M180SF5RMV2_NDA, Rev. 0 Draft A, October 2014
+  13:../Startup/system_MK65F18.c **** **     Version:             rev. 2.4, 2015-02-19
+  14:../Startup/system_MK65F18.c **** **     Build:               b150223
+  15:../Startup/system_MK65F18.c **** **
+  16:../Startup/system_MK65F18.c **** **     Abstract:
+  17:../Startup/system_MK65F18.c **** **         Provides a system configuration function and a global variable that
+  18:../Startup/system_MK65F18.c **** **         contains the system frequency. It configures the device and initializes
+  19:../Startup/system_MK65F18.c **** **         the oscillator (PLL) that is part of the microcontroller device.
+  20:../Startup/system_MK65F18.c **** **
+  21:../Startup/system_MK65F18.c **** **     Copyright (c) 2015 Freescale Semiconductor, Inc.
+  22:../Startup/system_MK65F18.c **** **     All rights reserved.
+  23:../Startup/system_MK65F18.c **** **
+  24:../Startup/system_MK65F18.c **** **     Redistribution and use in source and binary forms, with or without modification,
+  25:../Startup/system_MK65F18.c **** **     are permitted provided that the following conditions are met:
+  26:../Startup/system_MK65F18.c **** **
+  27:../Startup/system_MK65F18.c **** **     o Redistributions of source code must retain the above copyright notice, this list
+  28:../Startup/system_MK65F18.c **** **       of conditions and the following disclaimer.
+  29:../Startup/system_MK65F18.c **** **
+  30:../Startup/system_MK65F18.c **** **     o Redistributions in binary form must reproduce the above copyright notice, this
+  31:../Startup/system_MK65F18.c **** **       list of conditions and the following disclaimer in the documentation and/or
+  32:../Startup/system_MK65F18.c **** **       other materials provided with the distribution.
+  33:../Startup/system_MK65F18.c **** **
+  34:../Startup/system_MK65F18.c **** **     o Neither the name of Freescale Semiconductor, Inc. nor the names of its
+  35:../Startup/system_MK65F18.c **** **       contributors may be used to endorse or promote products derived from this
+  36:../Startup/system_MK65F18.c **** **       software without specific prior written permission.
+  37:../Startup/system_MK65F18.c **** **
+  38:../Startup/system_MK65F18.c **** **     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  39:../Startup/system_MK65F18.c **** **     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  40:../Startup/system_MK65F18.c **** **     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  41:../Startup/system_MK65F18.c **** **     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+  42:../Startup/system_MK65F18.c **** **     ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  43:../Startup/system_MK65F18.c **** **     (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  44:../Startup/system_MK65F18.c **** **     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+  45:../Startup/system_MK65F18.c **** **     ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  46:../Startup/system_MK65F18.c **** **     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  47:../Startup/system_MK65F18.c **** **     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  48:../Startup/system_MK65F18.c **** **
+  49:../Startup/system_MK65F18.c **** **     http:                 www.freescale.com
+  50:../Startup/system_MK65F18.c **** **     mail:                 support@freescale.com
+  51:../Startup/system_MK65F18.c **** **
+  52:../Startup/system_MK65F18.c **** **     Revisions:
+  53:../Startup/system_MK65F18.c **** **     - rev. 1.0 (2013-09-02)
+  54:../Startup/system_MK65F18.c **** **         Initial version.
+  55:../Startup/system_MK65F18.c **** **     - rev. 2.0 (2014-02-17)
+  56:../Startup/system_MK65F18.c **** **         Register accessor macros added to the memory map.
+  57:../Startup/system_MK65F18.c **** **         Symbols for Processor Expert memory map compatibility added to the memory map.
+  58:../Startup/system_MK65F18.c **** **         Startup file for gcc has been updated according to CMSIS 3.2.
+  59:../Startup/system_MK65F18.c **** **         Definition of BITBAND macros updated to support peripherals with 32-bit acces disabled.
+  60:../Startup/system_MK65F18.c **** **         Update according to reference manual rev. 2
+  61:../Startup/system_MK65F18.c **** **     - rev. 2.1 (2014-04-16)
+  62:../Startup/system_MK65F18.c **** **         Update of SystemInit() and SystemCoreClockUpdate() functions.
+  63:../Startup/system_MK65F18.c **** **     - rev. 2.2 (2014-10-14)
+  64:../Startup/system_MK65F18.c **** **         Interrupt INT_LPTimer renamed to INT_LPTMR0, interrupt INT_Watchdog renamed to INT_WDOG_
+  65:../Startup/system_MK65F18.c **** **     - rev. 2.3 (2014-11-20)
+  66:../Startup/system_MK65F18.c **** **         Update according to reverence manual K65P169M180SF5RMV2_NDA, Rev. 0 Draft A, October 201
+  67:../Startup/system_MK65F18.c **** **         Update of SystemInit() to use 16MHz external crystal.
+  68:../Startup/system_MK65F18.c **** **     - rev. 2.4 (2015-02-19)
+  69:../Startup/system_MK65F18.c **** **         Renamed interrupt vector LLW to LLWU.
+  70:../Startup/system_MK65F18.c **** **
+  71:../Startup/system_MK65F18.c **** ** ###################################################################
+  72:../Startup/system_MK65F18.c **** */
+  73:../Startup/system_MK65F18.c **** 
+  74:../Startup/system_MK65F18.c **** /*!
+  75:../Startup/system_MK65F18.c ****  * @file MK65F18
+  76:../Startup/system_MK65F18.c ****  * @version 2.4
+  77:../Startup/system_MK65F18.c ****  * @date 2015-02-19
+  78:../Startup/system_MK65F18.c ****  * @brief Device specific configuration file for MK65F18 (implementation file)
+  79:../Startup/system_MK65F18.c ****  *
+  80:../Startup/system_MK65F18.c ****  * Provides a system configuration function and a global variable that contains
+  81:../Startup/system_MK65F18.c ****  * the system frequency. It configures the device and initializes the oscillator
+  82:../Startup/system_MK65F18.c ****  * (PLL) that is part of the microcontroller device.
+  83:../Startup/system_MK65F18.c ****  */
+  84:../Startup/system_MK65F18.c **** 
+  85:../Startup/system_MK65F18.c **** #include <stdint.h>
+  86:../Startup/system_MK65F18.c **** #include "MK65F18.h"
+  87:../Startup/system_MK65F18.c **** 
+  88:../Startup/system_MK65F18.c **** 
+  89:../Startup/system_MK65F18.c **** 
+  90:../Startup/system_MK65F18.c **** /* ----------------------------------------------------------------------------
+  91:../Startup/system_MK65F18.c ****    -- Core clock
+  92:../Startup/system_MK65F18.c ****    ---------------------------------------------------------------------------- */
+  93:../Startup/system_MK65F18.c **** 
+  94:../Startup/system_MK65F18.c **** uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
+  95:../Startup/system_MK65F18.c **** 
+  96:../Startup/system_MK65F18.c **** /* ----------------------------------------------------------------------------
+  97:../Startup/system_MK65F18.c ****    -- SystemInit()
+  98:../Startup/system_MK65F18.c ****    ---------------------------------------------------------------------------- */
+  99:../Startup/system_MK65F18.c **** 
+ 100:../Startup/system_MK65F18.c **** void SystemInit (void) {
+  36              		.loc 1 100 0
+  37              		.cfi_startproc
+  38              		@ args = 0, pretend = 0, frame = 0
+  39              		@ frame_needed = 1, uses_anonymous_args = 0
+  40              		@ link register save eliminated.
+  41 0000 80B4     		push	{r7}
+  42              		.cfi_def_cfa_offset 4
+  43              		.cfi_offset 7, -4
+  44 0002 00AF     		add	r7, sp, #0
+  45              		.cfi_def_cfa_register 7
+ 101:../Startup/system_MK65F18.c **** #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+ 102:../Startup/system_MK65F18.c ****   SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access */
+  46              		.loc 1 102 0
+  47 0004 8F4B     		ldr	r3, .L11
+  48 0006 8F4A     		ldr	r2, .L11
+  49 0008 D2F88820 		ldr	r2, [r2, #136]
+  50 000c 42F47002 		orr	r2, r2, #15728640
+  51 0010 C3F88820 		str	r2, [r3, #136]
+ 103:../Startup/system_MK65F18.c **** #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
+ 104:../Startup/system_MK65F18.c ****   /* Watchdog disable */
+ 105:../Startup/system_MK65F18.c **** #if (DISABLE_WDOG)
+ 106:../Startup/system_MK65F18.c ****   /* WDOG->UNLOCK: WDOGUNLOCK=0xC520 */
+ 107:../Startup/system_MK65F18.c ****   WDOG->UNLOCK = WDOG_UNLOCK_WDOGUNLOCK(0xC520); /* Key 1 */
+  52              		.loc 1 107 0
+  53 0014 8C4B     		ldr	r3, .L11+4
+  54 0016 4CF22052 		movw	r2, #50464
+  55 001a DA81     		strh	r2, [r3, #14]	@ movhi
+ 108:../Startup/system_MK65F18.c ****   /* WDOG->UNLOCK: WDOGUNLOCK=0xD928 */
+ 109:../Startup/system_MK65F18.c ****   WDOG->UNLOCK = WDOG_UNLOCK_WDOGUNLOCK(0xD928); /* Key 2 */
+  56              		.loc 1 109 0
+  57 001c 8A4B     		ldr	r3, .L11+4
+  58 001e 4DF62812 		movw	r2, #55592
+  59 0022 DA81     		strh	r2, [r3, #14]	@ movhi
+ 110:../Startup/system_MK65F18.c ****   /* WDOG->STCTRLH: ?=0,DISTESTWDOG=0,BYTESEL=0,TESTSEL=0,TESTWDOG=0,?=0,?=1,WAITEN=1,STOPEN=1,DBGE
+ 111:../Startup/system_MK65F18.c ****   WDOG->STCTRLH = WDOG_STCTRLH_BYTESEL(0x00) |
+  60              		.loc 1 111 0
+  61 0024 884B     		ldr	r3, .L11+4
+  62 0026 4FF4E972 		mov	r2, #466
+  63 002a 1A80     		strh	r2, [r3]	@ movhi
+ 112:../Startup/system_MK65F18.c ****                  WDOG_STCTRLH_WAITEN_MASK |
+ 113:../Startup/system_MK65F18.c ****                  WDOG_STCTRLH_STOPEN_MASK |
+ 114:../Startup/system_MK65F18.c ****                  WDOG_STCTRLH_ALLOWUPDATE_MASK |
+ 115:../Startup/system_MK65F18.c ****                  WDOG_STCTRLH_CLKSRC_MASK |
+ 116:../Startup/system_MK65F18.c ****                  0x0100U;
+ 117:../Startup/system_MK65F18.c **** #endif /* (DISABLE_WDOG) */
+ 118:../Startup/system_MK65F18.c **** #ifdef CLOCK_SETUP
+ 119:../Startup/system_MK65F18.c ****   /* Wake-up from VLLSx? */
+ 120:../Startup/system_MK65F18.c ****   if((RCM->SRS0 & RCM_SRS0_WAKEUP_MASK) != 0x00U)
+  64              		.loc 1 120 0
+  65 002c 874B     		ldr	r3, .L11+8
+  66 002e 1B78     		ldrb	r3, [r3]
+  67 0030 DBB2     		uxtb	r3, r3
+  68 0032 03F00103 		and	r3, r3, #1
+  69 0036 002B     		cmp	r3, #0
+  70 0038 0FD0     		beq	.L2
+ 121:../Startup/system_MK65F18.c ****   {
+ 122:../Startup/system_MK65F18.c ****     /* VLLSx recovery */
+ 123:../Startup/system_MK65F18.c ****     if((PMC->REGSC & PMC_REGSC_ACKISO_MASK) != 0x00U)
+  71              		.loc 1 123 0
+  72 003a 854B     		ldr	r3, .L11+12
+  73 003c 9B78     		ldrb	r3, [r3, #2]
+  74 003e DBB2     		uxtb	r3, r3
+  75 0040 03F00803 		and	r3, r3, #8
+  76 0044 002B     		cmp	r3, #0
+  77 0046 2ED0     		beq	.L4
+ 124:../Startup/system_MK65F18.c ****     {
+ 125:../Startup/system_MK65F18.c ****        PMC->REGSC |= PMC_REGSC_ACKISO_MASK; /* Release hold with ACKISO: Only has an effect if reco
+  78              		.loc 1 125 0
+  79 0048 814B     		ldr	r3, .L11+12
+  80 004a 814A     		ldr	r2, .L11+12
+  81 004c 9278     		ldrb	r2, [r2, #2]
+  82 004e D2B2     		uxtb	r2, r2
+  83 0050 42F00802 		orr	r2, r2, #8
+  84 0054 D2B2     		uxtb	r2, r2
+  85 0056 9A70     		strb	r2, [r3, #2]
+  86 0058 25E0     		b	.L4
+  87              	.L2:
+ 126:../Startup/system_MK65F18.c ****     }
+ 127:../Startup/system_MK65F18.c ****   } else {
+ 128:../Startup/system_MK65F18.c ****     /* RTC initialization */
+ 129:../Startup/system_MK65F18.c **** #ifdef SYSTEM_RTC_CR_VALUE
+ 130:../Startup/system_MK65F18.c ****     SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
+  88              		.loc 1 130 0
+  89 005a 7E49     		ldr	r1, .L11+16
+  90 005c 7D4B     		ldr	r3, .L11+16
+  91 005e 03F58153 		add	r3, r3, #4128
+  92 0062 1C33     		adds	r3, r3, #28
+  93 0064 1B68     		ldr	r3, [r3]
+  94 0066 43F00052 		orr	r2, r3, #536870912
+  95 006a 01F58153 		add	r3, r1, #4128
+  96 006e 1C33     		adds	r3, r3, #28
+  97 0070 1A60     		str	r2, [r3]
+ 131:../Startup/system_MK65F18.c ****     if ((RTC->CR & RTC_CR_OSCE_MASK) == 0x00U) { /* Only if the OSCILLATOR is not already enabled *
+  98              		.loc 1 131 0
+  99 0072 794B     		ldr	r3, .L11+20
+ 100 0074 1B69     		ldr	r3, [r3, #16]
+ 101 0076 03F48073 		and	r3, r3, #256
+ 102 007a 002B     		cmp	r3, #0
+ 103 007c 13D1     		bne	.L4
+ 132:../Startup/system_MK65F18.c ****       RTC->CR = (uint32_t)((RTC->CR & (uint32_t)~(uint32_t)(RTC_CR_SC2P_MASK | RTC_CR_SC4P_MASK | R
+ 104              		.loc 1 132 0
+ 105 007e 764B     		ldr	r3, .L11+20
+ 106 0080 754A     		ldr	r2, .L11+20
+ 107 0082 1269     		ldr	r2, [r2, #16]
+ 108 0084 22F47C52 		bic	r2, r2, #16128
+ 109 0088 42F44072 		orr	r2, r2, #768
+ 110 008c 1A61     		str	r2, [r3, #16]
+ 133:../Startup/system_MK65F18.c ****       RTC->CR |= (uint32_t)RTC_CR_OSCE_MASK;
+ 111              		.loc 1 133 0
+ 112 008e 724B     		ldr	r3, .L11+20
+ 113 0090 714A     		ldr	r2, .L11+20
+ 114 0092 1269     		ldr	r2, [r2, #16]
+ 115 0094 42F48072 		orr	r2, r2, #256
+ 116 0098 1A61     		str	r2, [r3, #16]
+ 134:../Startup/system_MK65F18.c ****       RTC->CR &= (uint32_t)~(uint32_t)RTC_CR_CLKO_MASK;
+ 117              		.loc 1 134 0
+ 118 009a 6F4B     		ldr	r3, .L11+20
+ 119 009c 6E4A     		ldr	r2, .L11+20
+ 120 009e 1269     		ldr	r2, [r2, #16]
+ 121 00a0 22F40072 		bic	r2, r2, #512
+ 122 00a4 1A61     		str	r2, [r3, #16]
+ 123              	.L4:
+ 135:../Startup/system_MK65F18.c ****     }
+ 136:../Startup/system_MK65F18.c **** #endif
+ 137:../Startup/system_MK65F18.c ****   }
+ 138:../Startup/system_MK65F18.c **** 
+ 139:../Startup/system_MK65F18.c ****   /* Power mode protection initialization */
+ 140:../Startup/system_MK65F18.c **** #ifdef SYSTEM_SMC_PMPROT_VALUE
+ 141:../Startup/system_MK65F18.c ****   SMC->PMPROT = SYSTEM_SMC_PMPROT_VALUE;
+ 124              		.loc 1 141 0
+ 125 00a6 6D4B     		ldr	r3, .L11+24
+ 126 00a8 AA22     		movs	r2, #170
+ 127 00aa 1A70     		strb	r2, [r3]
+ 142:../Startup/system_MK65F18.c **** #endif
+ 143:../Startup/system_MK65F18.c **** 
+ 144:../Startup/system_MK65F18.c ****   /* High speed run mode enable */
+ 145:../Startup/system_MK65F18.c **** #if (((SYSTEM_SMC_PMCTRL_VALUE) & SMC_PMCTRL_RUNM_MASK) == (0x03U << SMC_PMCTRL_RUNM_SHIFT))
+ 146:../Startup/system_MK65F18.c ****   SMC->PMCTRL = (uint8_t)((SYSTEM_SMC_PMCTRL_VALUE) & (SMC_PMCTRL_RUNM_MASK)); /* Enable HSRUN mode
+ 128              		.loc 1 146 0
+ 129 00ac 6B4B     		ldr	r3, .L11+24
+ 130 00ae 6022     		movs	r2, #96
+ 131 00b0 5A70     		strb	r2, [r3, #1]
+ 147:../Startup/system_MK65F18.c ****   while(SMC->PMSTAT != 0x80U) {        /* Wait until the system is in HSRUN mode */
+ 132              		.loc 1 147 0
+ 133 00b2 00BF     		nop
+ 134              	.L5:
+ 135              		.loc 1 147 0 is_stmt 0 discriminator 1
+ 136 00b4 694B     		ldr	r3, .L11+24
+ 137 00b6 DB78     		ldrb	r3, [r3, #3]
+ 138 00b8 DBB2     		uxtb	r3, r3
+ 139 00ba 802B     		cmp	r3, #128
+ 140 00bc FAD1     		bne	.L5
+ 148:../Startup/system_MK65F18.c ****   }
+ 149:../Startup/system_MK65F18.c **** #endif
+ 150:../Startup/system_MK65F18.c ****   /* System clock initialization */
+ 151:../Startup/system_MK65F18.c ****   /* Internal reference clock trim initialization */
+ 152:../Startup/system_MK65F18.c **** #if defined(SLOW_TRIM_ADDRESS)
+ 153:../Startup/system_MK65F18.c ****   if ( *((uint8_t*)SLOW_TRIM_ADDRESS) != 0xFFU) {                              /* Skip if non-volat
+ 154:../Startup/system_MK65F18.c ****     MCG->C3 = *((uint8_t*)SLOW_TRIM_ADDRESS);
+ 155:../Startup/system_MK65F18.c **** #endif /* defined(SLOW_TRIM_ADDRESS) */
+ 156:../Startup/system_MK65F18.c **** #if defined(SLOW_FINE_TRIM_ADDRESS)
+ 157:../Startup/system_MK65F18.c ****     MCG->C4 = (MCG->C4 & ~(MCG_C4_SCFTRIM_MASK)) | ((*((uint8_t*) SLOW_FINE_TRIM_ADDRESS)) & MCG_C4
+ 158:../Startup/system_MK65F18.c **** #endif
+ 159:../Startup/system_MK65F18.c **** #if defined(FAST_TRIM_ADDRESS)
+ 160:../Startup/system_MK65F18.c ****     MCG->C4 = (MCG->C4 & ~(MCG_C4_FCTRIM_MASK)) |((*((uint8_t*) FAST_TRIM_ADDRESS)) & MCG_C4_FCTRIM
+ 161:../Startup/system_MK65F18.c **** #endif
+ 162:../Startup/system_MK65F18.c **** #if defined(FAST_FINE_TRIM_ADDRESS)
+ 163:../Startup/system_MK65F18.c ****     MCG->C2 = (MCG->C2 & ~(MCG_C2_FCFTRIM_MASK)) | ((*((uint8_t*)FAST_TRIM_ADDRESS)) & MCG_C2_FCFTR
+ 164:../Startup/system_MK65F18.c **** #endif /* defined(FAST_FINE_TRIM_ADDRESS) */
+ 165:../Startup/system_MK65F18.c **** #if defined(SLOW_TRIM_ADDRESS)
+ 166:../Startup/system_MK65F18.c ****   }
+ 167:../Startup/system_MK65F18.c **** #endif /* defined(SLOW_TRIM_ADDRESS) */
+ 168:../Startup/system_MK65F18.c **** 
+ 169:../Startup/system_MK65F18.c ****   /* Set system prescalers and clock sources */
+ 170:../Startup/system_MK65F18.c ****   SIM->CLKDIV1 = SYSTEM_SIM_CLKDIV1_VALUE; /* Set system prescalers */
+ 141              		.loc 1 170 0 is_stmt 1
+ 142 00be 654B     		ldr	r3, .L11+16
+ 143 00c0 03F58253 		add	r3, r3, #4160
+ 144 00c4 0433     		adds	r3, r3, #4
+ 145 00c6 664A     		ldr	r2, .L11+28
+ 146 00c8 1A60     		str	r2, [r3]
+ 171:../Startup/system_MK65F18.c ****   SIM->SOPT1 = ((SIM->SOPT1) & (uint32_t)(~(SIM_SOPT1_OSC32KSEL_MASK))) | ((SYSTEM_SIM_SOPT1_VALUE)
+ 147              		.loc 1 171 0
+ 148 00ca 624B     		ldr	r3, .L11+16
+ 149 00cc 614A     		ldr	r2, .L11+16
+ 150 00ce 1268     		ldr	r2, [r2]
+ 151 00d0 22F44022 		bic	r2, r2, #786432
+ 152 00d4 42F40022 		orr	r2, r2, #524288
+ 153 00d8 1A60     		str	r2, [r3]
+ 172:../Startup/system_MK65F18.c ****   SIM->SOPT2 = ((SIM->SOPT2) & (uint32_t)(~(SIM_SOPT2_PLLFLLSEL_MASK))) | ((SYSTEM_SIM_SOPT2_VALUE)
+ 154              		.loc 1 172 0
+ 155 00da 5E49     		ldr	r1, .L11+16
+ 156 00dc 5D4B     		ldr	r3, .L11+16
+ 157 00de 03F58053 		add	r3, r3, #4096
+ 158 00e2 0433     		adds	r3, r3, #4
+ 159 00e4 1B68     		ldr	r3, [r3]
+ 160 00e6 23F44033 		bic	r3, r3, #196608
+ 161 00ea 43F48032 		orr	r2, r3, #65536
+ 162 00ee 01F58053 		add	r3, r1, #4096
+ 163 00f2 0433     		adds	r3, r3, #4
+ 164 00f4 1A60     		str	r2, [r3]
+ 173:../Startup/system_MK65F18.c ****   SIM->SOPT2 = ((SIM->SOPT2) & (uint32_t)(~(SIM_SOPT2_TPMSRC_MASK))) | ((SYSTEM_SIM_SOPT2_VALUE) & 
+ 165              		.loc 1 173 0
+ 166 00f6 5749     		ldr	r1, .L11+16
+ 167 00f8 564B     		ldr	r3, .L11+16
+ 168 00fa 03F58053 		add	r3, r3, #4096
+ 169 00fe 0433     		adds	r3, r3, #4
+ 170 0100 1B68     		ldr	r3, [r3]
+ 171 0102 23F04073 		bic	r3, r3, #50331648
+ 172 0106 43F08072 		orr	r2, r3, #16777216
+ 173 010a 01F58053 		add	r3, r1, #4096
+ 174 010e 0433     		adds	r3, r3, #4
+ 175 0110 1A60     		str	r2, [r3]
+ 174:../Startup/system_MK65F18.c **** #if ((MCG_MODE == MCG_MODE_FEI) || (MCG_MODE == MCG_MODE_FBI) || (MCG_MODE == MCG_MODE_BLPI))
+ 175:../Startup/system_MK65F18.c ****   /* Set MCG and OSC */
+ 176:../Startup/system_MK65F18.c **** #if  ((((SYSTEM_OSC_CR_VALUE) & OSC_CR_ERCLKEN_MASK) != 0x00U) || ((((SYSTEM_MCG_C5_VALUE) & MCG_C5
+ 177:../Startup/system_MK65F18.c ****   /* SIM_SCGC5: PORTA=1 */
+ 178:../Startup/system_MK65F18.c ****   SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
+ 179:../Startup/system_MK65F18.c ****   /* PORTA_PCR18: ISF=0,MUX=0 */
+ 180:../Startup/system_MK65F18.c ****   PORTA_PCR18 &= (uint32_t)~(uint32_t)((PORT_PCR_ISF_MASK | PORT_PCR_MUX(0x07)));
+ 181:../Startup/system_MK65F18.c ****   if (((SYSTEM_MCG_C2_VALUE) & MCG_C2_EREFS_MASK) != 0x00U) {
+ 182:../Startup/system_MK65F18.c ****   /* PORTA_PCR19: ISF=0,MUX=0 */
+ 183:../Startup/system_MK65F18.c ****   PORTA_PCR19 &= (uint32_t)~(uint32_t)((PORT_PCR_ISF_MASK | PORT_PCR_MUX(0x07)));
+ 184:../Startup/system_MK65F18.c ****   }
+ 185:../Startup/system_MK65F18.c **** #endif
+ 186:../Startup/system_MK65F18.c ****   MCG->SC = SYSTEM_MCG_SC_VALUE;       /* Set SC (fast clock internal reference divider) */
+ 187:../Startup/system_MK65F18.c ****   MCG->C1 = SYSTEM_MCG_C1_VALUE;       /* Set C1 (clock source selection, FLL ext. reference divide
+ 188:../Startup/system_MK65F18.c ****   /* Check that the source of the FLL reference clock is the requested one. */
+ 189:../Startup/system_MK65F18.c ****   if (((SYSTEM_MCG_C1_VALUE) & MCG_C1_IREFS_MASK) != 0x00U) {
+ 190:../Startup/system_MK65F18.c ****     while((MCG->S & MCG_S_IREFST_MASK) == 0x00U) {
+ 191:../Startup/system_MK65F18.c ****     }
+ 192:../Startup/system_MK65F18.c ****   } else {
+ 193:../Startup/system_MK65F18.c ****     while((MCG->S & MCG_S_IREFST_MASK) != 0x00U) {
+ 194:../Startup/system_MK65F18.c ****     }
+ 195:../Startup/system_MK65F18.c ****   }
+ 196:../Startup/system_MK65F18.c ****   MCG->C2 = (MCG->C2 & (uint8_t)(~(MCG_C2_FCFTRIM_MASK))) | (SYSTEM_MCG_C2_VALUE & (uint8_t)(~(MCG_
+ 197:../Startup/system_MK65F18.c ****   MCG->C4 = ((SYSTEM_MCG_C4_VALUE) & (uint8_t)(~(MCG_C4_FCTRIM_MASK | MCG_C4_SCFTRIM_MASK))) | (MCG
+ 198:../Startup/system_MK65F18.c ****   OSC->CR = SYSTEM_OSC_CR_VALUE;       /* Set OSC_CR (OSCERCLK enable, oscillator capacitor load) *
+ 199:../Startup/system_MK65F18.c ****   MCG->C7 = SYSTEM_MCG_C7_VALUE;       /* Set C7 (OSC Clock Select) */
+ 200:../Startup/system_MK65F18.c **** 
+ 201:../Startup/system_MK65F18.c **** #else /* MCG_MODE */
+ 202:../Startup/system_MK65F18.c ****   /* Set MCG and OSC */
+ 203:../Startup/system_MK65F18.c **** #if  (((SYSTEM_OSC_CR_VALUE) & OSC_CR_ERCLKEN_MASK) != 0x00U) || (((SYSTEM_MCG_C7_VALUE) & MCG_C7_O
+ 204:../Startup/system_MK65F18.c ****   /* SIM_SCGC5: PORTA=1 */
+ 205:../Startup/system_MK65F18.c ****   SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK;
+ 176              		.loc 1 205 0
+ 177 0112 5049     		ldr	r1, .L11+16
+ 178 0114 4F4B     		ldr	r3, .L11+16
+ 179 0116 03F58153 		add	r3, r3, #4128
+ 180 011a 1833     		adds	r3, r3, #24
+ 181 011c 1B68     		ldr	r3, [r3]
+ 182 011e 43F40072 		orr	r2, r3, #512
+ 183 0122 01F58153 		add	r3, r1, #4128
+ 184 0126 1833     		adds	r3, r3, #24
+ 185 0128 1A60     		str	r2, [r3]
+ 206:../Startup/system_MK65F18.c ****   /* PORTA_PCR18: ISF=0,MUX=0 */
+ 207:../Startup/system_MK65F18.c ****   PORTA_PCR18 &= (uint32_t)~(uint32_t)((PORT_PCR_ISF_MASK | PORT_PCR_MUX(0x07)));
+ 186              		.loc 1 207 0
+ 187 012a 4E4A     		ldr	r2, .L11+32
+ 188 012c 4D4B     		ldr	r3, .L11+32
+ 189 012e 9B6C     		ldr	r3, [r3, #72]
+ 190 0130 23F08073 		bic	r3, r3, #16777216
+ 191 0134 23F4E063 		bic	r3, r3, #1792
+ 192 0138 9364     		str	r3, [r2, #72]
+ 208:../Startup/system_MK65F18.c ****   if (((SYSTEM_MCG_C2_VALUE) & MCG_C2_EREFS_MASK) != 0x00U) {
+ 209:../Startup/system_MK65F18.c ****   /* PORTA_PCR19: ISF=0,MUX=0 */
+ 210:../Startup/system_MK65F18.c ****   PORTA_PCR19 &= (uint32_t)~(uint32_t)((PORT_PCR_ISF_MASK | PORT_PCR_MUX(0x07)));
+ 193              		.loc 1 210 0
+ 194 013a 4A4A     		ldr	r2, .L11+32
+ 195 013c 494B     		ldr	r3, .L11+32
+ 196 013e DB6C     		ldr	r3, [r3, #76]
+ 197 0140 23F08073 		bic	r3, r3, #16777216
+ 198 0144 23F4E063 		bic	r3, r3, #1792
+ 199 0148 D364     		str	r3, [r2, #76]
+ 211:../Startup/system_MK65F18.c ****   }
+ 212:../Startup/system_MK65F18.c **** #endif
+ 213:../Startup/system_MK65F18.c ****   MCG->SC = SYSTEM_MCG_SC_VALUE;       /* Set SC (fast clock internal reference divider) */
+ 200              		.loc 1 213 0
+ 201 014a 474B     		ldr	r3, .L11+36
+ 202 014c 0022     		movs	r2, #0
+ 203 014e 1A72     		strb	r2, [r3, #8]
+ 214:../Startup/system_MK65F18.c ****   MCG->C2 = (MCG->C2 & (uint8_t)(~(MCG_C2_FCFTRIM_MASK))) | (SYSTEM_MCG_C2_VALUE & (uint8_t)(~(MCG_
+ 204              		.loc 1 214 0
+ 205 0150 454B     		ldr	r3, .L11+36
+ 206 0152 454A     		ldr	r2, .L11+36
+ 207 0154 5278     		ldrb	r2, [r2, #1]
+ 208 0156 D2B2     		uxtb	r2, r2
+ 209 0158 22F06402 		bic	r2, r2, #100
+ 210 015c D2B2     		uxtb	r2, r2
+ 211 015e 42F02402 		orr	r2, r2, #36
+ 212 0162 D2B2     		uxtb	r2, r2
+ 213 0164 5A70     		strb	r2, [r3, #1]
+ 215:../Startup/system_MK65F18.c ****   OSC->CR = SYSTEM_OSC_CR_VALUE;       /* Set OSC_CR (OSCERCLK enable, oscillator capacitor load) *
+ 214              		.loc 1 215 0
+ 215 0166 414B     		ldr	r3, .L11+40
+ 216 0168 8022     		movs	r2, #128
+ 217 016a 1A70     		strb	r2, [r3]
+ 216:../Startup/system_MK65F18.c ****   MCG->C7 = SYSTEM_MCG_C7_VALUE;       /* Set C7 (OSC Clock Select) */
+ 218              		.loc 1 216 0
+ 219 016c 3E4B     		ldr	r3, .L11+36
+ 220 016e 0022     		movs	r2, #0
+ 221 0170 1A73     		strb	r2, [r3, #12]
+ 217:../Startup/system_MK65F18.c ****   #if (MCG_MODE == MCG_MODE_PEE)
+ 218:../Startup/system_MK65F18.c ****   MCG->C1 = (SYSTEM_MCG_C1_VALUE) | MCG_C1_CLKS(0x02); /* Set C1 (clock source selection, FLL ext. 
+ 222              		.loc 1 218 0
+ 223 0172 3D4B     		ldr	r3, .L11+36
+ 224 0174 A222     		movs	r2, #162
+ 225 0176 1A70     		strb	r2, [r3]
+ 219:../Startup/system_MK65F18.c ****   #else
+ 220:../Startup/system_MK65F18.c ****   MCG->C1 = SYSTEM_MCG_C1_VALUE;       /* Set C1 (clock source selection, FLL ext. reference divide
+ 221:../Startup/system_MK65F18.c ****   #endif
+ 222:../Startup/system_MK65F18.c ****   if ((((SYSTEM_MCG_C2_VALUE) & MCG_C2_EREFS_MASK) != 0x00U) && (((SYSTEM_MCG_C7_VALUE) & MCG_C7_OS
+ 223:../Startup/system_MK65F18.c ****     while((MCG->S & MCG_S_OSCINIT0_MASK) == 0x00U) { /* Check that the oscillator is running */
+ 226              		.loc 1 223 0
+ 227 0178 00BF     		nop
+ 228              	.L6:
+ 229              		.loc 1 223 0 is_stmt 0 discriminator 1
+ 230 017a 3B4B     		ldr	r3, .L11+36
+ 231 017c 9B79     		ldrb	r3, [r3, #6]
+ 232 017e DBB2     		uxtb	r3, r3
+ 233 0180 03F00203 		and	r3, r3, #2
+ 234 0184 002B     		cmp	r3, #0
+ 235 0186 F8D0     		beq	.L6
+ 224:../Startup/system_MK65F18.c ****     }
+ 225:../Startup/system_MK65F18.c ****   }
+ 226:../Startup/system_MK65F18.c ****   /* Check that the source of the FLL reference clock is the requested one. */
+ 227:../Startup/system_MK65F18.c ****   if (((SYSTEM_MCG_C1_VALUE) & MCG_C1_IREFS_MASK) != 0x00U) {
+ 228:../Startup/system_MK65F18.c ****     while((MCG->S & MCG_S_IREFST_MASK) == 0x00U) {
+ 229:../Startup/system_MK65F18.c ****     }
+ 230:../Startup/system_MK65F18.c ****   } else {
+ 231:../Startup/system_MK65F18.c ****     while((MCG->S & MCG_S_IREFST_MASK) != 0x00U) {
+ 236              		.loc 1 231 0 is_stmt 1
+ 237 0188 00BF     		nop
+ 238              	.L7:
+ 239              		.loc 1 231 0 is_stmt 0 discriminator 1
+ 240 018a 374B     		ldr	r3, .L11+36
+ 241 018c 9B79     		ldrb	r3, [r3, #6]
+ 242 018e DBB2     		uxtb	r3, r3
+ 243 0190 03F01003 		and	r3, r3, #16
+ 244 0194 002B     		cmp	r3, #0
+ 245 0196 F8D1     		bne	.L7
+ 232:../Startup/system_MK65F18.c ****     }
+ 233:../Startup/system_MK65F18.c ****   }
+ 234:../Startup/system_MK65F18.c ****   MCG->C4 = ((SYSTEM_MCG_C4_VALUE)  & (uint8_t)(~(MCG_C4_FCTRIM_MASK | MCG_C4_SCFTRIM_MASK))) | (MC
+ 246              		.loc 1 234 0 is_stmt 1
+ 247 0198 334B     		ldr	r3, .L11+36
+ 248 019a 334A     		ldr	r2, .L11+36
+ 249 019c D278     		ldrb	r2, [r2, #3]
+ 250 019e D2B2     		uxtb	r2, r2
+ 251 01a0 02F01F02 		and	r2, r2, #31
+ 252 01a4 D2B2     		uxtb	r2, r2
+ 253 01a6 DA70     		strb	r2, [r3, #3]
+ 235:../Startup/system_MK65F18.c **** #endif /* MCG_MODE */
+ 236:../Startup/system_MK65F18.c **** 
+ 237:../Startup/system_MK65F18.c ****   /* USB UTMI PHY PLL initialization */
+ 238:../Startup/system_MK65F18.c **** #ifdef SYSTEM_USBPHY_ANACTRL_VALUE
+ 239:../Startup/system_MK65F18.c ****   SIM->SOPT2 |= SIM_SOPT2_USBREGEN_MASK; /* Enable USB PHY PLL regulator */
+ 240:../Startup/system_MK65F18.c ****   SIM->SCGC3 |= SIM_SCGC3_USBHSPHY_MASK; /* Enable USB PHY clock gate */
+ 241:../Startup/system_MK65F18.c ****   /* Use LPTMR to wait for 1ms */
+ 242:../Startup/system_MK65F18.c ****   SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;  /* Allow software control of LPMTR */
+ 243:../Startup/system_MK65F18.c ****   LPTMR0->CMR = LPTMR_CMR_COMPARE(0);  /* Default 1 LPO tick */
+ 244:../Startup/system_MK65F18.c ****   LPTMR0->CSR = (LPTMR_CSR_TCF_MASK | LPTMR_CSR_TPS(0x00));
+ 245:../Startup/system_MK65F18.c ****   LPTMR0->PSR = (LPTMR_PSR_PCS(0x01) | LPTMR_PSR_PBYP_MASK); /* Clock source: LPO, Prescaler bypass
+ 246:../Startup/system_MK65F18.c ****   LPTMR0->CSR = LPTMR_CSR_TEN_MASK;    /* LPMTR enable */
+ 247:../Startup/system_MK65F18.c ****   while((LPTMR0->CSR & LPTMR_CSR_TCF_MASK) == 0u) {
+ 248:../Startup/system_MK65F18.c ****   }
+ 249:../Startup/system_MK65F18.c ****   LPTMR0->CSR = 0x00;                  /* Disable LPTMR */
+ 250:../Startup/system_MK65F18.c ****   SIM->USBPHYCTL = SIM_USBPHYCTL_USB3VOUTTRG(6); /* Trim the USB regulator output to be 3.13V */
+ 251:../Startup/system_MK65F18.c ****   USBPHY_TRIM_OVERRIDE_EN = USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_MASK; /* Enable override 
+ 252:../Startup/system_MK65F18.c ****   USBPHY->CTRL &= ~USBPHY_CTRL_SFTRST_MASK; /* Release PHY from reset */
+ 253:../Startup/system_MK65F18.c ****   USBPHY->CTRL &= ~USBPHY_CTRL_CLKGATE_MASK; /* Clear CLKGATE to run clocks */
+ 254:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_POWER_MASK; /* Power up PLL */
+ 255:../Startup/system_MK65F18.c ****   #if (CPU_XTAL_CLK_HZ == 24000000U)   /* Setup the USB PLL feedback loop divider */
+ 256:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_DIV_SEL(0);
+ 257:../Startup/system_MK65F18.c ****   #elif (CPU_XTAL_CLK_HZ == 16000000U)
+ 258:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_DIV_SEL(1);
+ 259:../Startup/system_MK65F18.c ****   #elif (CPU_XTAL_CLK_HZ == 12000000U)
+ 260:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_DIV_SEL(2);
+ 261:../Startup/system_MK65F18.c ****   #endif
+ 262:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC &= ~USBPHY_PLL_SIC_PLL_BYPASS_MASK; /* Clear bypass bit */
+ 263:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK;	 /* Enable USB clock output from USB PHY 
+ 264:../Startup/system_MK65F18.c ****   USBPHY->CTRL |= (USBPHY_CTRL_AUTORESUME_EN_MASK | USBPHY_CTRL_ENAUTOCLR_CLKGATE_MASK | USBPHY_CTR
+ 265:../Startup/system_MK65F18.c ****   while(!(USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK)) {
+ 266:../Startup/system_MK65F18.c ****   }
+ 267:../Startup/system_MK65F18.c ****   USBPHY->PLL_SIC |= USBPHY_PLL_SIC_PLL_ENABLE_MASK; /* Enable PLL output */
+ 268:../Startup/system_MK65F18.c ****   USBPHY->ANACTRL = (USBPHY->ANACTRL & (uint32_t)(~(USBPHY_ANACTRL_PFD_CLK_SEL_MASK | USBPHY_ANACTR
+ 269:../Startup/system_MK65F18.c ****                   | (SYSTEM_USBPHY_ANACTRL_VALUE & (USBPHY_ANACTRL_PFD_CLK_SEL_MASK | USBPHY_ANACTR
+ 270:../Startup/system_MK65F18.c ****   USBPHY->ANACTRL &= ~USBPHY_ANACTRL_PFD_CLKGATE_MASK;
+ 271:../Startup/system_MK65F18.c **** #endif
+ 272:../Startup/system_MK65F18.c **** 
+ 273:../Startup/system_MK65F18.c ****   /* Common for all MCG modes */
+ 274:../Startup/system_MK65F18.c **** 
+ 275:../Startup/system_MK65F18.c ****   /* PLL clock can be used to generate clock for some devices regardless of clock generator (MCGOUT
+ 276:../Startup/system_MK65F18.c ****   MCG->C5 = (SYSTEM_MCG_C5_VALUE) & (uint8_t)(~(MCG_C5_PLLCLKEN_MASK)); /* Set C5 (PLL settings, PL
+ 254              		.loc 1 276 0
+ 255 01a8 2F4B     		ldr	r3, .L11+36
+ 256 01aa 0122     		movs	r2, #1
+ 257 01ac 1A71     		strb	r2, [r3, #4]
+ 277:../Startup/system_MK65F18.c ****   MCG->C6 = (SYSTEM_MCG_C6_VALUE) & (uint8_t)~(MCG_C6_PLLS_MASK); /* Set C6 (PLL select, VCO divide
+ 258              		.loc 1 277 0
+ 259 01ae 2E4B     		ldr	r3, .L11+36
+ 260 01b0 1D22     		movs	r2, #29
+ 261 01b2 5A71     		strb	r2, [r3, #5]
+ 278:../Startup/system_MK65F18.c ****   if ((SYSTEM_MCG_C5_VALUE) & MCG_C5_PLLCLKEN_MASK) {
+ 279:../Startup/system_MK65F18.c ****     MCG->C5 |= MCG_C5_PLLCLKEN_MASK;   /* PLL clock enable in mode other than PEE or PBE */
+ 280:../Startup/system_MK65F18.c ****   }
+ 281:../Startup/system_MK65F18.c **** 
+ 282:../Startup/system_MK65F18.c ****   /* BLPI and BLPE MCG mode specific */
+ 283:../Startup/system_MK65F18.c **** #if ((MCG_MODE == MCG_MODE_BLPI) || (MCG_MODE == MCG_MODE_BLPE))
+ 284:../Startup/system_MK65F18.c ****   MCG->C2 |= (MCG_C2_LP_MASK);         /* Disable FLL and PLL in bypass mode */
+ 285:../Startup/system_MK65F18.c ****   /* PEE and PBE MCG mode specific */
+ 286:../Startup/system_MK65F18.c **** #elif ((MCG_MODE == MCG_MODE_PBE) || (MCG_MODE == MCG_MODE_PEE))
+ 287:../Startup/system_MK65F18.c ****   MCG_C11 = SYSTEM_MCG_C11_VALUE;      /* Set C11 (Select PLL used to derive MCGOUT */
+ 262              		.loc 1 287 0
+ 263 01b4 2C4B     		ldr	r3, .L11+36
+ 264 01b6 0022     		movs	r2, #0
+ 265 01b8 1A74     		strb	r2, [r3, #16]
+ 288:../Startup/system_MK65F18.c ****   MCG->C6 |= (MCG_C6_PLLS_MASK);       /* Set C6 (PLL select, VCO divider etc.) */
+ 266              		.loc 1 288 0
+ 267 01ba 2B4B     		ldr	r3, .L11+36
+ 268 01bc 2A4A     		ldr	r2, .L11+36
+ 269 01be 5279     		ldrb	r2, [r2, #5]
+ 270 01c0 D2B2     		uxtb	r2, r2
+ 271 01c2 42F04002 		orr	r2, r2, #64
+ 272 01c6 D2B2     		uxtb	r2, r2
+ 273 01c8 5A71     		strb	r2, [r3, #5]
+ 289:../Startup/system_MK65F18.c ****   #if ((MCG_MODE == MCG_MODE_PEE) && (((SYSTEM_MCG_C11_VALUE) & MCG_C11_PLLCS_MASK) == 0x00U))
+ 290:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_LOCK0_MASK) == 0x00U) { /* Wait until PLL is locked*/
+ 274              		.loc 1 290 0
+ 275 01ca 00BF     		nop
+ 276              	.L8:
+ 277              		.loc 1 290 0 is_stmt 0 discriminator 1
+ 278 01cc 264B     		ldr	r3, .L11+36
+ 279 01ce 9B79     		ldrb	r3, [r3, #6]
+ 280 01d0 DBB2     		uxtb	r3, r3
+ 281 01d2 03F04003 		and	r3, r3, #64
+ 282 01d6 002B     		cmp	r3, #0
+ 283 01d8 F8D0     		beq	.L8
+ 291:../Startup/system_MK65F18.c ****   }
+ 292:../Startup/system_MK65F18.c ****   #endif
+ 293:../Startup/system_MK65F18.c ****   #if (MCG_MODE == MCG_MODE_PEE)
+ 294:../Startup/system_MK65F18.c ****   MCG->C1 &= (uint8_t)~(MCG_C1_CLKS_MASK);
+ 284              		.loc 1 294 0 is_stmt 1
+ 285 01da 234B     		ldr	r3, .L11+36
+ 286 01dc 224A     		ldr	r2, .L11+36
+ 287 01de 1278     		ldrb	r2, [r2]
+ 288 01e0 D2B2     		uxtb	r2, r2
+ 289 01e2 02F03F02 		and	r2, r2, #63
+ 290 01e6 D2B2     		uxtb	r2, r2
+ 291 01e8 1A70     		strb	r2, [r3]
+ 295:../Startup/system_MK65F18.c ****   #endif
+ 296:../Startup/system_MK65F18.c **** #endif
+ 297:../Startup/system_MK65F18.c **** 
+ 298:../Startup/system_MK65F18.c ****   /* Clock mode status check */
+ 299:../Startup/system_MK65F18.c **** #if ((MCG_MODE == MCG_MODE_FEI) || (MCG_MODE == MCG_MODE_FEE))
+ 300:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_CLKST_MASK) != 0x00U) { /* Wait until output of the FLL is selected */
+ 301:../Startup/system_MK65F18.c ****   }
+ 302:../Startup/system_MK65F18.c ****   /* Use LPTMR to wait for 1ms for FLL clock stabilization */
+ 303:../Startup/system_MK65F18.c ****   SIM->SCGC5 |= SIM_SCGC5_LPTMR_MASK;  /* Allow software control of LPMTR */
+ 304:../Startup/system_MK65F18.c ****   LPTMR0->CMR = LPTMR_CMR_COMPARE(0);  /* Default 1 LPO tick */
+ 305:../Startup/system_MK65F18.c ****   LPTMR0->CSR = (LPTMR_CSR_TCF_MASK | LPTMR_CSR_TPS(0x00));
+ 306:../Startup/system_MK65F18.c ****   LPTMR0->PSR = (LPTMR_PSR_PCS(0x01) | LPTMR_PSR_PBYP_MASK); /* Clock source: LPO, Prescaler bypass
+ 307:../Startup/system_MK65F18.c ****   LPTMR0->CSR = LPTMR_CSR_TEN_MASK;    /* LPMTR enable */
+ 308:../Startup/system_MK65F18.c ****   while((LPTMR0->CSR & LPTMR_CSR_TCF_MASK) == 0u) {
+ 309:../Startup/system_MK65F18.c ****   }
+ 310:../Startup/system_MK65F18.c ****   LPTMR0->CSR = 0x00;                  /* Disable LPTMR */
+ 311:../Startup/system_MK65F18.c ****   SIM->SCGC5 &= (uint32_t)~(uint32_t)SIM_SCGC5_LPTMR_MASK;
+ 312:../Startup/system_MK65F18.c **** #elif ((MCG_MODE == MCG_MODE_FBI) || (MCG_MODE == MCG_MODE_BLPI))
+ 313:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_CLKST_MASK) != 0x04U) { /* Wait until internal reference clock is selected 
+ 314:../Startup/system_MK65F18.c ****   }
+ 315:../Startup/system_MK65F18.c **** #elif ((MCG_MODE == MCG_MODE_FBE) || (MCG_MODE == MCG_MODE_PBE) || (MCG_MODE == MCG_MODE_BLPE))
+ 316:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_CLKST_MASK) != 0x08U) { /* Wait until external reference clock is selected 
+ 317:../Startup/system_MK65F18.c ****   }
+ 318:../Startup/system_MK65F18.c **** #elif (MCG_MODE == MCG_MODE_PEE)
+ 319:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_CLKST_MASK) != 0x0CU) { /* Wait until output of the PLL is selected */
+ 292              		.loc 1 319 0
+ 293 01ea 00BF     		nop
+ 294              	.L9:
+ 295              		.loc 1 319 0 is_stmt 0 discriminator 1
+ 296 01ec 1E4B     		ldr	r3, .L11+36
+ 297 01ee 9B79     		ldrb	r3, [r3, #6]
+ 298 01f0 DBB2     		uxtb	r3, r3
+ 299 01f2 03F00C03 		and	r3, r3, #12
+ 300 01f6 0C2B     		cmp	r3, #12
+ 301 01f8 F8D1     		bne	.L9
+ 320:../Startup/system_MK65F18.c ****   }
+ 321:../Startup/system_MK65F18.c ****   while(MCG->S2 != SYSTEM_MCG_C11_VALUE) { /* Wait until output of the correct PLL is selected */
+ 302              		.loc 1 321 0 is_stmt 1
+ 303 01fa 00BF     		nop
+ 304              	.L10:
+ 305              		.loc 1 321 0 is_stmt 0 discriminator 1
+ 306 01fc 1A4B     		ldr	r3, .L11+36
+ 307 01fe 9B7C     		ldrb	r3, [r3, #18]
+ 308 0200 DBB2     		uxtb	r3, r3
+ 309 0202 002B     		cmp	r3, #0
+ 310 0204 FAD1     		bne	.L10
+ 322:../Startup/system_MK65F18.c ****   }
+ 323:../Startup/system_MK65F18.c **** #elif ((MCG_MODE == MCG_MODE_FBE) || (MCG_MODE == MCG_MODE_BLPE))
+ 324:../Startup/system_MK65F18.c ****   while((MCG->S & MCG_S_CLKST_MASK) != 0x08U) { /* Wait until external reference clock is selected 
+ 325:../Startup/system_MK65F18.c ****   }
+ 326:../Startup/system_MK65F18.c **** #endif
+ 327:../Startup/system_MK65F18.c **** 
+ 328:../Startup/system_MK65F18.c ****   /* Very-low-power run mode enable */
+ 329:../Startup/system_MK65F18.c **** #if (((SYSTEM_SMC_PMCTRL_VALUE) & SMC_PMCTRL_RUNM_MASK) == (0x02U << SMC_PMCTRL_RUNM_SHIFT))
+ 330:../Startup/system_MK65F18.c ****   SMC->PMCTRL = (uint8_t)((SYSTEM_SMC_PMCTRL_VALUE) & (SMC_PMCTRL_RUNM_MASK)); /* Enable VLPR mode 
+ 331:../Startup/system_MK65F18.c ****   while(SMC->PMSTAT != 0x04U) {        /* Wait until the system is in VLPR mode */
+ 332:../Startup/system_MK65F18.c ****   }
+ 333:../Startup/system_MK65F18.c **** #endif
+ 334:../Startup/system_MK65F18.c **** 
+ 335:../Startup/system_MK65F18.c **** #if defined(SYSTEM_SIM_CLKDIV2_VALUE)
+ 336:../Startup/system_MK65F18.c ****   SIM->CLKDIV2 = ((SIM->CLKDIV2) & (uint32_t)(~(SIM_CLKDIV2_USBFRAC_MASK | SIM_CLKDIV2_USBDIV_MASK)
+ 311              		.loc 1 336 0 is_stmt 1
+ 312 0206 1349     		ldr	r1, .L11+16
+ 313 0208 124B     		ldr	r3, .L11+16
+ 314 020a 03F58253 		add	r3, r3, #4160
+ 315 020e 0833     		adds	r3, r3, #8
+ 316 0210 1B68     		ldr	r3, [r3]
+ 317 0212 23F00F03 		bic	r3, r3, #15
+ 318 0216 43F00C02 		orr	r2, r3, #12
+ 319 021a 01F58253 		add	r3, r1, #4160
+ 320 021e 0833     		adds	r3, r3, #8
+ 321 0220 1A60     		str	r2, [r3]
+ 337:../Startup/system_MK65F18.c **** #endif
+ 338:../Startup/system_MK65F18.c **** #if defined(SYSTEM_SIM_CLKDIV3_VALUE)
+ 339:../Startup/system_MK65F18.c ****   SIM->CLKDIV3 = ((SIM->CLKDIV3) & (uint32_t)(~(SIM_CLKDIV3_PLLFLLFRAC_MASK | SIM_CLKDIV3_PLLFLLDIV
+ 322              		.loc 1 339 0
+ 323 0222 0C49     		ldr	r1, .L11+16
+ 324 0224 0B4B     		ldr	r3, .L11+16
+ 325 0226 03F58353 		add	r3, r3, #4192
+ 326 022a 0433     		adds	r3, r3, #4
+ 327 022c 1B68     		ldr	r3, [r3]
+ 328 022e 23F00F02 		bic	r2, r3, #15
+ 329 0232 01F58353 		add	r3, r1, #4192
+ 330 0236 0433     		adds	r3, r3, #4
+ 331 0238 1A60     		str	r2, [r3]
+ 340:../Startup/system_MK65F18.c **** #endif
+ 341:../Startup/system_MK65F18.c **** 
+ 342:../Startup/system_MK65F18.c ****   /* PLL loss of lock interrupt request initialization */
+ 343:../Startup/system_MK65F18.c ****   if (((SYSTEM_MCG_C6_VALUE) & MCG_C6_LOLIE0_MASK) != 0U) {
+ 344:../Startup/system_MK65F18.c ****     NVIC_EnableIRQ(MCG_IRQn);          /* Enable PLL loss of lock interrupt request */
+ 345:../Startup/system_MK65F18.c ****   }
+ 346:../Startup/system_MK65F18.c **** #endif
+ 347:../Startup/system_MK65F18.c **** }
+ 332              		.loc 1 347 0
+ 333 023a BD46     		mov	sp, r7
+ 334              		@ sp needed
+ 335 023c 5DF8047B 		ldr	r7, [sp], #4
+ 336 0240 7047     		bx	lr
+ 337              	.L12:
+ 338 0242 00BF     		.align	2
+ 339              	.L11:
+ 340 0244 00ED00E0 		.word	-536810240
+ 341 0248 00200540 		.word	1074077696
+ 342 024c 00F00740 		.word	1074262016
+ 343 0250 00D00740 		.word	1074253824
+ 344 0254 00700440 		.word	1074032640
+ 345 0258 00D00340 		.word	1073991680
+ 346 025c 00E00740 		.word	1074257920
+ 347 0260 00002602 		.word	36044800
+ 348 0264 00900440 		.word	1074040832
+ 349 0268 00400640 		.word	1074151424
+ 350 026c 00500640 		.word	1074155520
+ 351              		.cfi_endproc
+ 352              	.LFE116:
+ 354              		.section	.text.SystemCoreClockUpdate,"ax",%progbits
+ 355              		.align	2
+ 356              		.global	SystemCoreClockUpdate
+ 357              		.thumb
+ 358              		.thumb_func
+ 360              	SystemCoreClockUpdate:
+ 361              	.LFB117:
+ 348:../Startup/system_MK65F18.c **** 
+ 349:../Startup/system_MK65F18.c **** /* ----------------------------------------------------------------------------
+ 350:../Startup/system_MK65F18.c ****    -- SystemCoreClockUpdate()
+ 351:../Startup/system_MK65F18.c ****    ---------------------------------------------------------------------------- */
+ 352:../Startup/system_MK65F18.c **** 
+ 353:../Startup/system_MK65F18.c **** void SystemCoreClockUpdate (void) {
+ 362              		.loc 1 353 0
+ 363              		.cfi_startproc
+ 364              		@ args = 0, pretend = 0, frame = 8
+ 365              		@ frame_needed = 1, uses_anonymous_args = 0
+ 366              		@ link register save eliminated.
+ 367 0000 80B4     		push	{r7}
+ 368              		.cfi_def_cfa_offset 4
+ 369              		.cfi_offset 7, -4
+ 370 0002 83B0     		sub	sp, sp, #12
+ 371              		.cfi_def_cfa_offset 16
+ 372 0004 00AF     		add	r7, sp, #0
+ 373              		.cfi_def_cfa_register 7
+ 354:../Startup/system_MK65F18.c ****   uint32_t MCGOUTClock;                                                        /* Variable to store
+ 355:../Startup/system_MK65F18.c ****   uint16_t Divider;
+ 356:../Startup/system_MK65F18.c **** 
+ 357:../Startup/system_MK65F18.c ****   if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x00U) {
+ 374              		.loc 1 357 0
+ 375 0006 AA4B     		ldr	r3, .L58
+ 376 0008 1B78     		ldrb	r3, [r3]
+ 377 000a DBB2     		uxtb	r3, r3
+ 378 000c 03F0C003 		and	r3, r3, #192
+ 379 0010 002B     		cmp	r3, #0
+ 380 0012 40F00E81 		bne	.L14
+ 358:../Startup/system_MK65F18.c ****     /* Output of FLL or PLL is selected */
+ 359:../Startup/system_MK65F18.c ****     if ((MCG->C6 & MCG_C6_PLLS_MASK) == 0x00U) {
+ 381              		.loc 1 359 0
+ 382 0016 A64B     		ldr	r3, .L58
+ 383 0018 5B79     		ldrb	r3, [r3, #5]
+ 384 001a DBB2     		uxtb	r3, r3
+ 385 001c 03F04003 		and	r3, r3, #64
+ 386 0020 002B     		cmp	r3, #0
+ 387 0022 40F0AE80 		bne	.L15
+ 360:../Startup/system_MK65F18.c ****       /* FLL is selected */
+ 361:../Startup/system_MK65F18.c ****       if ((MCG->C1 & MCG_C1_IREFS_MASK) == 0x00U) {
+ 388              		.loc 1 361 0
+ 389 0026 A24B     		ldr	r3, .L58
+ 390 0028 1B78     		ldrb	r3, [r3]
+ 391 002a DBB2     		uxtb	r3, r3
+ 392 002c 03F00403 		and	r3, r3, #4
+ 393 0030 002B     		cmp	r3, #0
+ 394 0032 4ED1     		bne	.L16
+ 362:../Startup/system_MK65F18.c ****         /* External reference clock is selected */
+ 363:../Startup/system_MK65F18.c ****         switch (MCG->C7 & MCG_C7_OSCSEL_MASK) {
+ 395              		.loc 1 363 0
+ 396 0034 9E4B     		ldr	r3, .L58
+ 397 0036 1B7B     		ldrb	r3, [r3, #12]
+ 398 0038 DBB2     		uxtb	r3, r3
+ 399 003a 03F00303 		and	r3, r3, #3
+ 400 003e 002B     		cmp	r3, #0
+ 401 0040 02D0     		beq	.L18
+ 402 0042 012B     		cmp	r3, #1
+ 403 0044 03D0     		beq	.L19
+ 404 0046 06E0     		b	.L55
+ 405              	.L18:
+ 364:../Startup/system_MK65F18.c ****         case 0x00U:
+ 365:../Startup/system_MK65F18.c ****           MCGOUTClock = CPU_XTAL_CLK_HZ; /* System oscillator drives MCG clock */
+ 406              		.loc 1 365 0
+ 407 0048 9A4B     		ldr	r3, .L58+4
+ 408 004a 7B60     		str	r3, [r7, #4]
+ 366:../Startup/system_MK65F18.c ****           break;
+ 409              		.loc 1 366 0
+ 410 004c 06E0     		b	.L20
+ 411              	.L19:
+ 367:../Startup/system_MK65F18.c ****         case 0x01U:
+ 368:../Startup/system_MK65F18.c ****           MCGOUTClock = CPU_XTAL32k_CLK_HZ; /* RTC 32 kHz oscillator drives MCG clock */
+ 412              		.loc 1 368 0
+ 413 004e 4FF40043 		mov	r3, #32768
+ 414 0052 7B60     		str	r3, [r7, #4]
+ 369:../Startup/system_MK65F18.c ****           break;
+ 415              		.loc 1 369 0
+ 416 0054 02E0     		b	.L20
+ 417              	.L55:
+ 370:../Startup/system_MK65F18.c ****         case 0x02U:
+ 371:../Startup/system_MK65F18.c ****         default:
+ 372:../Startup/system_MK65F18.c ****           MCGOUTClock = CPU_INT_IRC_CLK_HZ; /* IRC 48MHz oscillator drives MCG clock */
+ 418              		.loc 1 372 0
+ 419 0056 984B     		ldr	r3, .L58+8
+ 420 0058 7B60     		str	r3, [r7, #4]
+ 373:../Startup/system_MK65F18.c ****           break;
+ 421              		.loc 1 373 0
+ 422 005a 00BF     		nop
+ 423              	.L20:
+ 374:../Startup/system_MK65F18.c ****         }
+ 375:../Startup/system_MK65F18.c ****         if (((MCG->C2 & MCG_C2_RANGE_MASK) != 0x00U) && ((MCG->C7 & MCG_C7_OSCSEL_MASK) != 0x01U)) 
+ 424              		.loc 1 375 0
+ 425 005c 944B     		ldr	r3, .L58
+ 426 005e 5B78     		ldrb	r3, [r3, #1]
+ 427 0060 DBB2     		uxtb	r3, r3
+ 428 0062 03F03003 		and	r3, r3, #48
+ 429 0066 002B     		cmp	r3, #0
+ 430 0068 23D0     		beq	.L21
+ 431              		.loc 1 375 0 is_stmt 0 discriminator 1
+ 432 006a 914B     		ldr	r3, .L58
+ 433 006c 1B7B     		ldrb	r3, [r3, #12]
+ 434 006e DBB2     		uxtb	r3, r3
+ 435 0070 03F00303 		and	r3, r3, #3
+ 436 0074 012B     		cmp	r3, #1
+ 437 0076 1CD0     		beq	.L21
+ 376:../Startup/system_MK65F18.c ****           switch (MCG->C1 & MCG_C1_FRDIV_MASK) {
+ 438              		.loc 1 376 0 is_stmt 1
+ 439 0078 8D4B     		ldr	r3, .L58
+ 440 007a 1B78     		ldrb	r3, [r3]
+ 441 007c DBB2     		uxtb	r3, r3
+ 442 007e 03F03803 		and	r3, r3, #56
+ 443 0082 302B     		cmp	r3, #48
+ 444 0084 05D0     		beq	.L23
+ 445 0086 382B     		cmp	r3, #56
+ 446 0088 07D1     		bne	.L56
+ 377:../Startup/system_MK65F18.c ****           case 0x38U:
+ 378:../Startup/system_MK65F18.c ****             Divider = 1536U;
+ 447              		.loc 1 378 0
+ 448 008a 4FF4C063 		mov	r3, #1536
+ 449 008e 7B80     		strh	r3, [r7, #2]	@ movhi
+ 379:../Startup/system_MK65F18.c ****             break;
+ 450              		.loc 1 379 0
+ 451 0090 0EE0     		b	.L25
+ 452              	.L23:
+ 380:../Startup/system_MK65F18.c ****           case 0x30U:
+ 381:../Startup/system_MK65F18.c ****             Divider = 1280U;
+ 453              		.loc 1 381 0
+ 454 0092 4FF4A063 		mov	r3, #1280
+ 455 0096 7B80     		strh	r3, [r7, #2]	@ movhi
+ 382:../Startup/system_MK65F18.c ****             break;
+ 456              		.loc 1 382 0
+ 457 0098 0AE0     		b	.L25
+ 458              	.L56:
+ 383:../Startup/system_MK65F18.c ****           default:
+ 384:../Startup/system_MK65F18.c ****             Divider = (uint16_t)(32LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+ 459              		.loc 1 384 0
+ 460 009a 854B     		ldr	r3, .L58
+ 461 009c 1B78     		ldrb	r3, [r3]
+ 462 009e DBB2     		uxtb	r3, r3
+ 463 00a0 03F03803 		and	r3, r3, #56
+ 464 00a4 DB08     		lsrs	r3, r3, #3
+ 465 00a6 2022     		movs	r2, #32
+ 466 00a8 02FA03F3 		lsl	r3, r2, r3
+ 467 00ac 7B80     		strh	r3, [r7, #2]	@ movhi
+ 385:../Startup/system_MK65F18.c ****             break;
+ 468              		.loc 1 385 0
+ 469 00ae 00BF     		nop
+ 470              	.L25:
+ 386:../Startup/system_MK65F18.c ****           }
+ 387:../Startup/system_MK65F18.c ****         } else {/* ((MCG->C2 & MCG_C2_RANGE_MASK) != 0x00U) */
+ 471              		.loc 1 387 0
+ 472 00b0 09E0     		b	.L26
+ 473              	.L21:
+ 388:../Startup/system_MK65F18.c ****           Divider = (uint16_t)(1LU << ((MCG->C1 & MCG_C1_FRDIV_MASK) >> MCG_C1_FRDIV_SHIFT));
+ 474              		.loc 1 388 0
+ 475 00b2 7F4B     		ldr	r3, .L58
+ 476 00b4 1B78     		ldrb	r3, [r3]
+ 477 00b6 DBB2     		uxtb	r3, r3
+ 478 00b8 03F03803 		and	r3, r3, #56
+ 479 00bc DB08     		lsrs	r3, r3, #3
+ 480 00be 0122     		movs	r2, #1
+ 481 00c0 02FA03F3 		lsl	r3, r2, r3
+ 482 00c4 7B80     		strh	r3, [r7, #2]	@ movhi
+ 483              	.L26:
+ 389:../Startup/system_MK65F18.c ****         }
+ 390:../Startup/system_MK65F18.c ****         MCGOUTClock = (MCGOUTClock / Divider); /* Calculate the divided FLL reference clock */
+ 484              		.loc 1 390 0
+ 485 00c6 7B88     		ldrh	r3, [r7, #2]
+ 486 00c8 7A68     		ldr	r2, [r7, #4]
+ 487 00ca B2FBF3F3 		udiv	r3, r2, r3
+ 488 00ce 7B60     		str	r3, [r7, #4]
+ 489 00d0 02E0     		b	.L27
+ 490              	.L16:
+ 391:../Startup/system_MK65F18.c ****       } else { /* (!((MCG->C1 & MCG_C1_IREFS_MASK) == 0x00U)) */
+ 392:../Startup/system_MK65F18.c ****         MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* The slow internal reference clock is selected */
+ 491              		.loc 1 392 0
+ 492 00d2 4FF40043 		mov	r3, #32768
+ 493 00d6 7B60     		str	r3, [r7, #4]
+ 494              	.L27:
+ 393:../Startup/system_MK65F18.c ****       } /* (!((MCG->C1 & MCG_C1_IREFS_MASK) == 0x00U)) */
+ 394:../Startup/system_MK65F18.c ****       /* Select correct multiplier to calculate the MCG output clock  */
+ 395:../Startup/system_MK65F18.c ****       switch (MCG->C4 & (MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) {
+ 495              		.loc 1 395 0
+ 496 00d8 754B     		ldr	r3, .L58
+ 497 00da DB78     		ldrb	r3, [r3, #3]
+ 498 00dc DBB2     		uxtb	r3, r3
+ 499 00de 03F0E003 		and	r3, r3, #224
+ 500 00e2 602B     		cmp	r3, #96
+ 501 00e4 29D0     		beq	.L29
+ 502 00e6 602B     		cmp	r3, #96
+ 503 00e8 06D8     		bhi	.L30
+ 504 00ea 202B     		cmp	r3, #32
+ 505 00ec 17D0     		beq	.L31
+ 506 00ee 402B     		cmp	r3, #64
+ 507 00f0 1CD0     		beq	.L32
+ 508 00f2 002B     		cmp	r3, #0
+ 509 00f4 0CD0     		beq	.L33
+ 396:../Startup/system_MK65F18.c ****         case 0x00U:
+ 397:../Startup/system_MK65F18.c ****           MCGOUTClock *= 640U;
+ 398:../Startup/system_MK65F18.c ****           break;
+ 399:../Startup/system_MK65F18.c ****         case 0x20U:
+ 400:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1280U;
+ 401:../Startup/system_MK65F18.c ****           break;
+ 402:../Startup/system_MK65F18.c ****         case 0x40U:
+ 403:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1920U;
+ 404:../Startup/system_MK65F18.c ****           break;
+ 405:../Startup/system_MK65F18.c ****         case 0x60U:
+ 406:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2560U;
+ 407:../Startup/system_MK65F18.c ****           break;
+ 408:../Startup/system_MK65F18.c ****         case 0x80U:
+ 409:../Startup/system_MK65F18.c ****           MCGOUTClock *= 732U;
+ 410:../Startup/system_MK65F18.c ****           break;
+ 411:../Startup/system_MK65F18.c ****         case 0xA0U:
+ 412:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1464U;
+ 413:../Startup/system_MK65F18.c ****           break;
+ 414:../Startup/system_MK65F18.c ****         case 0xC0U:
+ 415:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2197U;
+ 416:../Startup/system_MK65F18.c ****           break;
+ 417:../Startup/system_MK65F18.c ****         case 0xE0U:
+ 418:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2929U;
+ 419:../Startup/system_MK65F18.c ****           break;
+ 420:../Startup/system_MK65F18.c ****         default:
+ 421:../Startup/system_MK65F18.c ****           break;
+ 510              		.loc 1 421 0
+ 511 00f6 43E0     		b	.L39
+ 512              	.L30:
+ 395:../Startup/system_MK65F18.c ****       switch (MCG->C4 & (MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) {
+ 513              		.loc 1 395 0
+ 514 00f8 A02B     		cmp	r3, #160
+ 515 00fa 2CD0     		beq	.L34
+ 516 00fc A02B     		cmp	r3, #160
+ 517 00fe 02D8     		bhi	.L35
+ 518 0100 802B     		cmp	r3, #128
+ 519 0102 21D0     		beq	.L36
+ 520              		.loc 1 421 0
+ 521 0104 3CE0     		b	.L39
+ 522              	.L35:
+ 395:../Startup/system_MK65F18.c ****       switch (MCG->C4 & (MCG_C4_DMX32_MASK | MCG_C4_DRST_DRS_MASK)) {
+ 523              		.loc 1 395 0
+ 524 0106 C02B     		cmp	r3, #192
+ 525 0108 2CD0     		beq	.L37
+ 526 010a E02B     		cmp	r3, #224
+ 527 010c 31D0     		beq	.L38
+ 528              		.loc 1 421 0
+ 529 010e 37E0     		b	.L39
+ 530              	.L33:
+ 397:../Startup/system_MK65F18.c ****           MCGOUTClock *= 640U;
+ 531              		.loc 1 397 0
+ 532 0110 7A68     		ldr	r2, [r7, #4]
+ 533 0112 1346     		mov	r3, r2
+ 534 0114 9B00     		lsls	r3, r3, #2
+ 535 0116 1344     		add	r3, r3, r2
+ 536 0118 DB01     		lsls	r3, r3, #7
+ 537 011a 7B60     		str	r3, [r7, #4]
+ 398:../Startup/system_MK65F18.c ****           break;
+ 538              		.loc 1 398 0
+ 539 011c 30E0     		b	.L39
+ 540              	.L31:
+ 400:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1280U;
+ 541              		.loc 1 400 0
+ 542 011e 7A68     		ldr	r2, [r7, #4]
+ 543 0120 1346     		mov	r3, r2
+ 544 0122 9B00     		lsls	r3, r3, #2
+ 545 0124 1344     		add	r3, r3, r2
+ 546 0126 1B02     		lsls	r3, r3, #8
+ 547 0128 7B60     		str	r3, [r7, #4]
+ 401:../Startup/system_MK65F18.c ****           break;
+ 548              		.loc 1 401 0
+ 549 012a 29E0     		b	.L39
+ 550              	.L32:
+ 403:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1920U;
+ 551              		.loc 1 403 0
+ 552 012c 7A68     		ldr	r2, [r7, #4]
+ 553 012e 1346     		mov	r3, r2
+ 554 0130 1B01     		lsls	r3, r3, #4
+ 555 0132 9B1A     		subs	r3, r3, r2
+ 556 0134 DB01     		lsls	r3, r3, #7
+ 557 0136 7B60     		str	r3, [r7, #4]
+ 404:../Startup/system_MK65F18.c ****           break;
+ 558              		.loc 1 404 0
+ 559 0138 22E0     		b	.L39
+ 560              	.L29:
+ 406:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2560U;
+ 561              		.loc 1 406 0
+ 562 013a 7A68     		ldr	r2, [r7, #4]
+ 563 013c 1346     		mov	r3, r2
+ 564 013e 9B00     		lsls	r3, r3, #2
+ 565 0140 1344     		add	r3, r3, r2
+ 566 0142 5B02     		lsls	r3, r3, #9
+ 567 0144 7B60     		str	r3, [r7, #4]
+ 407:../Startup/system_MK65F18.c ****           break;
+ 568              		.loc 1 407 0
+ 569 0146 1BE0     		b	.L39
+ 570              	.L36:
+ 409:../Startup/system_MK65F18.c ****           MCGOUTClock *= 732U;
+ 571              		.loc 1 409 0
+ 572 0148 7B68     		ldr	r3, [r7, #4]
+ 573 014a 4FF43772 		mov	r2, #732
+ 574 014e 02FB03F3 		mul	r3, r2, r3
+ 575 0152 7B60     		str	r3, [r7, #4]
+ 410:../Startup/system_MK65F18.c ****           break;
+ 576              		.loc 1 410 0
+ 577 0154 14E0     		b	.L39
+ 578              	.L34:
+ 412:../Startup/system_MK65F18.c ****           MCGOUTClock *= 1464U;
+ 579              		.loc 1 412 0
+ 580 0156 7B68     		ldr	r3, [r7, #4]
+ 581 0158 4FF4B762 		mov	r2, #1464
+ 582 015c 02FB03F3 		mul	r3, r2, r3
+ 583 0160 7B60     		str	r3, [r7, #4]
+ 413:../Startup/system_MK65F18.c ****           break;
+ 584              		.loc 1 413 0
+ 585 0162 0DE0     		b	.L39
+ 586              	.L37:
+ 415:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2197U;
+ 587              		.loc 1 415 0
+ 588 0164 7B68     		ldr	r3, [r7, #4]
+ 589 0166 40F69502 		movw	r2, #2197
+ 590 016a 02FB03F3 		mul	r3, r2, r3
+ 591 016e 7B60     		str	r3, [r7, #4]
+ 416:../Startup/system_MK65F18.c ****           break;
+ 592              		.loc 1 416 0
+ 593 0170 06E0     		b	.L39
+ 594              	.L38:
+ 418:../Startup/system_MK65F18.c ****           MCGOUTClock *= 2929U;
+ 595              		.loc 1 418 0
+ 596 0172 7B68     		ldr	r3, [r7, #4]
+ 597 0174 40F67132 		movw	r2, #2929
+ 598 0178 02FB03F3 		mul	r3, r2, r3
+ 599 017c 7B60     		str	r3, [r7, #4]
+ 419:../Startup/system_MK65F18.c ****           break;
+ 600              		.loc 1 419 0
+ 601 017e 00BF     		nop
+ 602              	.L39:
+ 603 0180 A2E0     		b	.L45
+ 604              	.L15:
+ 422:../Startup/system_MK65F18.c ****       }
+ 423:../Startup/system_MK65F18.c ****     } else { /* (!((MCG->C6 & MCG_C6_PLLS_MASK) == 0x00U)) */
+ 424:../Startup/system_MK65F18.c ****       if ((MCG->C11 & MCG_C11_PLLCS_MASK) == 0x00U) {
+ 605              		.loc 1 424 0
+ 606 0182 4B4B     		ldr	r3, .L58
+ 607 0184 1B7C     		ldrb	r3, [r3, #16]
+ 608 0186 DBB2     		uxtb	r3, r3
+ 609 0188 03F01003 		and	r3, r3, #16
+ 610 018c 002B     		cmp	r3, #0
+ 611 018e 1DD1     		bne	.L41
+ 425:../Startup/system_MK65F18.c ****         /* PLL is selected */
+ 426:../Startup/system_MK65F18.c ****         Divider = (((uint16_t)MCG->C5 & MCG_C5_PRDIV_MASK) + 0x01U);
+ 612              		.loc 1 426 0
+ 613 0190 474B     		ldr	r3, .L58
+ 614 0192 1B79     		ldrb	r3, [r3, #4]
+ 615 0194 DBB2     		uxtb	r3, r3
+ 616 0196 03F00703 		and	r3, r3, #7
+ 617 019a 9BB2     		uxth	r3, r3
+ 618 019c 0133     		adds	r3, r3, #1
+ 619 019e 7B80     		strh	r3, [r7, #2]	@ movhi
+ 427:../Startup/system_MK65F18.c ****         MCGOUTClock = (uint32_t)(CPU_XTAL_CLK_HZ / Divider); /* Calculate the PLL reference clock *
+ 620              		.loc 1 427 0
+ 621 01a0 7B88     		ldrh	r3, [r7, #2]
+ 622 01a2 444A     		ldr	r2, .L58+4
+ 623 01a4 B2FBF3F3 		udiv	r3, r2, r3
+ 624 01a8 7B60     		str	r3, [r7, #4]
+ 428:../Startup/system_MK65F18.c ****         Divider = (((uint16_t)MCG->C6 & MCG_C6_VDIV_MASK) + 16U);
+ 625              		.loc 1 428 0
+ 626 01aa 414B     		ldr	r3, .L58
+ 627 01ac 5B79     		ldrb	r3, [r3, #5]
+ 628 01ae DBB2     		uxtb	r3, r3
+ 629 01b0 03F01F03 		and	r3, r3, #31
+ 630 01b4 9BB2     		uxth	r3, r3
+ 631 01b6 1033     		adds	r3, r3, #16
+ 632 01b8 7B80     		strh	r3, [r7, #2]	@ movhi
+ 429:../Startup/system_MK65F18.c ****         MCGOUTClock *= Divider;        /* Calculate the VCO output clock */
+ 633              		.loc 1 429 0
+ 634 01ba 7A88     		ldrh	r2, [r7, #2]
+ 635 01bc 7B68     		ldr	r3, [r7, #4]
+ 636 01be 02FB03F3 		mul	r3, r2, r3
+ 637 01c2 7B60     		str	r3, [r7, #4]
+ 430:../Startup/system_MK65F18.c ****         MCGOUTClock /= 2;              /* Calculate the MCG output clock */
+ 638              		.loc 1 430 0
+ 639 01c4 7B68     		ldr	r3, [r7, #4]
+ 640 01c6 5B08     		lsrs	r3, r3, #1
+ 641 01c8 7B60     		str	r3, [r7, #4]
+ 642 01ca 7DE0     		b	.L45
+ 643              	.L41:
+ 431:../Startup/system_MK65F18.c ****       } else {
+ 432:../Startup/system_MK65F18.c ****         /* External PLL is selected */
+ 433:../Startup/system_MK65F18.c ****         if ((USBPHY->ANACTRL & USBPHY_ANACTRL_PFD_CLK_SEL_MASK) == 0x00U) {
+ 644              		.loc 1 433 0
+ 645 01cc 3B4B     		ldr	r3, .L58+12
+ 646 01ce D3F80031 		ldr	r3, [r3, #256]
+ 647 01d2 03F00C03 		and	r3, r3, #12
+ 648 01d6 002B     		cmp	r3, #0
+ 649 01d8 02D1     		bne	.L42
+ 434:../Startup/system_MK65F18.c ****           MCGOUTClock = CPU_XTAL_CLK_HZ;
+ 650              		.loc 1 434 0
+ 651 01da 364B     		ldr	r3, .L58+4
+ 652 01dc 7B60     		str	r3, [r7, #4]
+ 653 01de 73E0     		b	.L45
+ 654              	.L42:
+ 435:../Startup/system_MK65F18.c ****         } else {
+ 436:../Startup/system_MK65F18.c ****           Divider = (((uint16_t)USBPHY->ANACTRL & USBPHY_ANACTRL_PFD_FRAC_MASK) >> 4);
+ 655              		.loc 1 436 0
+ 656 01e0 364B     		ldr	r3, .L58+12
+ 657 01e2 D3F80031 		ldr	r3, [r3, #256]
+ 658 01e6 9BB2     		uxth	r3, r3
+ 659 01e8 03F47C73 		and	r3, r3, #1008
+ 660 01ec 1B09     		lsrs	r3, r3, #4
+ 661 01ee 7B80     		strh	r3, [r7, #2]	@ movhi
+ 437:../Startup/system_MK65F18.c ****           if ((USBPHY->ANACTRL & USBPHY_ANACTRL_PFD_CLK_SEL_MASK) == USBPHY_ANACTRL_PFD_CLK_SEL(1))
+ 662              		.loc 1 437 0
+ 663 01f0 324B     		ldr	r3, .L58+12
+ 664 01f2 D3F80031 		ldr	r3, [r3, #256]
+ 665 01f6 03F00C03 		and	r3, r3, #12
+ 666 01fa 042B     		cmp	r3, #4
+ 667 01fc 03D1     		bne	.L43
+ 438:../Startup/system_MK65F18.c ****             Divider *= 0x04U;
+ 668              		.loc 1 438 0
+ 669 01fe 7B88     		ldrh	r3, [r7, #2]	@ movhi
+ 670 0200 9B00     		lsls	r3, r3, #2
+ 671 0202 7B80     		strh	r3, [r7, #2]	@ movhi
+ 672 0204 09E0     		b	.L44
+ 673              	.L43:
+ 439:../Startup/system_MK65F18.c ****           } else if ((USBPHY->ANACTRL & USBPHY_ANACTRL_PFD_CLK_SEL_MASK) == USBPHY_ANACTRL_PFD_CLK_
+ 674              		.loc 1 439 0
+ 675 0206 2D4B     		ldr	r3, .L58+12
+ 676 0208 D3F80031 		ldr	r3, [r3, #256]
+ 677 020c 03F00C03 		and	r3, r3, #12
+ 678 0210 082B     		cmp	r3, #8
+ 679 0212 02D1     		bne	.L44
+ 440:../Startup/system_MK65F18.c ****             Divider *= 0x02U;
+ 680              		.loc 1 440 0
+ 681 0214 7B88     		ldrh	r3, [r7, #2]	@ movhi
+ 682 0216 5B00     		lsls	r3, r3, #1
+ 683 0218 7B80     		strh	r3, [r7, #2]	@ movhi
+ 684              	.L44:
+ 441:../Startup/system_MK65F18.c ****           }
+ 442:../Startup/system_MK65F18.c ****           MCGOUTClock = (uint32_t)(480000000 / Divider);
+ 685              		.loc 1 442 0
+ 686 021a 7B88     		ldrh	r3, [r7, #2]
+ 687 021c 284A     		ldr	r2, .L58+16
+ 688 021e 92FBF3F3 		sdiv	r3, r2, r3
+ 689 0222 7B60     		str	r3, [r7, #4]
+ 443:../Startup/system_MK65F18.c ****           MCGOUTClock *= 18;
+ 690              		.loc 1 443 0
+ 691 0224 7A68     		ldr	r2, [r7, #4]
+ 692 0226 1346     		mov	r3, r2
+ 693 0228 DB00     		lsls	r3, r3, #3
+ 694 022a 1344     		add	r3, r3, r2
+ 695 022c 5B00     		lsls	r3, r3, #1
+ 696 022e 7B60     		str	r3, [r7, #4]
+ 697 0230 4AE0     		b	.L45
+ 698              	.L14:
+ 444:../Startup/system_MK65F18.c ****         }
+ 445:../Startup/system_MK65F18.c ****       }
+ 446:../Startup/system_MK65F18.c ****     } /* (!((MCG->C6 & MCG_C6_PLLS_MASK) == 0x00U)) */
+ 447:../Startup/system_MK65F18.c ****   } else if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x40U) {
+ 699              		.loc 1 447 0
+ 700 0232 1F4B     		ldr	r3, .L58
+ 701 0234 1B78     		ldrb	r3, [r3]
+ 702 0236 DBB2     		uxtb	r3, r3
+ 703 0238 03F0C003 		and	r3, r3, #192
+ 704 023c 402B     		cmp	r3, #64
+ 705 023e 1AD1     		bne	.L46
+ 448:../Startup/system_MK65F18.c ****     /* Internal reference clock is selected */
+ 449:../Startup/system_MK65F18.c ****     if ((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U) {
+ 706              		.loc 1 449 0
+ 707 0240 1B4B     		ldr	r3, .L58
+ 708 0242 5B78     		ldrb	r3, [r3, #1]
+ 709 0244 DBB2     		uxtb	r3, r3
+ 710 0246 03F00103 		and	r3, r3, #1
+ 711 024a 002B     		cmp	r3, #0
+ 712 024c 03D1     		bne	.L47
+ 450:../Startup/system_MK65F18.c ****       MCGOUTClock = CPU_INT_SLOW_CLK_HZ; /* Slow internal reference clock selected */
+ 713              		.loc 1 450 0
+ 714 024e 4FF40043 		mov	r3, #32768
+ 715 0252 7B60     		str	r3, [r7, #4]
+ 716 0254 38E0     		b	.L45
+ 717              	.L47:
+ 451:../Startup/system_MK65F18.c ****     } else { /* (!((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U)) */
+ 452:../Startup/system_MK65F18.c ****       Divider = (uint16_t)(0x01LU << ((MCG->SC & MCG_SC_FCRDIV_MASK) >> MCG_SC_FCRDIV_SHIFT));
+ 718              		.loc 1 452 0
+ 719 0256 164B     		ldr	r3, .L58
+ 720 0258 1B7A     		ldrb	r3, [r3, #8]
+ 721 025a DBB2     		uxtb	r3, r3
+ 722 025c 03F00E03 		and	r3, r3, #14
+ 723 0260 5B08     		lsrs	r3, r3, #1
+ 724 0262 0122     		movs	r2, #1
+ 725 0264 02FA03F3 		lsl	r3, r2, r3
+ 726 0268 7B80     		strh	r3, [r7, #2]	@ movhi
+ 453:../Startup/system_MK65F18.c ****       MCGOUTClock = (uint32_t) (CPU_INT_FAST_CLK_HZ / Divider); /* Fast internal reference clock se
+ 727              		.loc 1 453 0
+ 728 026a 7B88     		ldrh	r3, [r7, #2]
+ 729 026c 154A     		ldr	r2, .L58+20
+ 730 026e B2FBF3F3 		udiv	r3, r2, r3
+ 731 0272 7B60     		str	r3, [r7, #4]
+ 732 0274 28E0     		b	.L45
+ 733              	.L46:
+ 454:../Startup/system_MK65F18.c ****     } /* (!((MCG->C2 & MCG_C2_IRCS_MASK) == 0x00U)) */
+ 455:../Startup/system_MK65F18.c ****   } else if ((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U) {
+ 734              		.loc 1 455 0
+ 735 0276 0E4B     		ldr	r3, .L58
+ 736 0278 1B78     		ldrb	r3, [r3]
+ 737 027a DBB2     		uxtb	r3, r3
+ 738 027c 03F0C003 		and	r3, r3, #192
+ 739 0280 802B     		cmp	r3, #128
+ 740 0282 14D1     		bne	.L49
+ 456:../Startup/system_MK65F18.c ****     /* External reference clock is selected */
+ 457:../Startup/system_MK65F18.c ****     switch (MCG->C7 & MCG_C7_OSCSEL_MASK) {
+ 741              		.loc 1 457 0
+ 742 0284 0A4B     		ldr	r3, .L58
+ 743 0286 1B7B     		ldrb	r3, [r3, #12]
+ 744 0288 DBB2     		uxtb	r3, r3
+ 745 028a 03F00303 		and	r3, r3, #3
+ 746 028e 002B     		cmp	r3, #0
+ 747 0290 02D0     		beq	.L51
+ 748 0292 012B     		cmp	r3, #1
+ 749 0294 03D0     		beq	.L52
+ 750 0296 06E0     		b	.L57
+ 751              	.L51:
+ 458:../Startup/system_MK65F18.c ****     case 0x00U:
+ 459:../Startup/system_MK65F18.c ****       MCGOUTClock = CPU_XTAL_CLK_HZ;   /* System oscillator drives MCG clock */
+ 752              		.loc 1 459 0
+ 753 0298 064B     		ldr	r3, .L58+4
+ 754 029a 7B60     		str	r3, [r7, #4]
+ 460:../Startup/system_MK65F18.c ****       break;
+ 755              		.loc 1 460 0
+ 756 029c 06E0     		b	.L53
+ 757              	.L52:
+ 461:../Startup/system_MK65F18.c ****     case 0x01U:
+ 462:../Startup/system_MK65F18.c ****       MCGOUTClock = CPU_XTAL32k_CLK_HZ; /* RTC 32 kHz oscillator drives MCG clock */
+ 758              		.loc 1 462 0
+ 759 029e 4FF40043 		mov	r3, #32768
+ 760 02a2 7B60     		str	r3, [r7, #4]
+ 463:../Startup/system_MK65F18.c ****       break;
+ 761              		.loc 1 463 0
+ 762 02a4 02E0     		b	.L53
+ 763              	.L57:
+ 464:../Startup/system_MK65F18.c ****     case 0x02U:
+ 465:../Startup/system_MK65F18.c ****     default:
+ 466:../Startup/system_MK65F18.c ****       MCGOUTClock = CPU_INT_IRC_CLK_HZ; /* IRC 48MHz oscillator drives MCG clock */
+ 764              		.loc 1 466 0
+ 765 02a6 044B     		ldr	r3, .L58+8
+ 766 02a8 7B60     		str	r3, [r7, #4]
+ 467:../Startup/system_MK65F18.c ****       break;
+ 767              		.loc 1 467 0
+ 768 02aa 00BF     		nop
+ 769              	.L53:
+ 770 02ac 0CE0     		b	.L45
+ 771              	.L49:
+ 468:../Startup/system_MK65F18.c ****     }
+ 469:../Startup/system_MK65F18.c ****   } else { /* (!((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U)) */
+ 470:../Startup/system_MK65F18.c ****     /* Reserved value */
+ 471:../Startup/system_MK65F18.c ****     return;
+ 772              		.loc 1 471 0
+ 773 02ae 17E0     		b	.L13
+ 774              	.L59:
+ 775              		.align	2
+ 776              	.L58:
+ 777 02b0 00400640 		.word	1074151424
+ 778 02b4 0024F400 		.word	16000000
+ 779 02b8 006CDC02 		.word	48000000
+ 780 02bc 00200A40 		.word	1074405376
+ 781 02c0 00389C1C 		.word	480000000
+ 782 02c4 00093D00 		.word	4000000
+ 783              	.L45:
+ 472:../Startup/system_MK65F18.c ****   } /* (!((MCG->C1 & MCG_C1_CLKS_MASK) == 0x80U)) */
+ 473:../Startup/system_MK65F18.c ****   SystemCoreClock = (MCGOUTClock / (0x01U + ((SIM->CLKDIV1 & SIM_CLKDIV1_OUTDIV1_MASK) >> SIM_CLKDI
+ 784              		.loc 1 473 0
+ 785 02c8 084B     		ldr	r3, .L60
+ 786 02ca 03F58253 		add	r3, r3, #4160
+ 787 02ce 0433     		adds	r3, r3, #4
+ 788 02d0 1B68     		ldr	r3, [r3]
+ 789 02d2 1B0F     		lsrs	r3, r3, #28
+ 790 02d4 0133     		adds	r3, r3, #1
+ 791 02d6 7A68     		ldr	r2, [r7, #4]
+ 792 02d8 B2FBF3F2 		udiv	r2, r2, r3
+ 793 02dc 044B     		ldr	r3, .L60+4
+ 794 02de 1A60     		str	r2, [r3]
+ 795              	.L13:
+ 474:../Startup/system_MK65F18.c **** }
+ 796              		.loc 1 474 0
+ 797 02e0 0C37     		adds	r7, r7, #12
+ 798 02e2 BD46     		mov	sp, r7
+ 799              		@ sp needed
+ 800 02e4 5DF8047B 		ldr	r7, [sp], #4
+ 801 02e8 7047     		bx	lr
+ 802              	.L61:
+ 803 02ea 00BF     		.align	2
+ 804              	.L60:
+ 805 02ec 00700440 		.word	1074032640
+ 806 02f0 00000000 		.word	SystemCoreClock
+ 807              		.cfi_endproc
+ 808              	.LFE117:
+ 810              		.text
+ 811              	.Letext0:
+ 812              		.file 2 "c:\\freescale\\kds_3.0.0\\toolchain\\lib\\gcc\\arm-none-eabi\\4.8.4\\include\\stdint-gcc.
+ 813              		.file 3 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/core_cm4.h"
+ 814              		.file 4 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/MK65F18.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 system_MK65F18.c
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:25     .data.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:22     .data.SystemCoreClock:00000000 $d
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:28     .text.SystemInit:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:33     .text.SystemInit:00000000 SystemInit
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:340    .text.SystemInit:00000244 $d
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:355    .text.SystemCoreClockUpdate:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:360    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:777    .text.SystemCoreClockUpdate:000002b0 $d
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:785    .text.SystemCoreClockUpdate:000002c8 $t
+C:\Users\needlea2\AppData\Local\Temp\2\cc8zKMfh.s:805    .text.SystemCoreClockUpdate:000002ec $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.984e0eb9c436e6355edc0c15c5d0e316
+                           .group:00000000 wm4.stdintgcc.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.MK65F18.h.88.978be19dfe32ee72c53eb22b5561f660
+                           .group:00000000 wm4.core_cm4.h.43.2c09f0fcaaed3bb5f3b9ab18546b570c
+                           .group:00000000 wm4.core_cmInstr.h.39.c66a1c911732cf6be44e58f2bee25308
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.3619de371a4f0fc7a1d8fbc60105c36c
+                           .group:00000000 wm4.system_MK65F18.h.86.82b4026cc9cfc80560089b2cb91b3357
+                           .group:00000000 wm4.MK65F18.h.375.844d7b6b5fc479e2554e03026fdf0451
+
+NO UNDEFINED SYMBOLS

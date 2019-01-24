@@ -1,0 +1,471 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"K65TWR_GPIO.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.GpioSw3Init,"ax",%progbits
+  21              		.align	2
+  22              		.global	GpioSw3Init
+  23              		.thumb
+  24              		.thumb_func
+  26              	GpioSw3Init:
+  27              	.LFB116:
+  28              		.file 1 "../Board/K65TWR_GPIO.c"
+   1:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+   2:../Board/K65TWR_GPIO.c **** * K65TWR_GPIO.c - K65TWR GPIO support package
+   3:../Board/K65TWR_GPIO.c **** * Todd Morton, 10/08/2015
+   4:../Board/K65TWR_GPIO.c **** * Todd Morton, 11/25/2015 Modified for new Debug bits. See EE344, Lab5, 2015
+   5:../Board/K65TWR_GPIO.c **** * Todd Morton, 10/16/2017 Modified to remove includes.h
+   6:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+   7:../Board/K65TWR_GPIO.c **** #include "MCUType.h"
+   8:../Board/K65TWR_GPIO.c **** #include "K65TWR_GPIO.h"
+   9:../Board/K65TWR_GPIO.c **** 
+  10:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+  11:../Board/K65TWR_GPIO.c **** * GpioSw3Init - Initialization for SW3 on the TWR-K65 board
+  12:../Board/K65TWR_GPIO.c **** * Parameters:
+  13:../Board/K65TWR_GPIO.c **** *   irqc - pass the desired value for the IRQC bits to control the interrupt configuration.
+  14:../Board/K65TWR_GPIO.c **** *       0 -> Interrupts disabled
+  15:../Board/K65TWR_GPIO.c **** *       1 DMA on rising-edge
+  16:../Board/K65TWR_GPIO.c **** *       2 DMA on falling-edge
+  17:../Board/K65TWR_GPIO.c **** *       3 DMA on either edge
+  18:../Board/K65TWR_GPIO.c **** *       4-7 Reserved
+  19:../Board/K65TWR_GPIO.c **** *       8 Interrupt when 0
+  20:../Board/K65TWR_GPIO.c **** *       9 Interrupt on rising-edge
+  21:../Board/K65TWR_GPIO.c **** *       10 Interrupt on falling-edge
+  22:../Board/K65TWR_GPIO.c **** *       11Interrupts on either edge
+  23:../Board/K65TWR_GPIO.c **** *       12 INterrupt when 1
+  24:../Board/K65TWR_GPIO.c **** *       13-15 Reserved
+  25:../Board/K65TWR_GPIO.c **** * 10/16/2017, TDM
+  26:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+  27:../Board/K65TWR_GPIO.c **** void GpioSw3Init(INT8U irqc){
+  29              		.loc 1 27 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 7, -4
+  37 0002 83B0     		sub	sp, sp, #12
+  38              		.cfi_def_cfa_offset 16
+  39 0004 00AF     		add	r7, sp, #0
+  40              		.cfi_def_cfa_register 7
+  41 0006 0346     		mov	r3, r0
+  42 0008 FB71     		strb	r3, [r7, #7]
+  28:../Board/K65TWR_GPIO.c **** 
+  29:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK; /* Enable clock gate for PORTA */
+  43              		.loc 1 29 0
+  44 000a 0D49     		ldr	r1, .L2
+  45 000c 0C4B     		ldr	r3, .L2
+  46 000e 03F58153 		add	r3, r3, #4128
+  47 0012 1833     		adds	r3, r3, #24
+  48 0014 1B68     		ldr	r3, [r3]
+  49 0016 43F40072 		orr	r2, r3, #512
+  50 001a 01F58153 		add	r3, r1, #4128
+  51 001e 1833     		adds	r3, r3, #24
+  52 0020 1A60     		str	r2, [r3]
+  30:../Board/K65TWR_GPIO.c ****     PORTA_PCR10 = PORT_PCR_MUX(1)|PORT_PCR_PE(1)|PORT_PCR_PS(1)|PORT_PCR_IRQC(irqc);
+  53              		.loc 1 30 0
+  54 0022 084A     		ldr	r2, .L2+4
+  55 0024 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  56 0026 1B04     		lsls	r3, r3, #16
+  57 0028 03F47023 		and	r3, r3, #983040
+  58 002c 43F48173 		orr	r3, r3, #258
+  59 0030 43F00103 		orr	r3, r3, #1
+  60 0034 9362     		str	r3, [r2, #40]
+  31:../Board/K65TWR_GPIO.c **** }
+  61              		.loc 1 31 0
+  62 0036 0C37     		adds	r7, r7, #12
+  63 0038 BD46     		mov	sp, r7
+  64              		@ sp needed
+  65 003a 5DF8047B 		ldr	r7, [sp], #4
+  66 003e 7047     		bx	lr
+  67              	.L3:
+  68              		.align	2
+  69              	.L2:
+  70 0040 00700440 		.word	1074032640
+  71 0044 00900440 		.word	1074040832
+  72              		.cfi_endproc
+  73              	.LFE116:
+  75              		.section	.text.GpioSw2Init,"ax",%progbits
+  76              		.align	2
+  77              		.global	GpioSw2Init
+  78              		.thumb
+  79              		.thumb_func
+  81              	GpioSw2Init:
+  82              	.LFB117:
+  32:../Board/K65TWR_GPIO.c **** 
+  33:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+  34:../Board/K65TWR_GPIO.c **** * GpioSw2Init - Initialization for SW2 on the TWR-K65 board
+  35:../Board/K65TWR_GPIO.c **** * Parameters:
+  36:../Board/K65TWR_GPIO.c **** *   irqc - pass the desired value for the IRQC bits to control the interrupt configuration.
+  37:../Board/K65TWR_GPIO.c **** *       0 -> Interrupts disabled
+  38:../Board/K65TWR_GPIO.c **** *       1 DMA on rising-edge
+  39:../Board/K65TWR_GPIO.c **** *       2 DMA on falling-edge
+  40:../Board/K65TWR_GPIO.c **** *       3 DMA on either edge
+  41:../Board/K65TWR_GPIO.c **** *       4-7 Reserved
+  42:../Board/K65TWR_GPIO.c **** *       8 Interrupt when 0
+  43:../Board/K65TWR_GPIO.c **** *       9 Interrupt on rising-edge
+  44:../Board/K65TWR_GPIO.c **** *       10 Interrupt on falling-edge
+  45:../Board/K65TWR_GPIO.c **** *       11Interrupts on either edge
+  46:../Board/K65TWR_GPIO.c **** *       12 INterrupt when 1
+  47:../Board/K65TWR_GPIO.c **** *       13-15 Reserved
+  48:../Board/K65TWR_GPIO.c **** * 10/16/2017, TDM
+  49:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+  50:../Board/K65TWR_GPIO.c **** void GpioSw2Init(INT8U irqc){
+  83              		.loc 1 50 0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 8
+  86              		@ frame_needed = 1, uses_anonymous_args = 0
+  87              		@ link register save eliminated.
+  88 0000 80B4     		push	{r7}
+  89              		.cfi_def_cfa_offset 4
+  90              		.cfi_offset 7, -4
+  91 0002 83B0     		sub	sp, sp, #12
+  92              		.cfi_def_cfa_offset 16
+  93 0004 00AF     		add	r7, sp, #0
+  94              		.cfi_def_cfa_register 7
+  95 0006 0346     		mov	r3, r0
+  96 0008 FB71     		strb	r3, [r7, #7]
+  51:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK; /* Enable clock gate for PORTA */
+  97              		.loc 1 51 0
+  98 000a 0D49     		ldr	r1, .L5
+  99 000c 0C4B     		ldr	r3, .L5
+ 100 000e 03F58153 		add	r3, r3, #4128
+ 101 0012 1833     		adds	r3, r3, #24
+ 102 0014 1B68     		ldr	r3, [r3]
+ 103 0016 43F40072 		orr	r2, r3, #512
+ 104 001a 01F58153 		add	r3, r1, #4128
+ 105 001e 1833     		adds	r3, r3, #24
+ 106 0020 1A60     		str	r2, [r3]
+  52:../Board/K65TWR_GPIO.c ****     PORTA_PCR4 = PORT_PCR_MUX(1)|PORT_PCR_PE(1)|PORT_PCR_PS(1)|PORT_PCR_IRQC(irqc);
+ 107              		.loc 1 52 0
+ 108 0022 084A     		ldr	r2, .L5+4
+ 109 0024 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 110 0026 1B04     		lsls	r3, r3, #16
+ 111 0028 03F47023 		and	r3, r3, #983040
+ 112 002c 43F48173 		orr	r3, r3, #258
+ 113 0030 43F00103 		orr	r3, r3, #1
+ 114 0034 1361     		str	r3, [r2, #16]
+  53:../Board/K65TWR_GPIO.c **** }
+ 115              		.loc 1 53 0
+ 116 0036 0C37     		adds	r7, r7, #12
+ 117 0038 BD46     		mov	sp, r7
+ 118              		@ sp needed
+ 119 003a 5DF8047B 		ldr	r7, [sp], #4
+ 120 003e 7047     		bx	lr
+ 121              	.L6:
+ 122              		.align	2
+ 123              	.L5:
+ 124 0040 00700440 		.word	1074032640
+ 125 0044 00900440 		.word	1074040832
+ 126              		.cfi_endproc
+ 127              	.LFE117:
+ 129              		.section	.text.GpioLED8Init,"ax",%progbits
+ 130              		.align	2
+ 131              		.global	GpioLED8Init
+ 132              		.thumb
+ 133              		.thumb_func
+ 135              	GpioLED8Init:
+ 136              	.LFB118:
+  54:../Board/K65TWR_GPIO.c **** 
+  55:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+  56:../Board/K65TWR_GPIO.c **** * GpioLED8Init - Initialization for LED8 port to an output, LED off.
+  57:../Board/K65TWR_GPIO.c **** * 10/16/2017, TDM
+  58:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+  59:../Board/K65TWR_GPIO.c **** void GpioLED8Init(void){
+ 137              		.loc 1 59 0
+ 138              		.cfi_startproc
+ 139              		@ args = 0, pretend = 0, frame = 0
+ 140              		@ frame_needed = 1, uses_anonymous_args = 0
+ 141              		@ link register save eliminated.
+ 142 0000 80B4     		push	{r7}
+ 143              		.cfi_def_cfa_offset 4
+ 144              		.cfi_offset 7, -4
+ 145 0002 00AF     		add	r7, sp, #0
+ 146              		.cfi_def_cfa_register 7
+  60:../Board/K65TWR_GPIO.c **** 
+  61:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK; /* Enable clock gate for PORTA */
+ 147              		.loc 1 61 0
+ 148 0004 0F49     		ldr	r1, .L8
+ 149 0006 0F4B     		ldr	r3, .L8
+ 150 0008 03F58153 		add	r3, r3, #4128
+ 151 000c 1833     		adds	r3, r3, #24
+ 152 000e 1B68     		ldr	r3, [r3]
+ 153 0010 43F40072 		orr	r2, r3, #512
+ 154 0014 01F58153 		add	r3, r1, #4128
+ 155 0018 1833     		adds	r3, r3, #24
+ 156 001a 1A60     		str	r2, [r3]
+  62:../Board/K65TWR_GPIO.c ****     PORTA_PCR28 = PORT_PCR_MUX(1);
+ 157              		.loc 1 62 0
+ 158 001c 0A4B     		ldr	r3, .L8+4
+ 159 001e 4FF48072 		mov	r2, #256
+ 160 0022 1A67     		str	r2, [r3, #112]
+  63:../Board/K65TWR_GPIO.c ****     GPIOA_PSOR |= GPIO_PIN(LED8_BIT);     /* Initialize off, activelow */
+ 161              		.loc 1 63 0
+ 162 0024 094B     		ldr	r3, .L8+8
+ 163 0026 094A     		ldr	r2, .L8+8
+ 164 0028 5268     		ldr	r2, [r2, #4]
+ 165 002a 42F08052 		orr	r2, r2, #268435456
+ 166 002e 5A60     		str	r2, [r3, #4]
+  64:../Board/K65TWR_GPIO.c ****     GPIOA_PDDR |= GPIO_PIN(LED8_BIT);
+ 167              		.loc 1 64 0
+ 168 0030 064B     		ldr	r3, .L8+8
+ 169 0032 064A     		ldr	r2, .L8+8
+ 170 0034 5269     		ldr	r2, [r2, #20]
+ 171 0036 42F08052 		orr	r2, r2, #268435456
+ 172 003a 5A61     		str	r2, [r3, #20]
+  65:../Board/K65TWR_GPIO.c **** }
+ 173              		.loc 1 65 0
+ 174 003c BD46     		mov	sp, r7
+ 175              		@ sp needed
+ 176 003e 5DF8047B 		ldr	r7, [sp], #4
+ 177 0042 7047     		bx	lr
+ 178              	.L9:
+ 179              		.align	2
+ 180              	.L8:
+ 181 0044 00700440 		.word	1074032640
+ 182 0048 00900440 		.word	1074040832
+ 183 004c 00F00F40 		.word	1074786304
+ 184              		.cfi_endproc
+ 185              	.LFE118:
+ 187              		.section	.text.GpioLED9Init,"ax",%progbits
+ 188              		.align	2
+ 189              		.global	GpioLED9Init
+ 190              		.thumb
+ 191              		.thumb_func
+ 193              	GpioLED9Init:
+ 194              	.LFB119:
+  66:../Board/K65TWR_GPIO.c **** 
+  67:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+  68:../Board/K65TWR_GPIO.c **** * GpioLED9Init - Initialization for LED9 port to an output, LED off.
+  69:../Board/K65TWR_GPIO.c **** * 10/16/2017, TDM
+  70:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+  71:../Board/K65TWR_GPIO.c **** void GpioLED9Init(void){
+ 195              		.loc 1 71 0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 0
+ 198              		@ frame_needed = 1, uses_anonymous_args = 0
+ 199              		@ link register save eliminated.
+ 200 0000 80B4     		push	{r7}
+ 201              		.cfi_def_cfa_offset 4
+ 202              		.cfi_offset 7, -4
+ 203 0002 00AF     		add	r7, sp, #0
+ 204              		.cfi_def_cfa_register 7
+  72:../Board/K65TWR_GPIO.c **** 
+  73:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK; /* Enable clock gate for PORTA */
+ 205              		.loc 1 73 0
+ 206 0004 0F49     		ldr	r1, .L11
+ 207 0006 0F4B     		ldr	r3, .L11
+ 208 0008 03F58153 		add	r3, r3, #4128
+ 209 000c 1833     		adds	r3, r3, #24
+ 210 000e 1B68     		ldr	r3, [r3]
+ 211 0010 43F40072 		orr	r2, r3, #512
+ 212 0014 01F58153 		add	r3, r1, #4128
+ 213 0018 1833     		adds	r3, r3, #24
+ 214 001a 1A60     		str	r2, [r3]
+  74:../Board/K65TWR_GPIO.c ****     PORTA_PCR29 = PORT_PCR_MUX(1);
+ 215              		.loc 1 74 0
+ 216 001c 0A4B     		ldr	r3, .L11+4
+ 217 001e 4FF48072 		mov	r2, #256
+ 218 0022 5A67     		str	r2, [r3, #116]
+  75:../Board/K65TWR_GPIO.c ****     GPIOA_PSOR |= GPIO_PIN(LED9_BIT);     /* Initialize off, activelow */
+ 219              		.loc 1 75 0
+ 220 0024 094B     		ldr	r3, .L11+8
+ 221 0026 094A     		ldr	r2, .L11+8
+ 222 0028 5268     		ldr	r2, [r2, #4]
+ 223 002a 42F00052 		orr	r2, r2, #536870912
+ 224 002e 5A60     		str	r2, [r3, #4]
+  76:../Board/K65TWR_GPIO.c ****     GPIOA_PDDR |= GPIO_PIN(LED9_BIT);
+ 225              		.loc 1 76 0
+ 226 0030 064B     		ldr	r3, .L11+8
+ 227 0032 064A     		ldr	r2, .L11+8
+ 228 0034 5269     		ldr	r2, [r2, #20]
+ 229 0036 42F00052 		orr	r2, r2, #536870912
+ 230 003a 5A61     		str	r2, [r3, #20]
+  77:../Board/K65TWR_GPIO.c **** }
+ 231              		.loc 1 77 0
+ 232 003c BD46     		mov	sp, r7
+ 233              		@ sp needed
+ 234 003e 5DF8047B 		ldr	r7, [sp], #4
+ 235 0042 7047     		bx	lr
+ 236              	.L12:
+ 237              		.align	2
+ 238              	.L11:
+ 239 0044 00700440 		.word	1074032640
+ 240 0048 00900440 		.word	1074040832
+ 241 004c 00F00F40 		.word	1074786304
+ 242              		.cfi_endproc
+ 243              	.LFE119:
+ 245              		.section	.text.GpioDBugBitsInit,"ax",%progbits
+ 246              		.align	2
+ 247              		.global	GpioDBugBitsInit
+ 248              		.thumb
+ 249              		.thumb_func
+ 251              	GpioDBugBitsInit:
+ 252              	.LFB120:
+  78:../Board/K65TWR_GPIO.c **** /*****************************************************************************************
+  79:../Board/K65TWR_GPIO.c **** * GpioDBugBitsInit - Initialization for Debug bits, each bit is cleared to 0.
+  80:../Board/K65TWR_GPIO.c **** * 10/16/2017, TDM
+  81:../Board/K65TWR_GPIO.c ****  ****************************************************************************************/
+  82:../Board/K65TWR_GPIO.c **** void GpioDBugBitsInit(void){
+ 253              		.loc 1 82 0
+ 254              		.cfi_startproc
+ 255              		@ args = 0, pretend = 0, frame = 0
+ 256              		@ frame_needed = 1, uses_anonymous_args = 0
+ 257              		@ link register save eliminated.
+ 258 0000 80B4     		push	{r7}
+ 259              		.cfi_def_cfa_offset 4
+ 260              		.cfi_offset 7, -4
+ 261 0002 00AF     		add	r7, sp, #0
+ 262              		.cfi_def_cfa_register 7
+  83:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTB(1);
+ 263              		.loc 1 83 0
+ 264 0004 2549     		ldr	r1, .L14
+ 265 0006 254B     		ldr	r3, .L14
+ 266 0008 03F58153 		add	r3, r3, #4128
+ 267 000c 1833     		adds	r3, r3, #24
+ 268 000e 1B68     		ldr	r3, [r3]
+ 269 0010 43F48062 		orr	r2, r3, #1024
+ 270 0014 01F58153 		add	r3, r1, #4128
+ 271 0018 1833     		adds	r3, r3, #24
+ 272 001a 1A60     		str	r2, [r3]
+  84:../Board/K65TWR_GPIO.c ****     SIM_SCGC5 |= SIM_SCGC5_PORTC(1);
+ 273              		.loc 1 84 0
+ 274 001c 1F49     		ldr	r1, .L14
+ 275 001e 1F4B     		ldr	r3, .L14
+ 276 0020 03F58153 		add	r3, r3, #4128
+ 277 0024 1833     		adds	r3, r3, #24
+ 278 0026 1B68     		ldr	r3, [r3]
+ 279 0028 43F40062 		orr	r2, r3, #2048
+ 280 002c 01F58153 		add	r3, r1, #4128
+ 281 0030 1833     		adds	r3, r3, #24
+ 282 0032 1A60     		str	r2, [r3]
+  85:../Board/K65TWR_GPIO.c ****     PORTC_PCR15 = PORT_PCR_MUX(1);
+ 283              		.loc 1 85 0
+ 284 0034 1A4B     		ldr	r3, .L14+4
+ 285 0036 4FF48072 		mov	r2, #256
+ 286 003a DA63     		str	r2, [r3, #60]
+  86:../Board/K65TWR_GPIO.c ****     PORTC_PCR14 = PORT_PCR_MUX(1);
+ 287              		.loc 1 86 0
+ 288 003c 184B     		ldr	r3, .L14+4
+ 289 003e 4FF48072 		mov	r2, #256
+ 290 0042 9A63     		str	r2, [r3, #56]
+  87:../Board/K65TWR_GPIO.c ****     PORTC_PCR13 = PORT_PCR_MUX(1);
+ 291              		.loc 1 87 0
+ 292 0044 164B     		ldr	r3, .L14+4
+ 293 0046 4FF48072 		mov	r2, #256
+ 294 004a 5A63     		str	r2, [r3, #52]
+  88:../Board/K65TWR_GPIO.c ****     PORTC_PCR12 = PORT_PCR_MUX(1);
+ 295              		.loc 1 88 0
+ 296 004c 144B     		ldr	r3, .L14+4
+ 297 004e 4FF48072 		mov	r2, #256
+ 298 0052 1A63     		str	r2, [r3, #48]
+  89:../Board/K65TWR_GPIO.c ****     PORTB_PCR23 = PORT_PCR_MUX(1);
+ 299              		.loc 1 89 0
+ 300 0054 134B     		ldr	r3, .L14+8
+ 301 0056 4FF48072 		mov	r2, #256
+ 302 005a DA65     		str	r2, [r3, #92]
+  90:../Board/K65TWR_GPIO.c ****     PORTB_PCR22 = PORT_PCR_MUX(1);
+ 303              		.loc 1 90 0
+ 304 005c 114B     		ldr	r3, .L14+8
+ 305 005e 4FF48072 		mov	r2, #256
+ 306 0062 9A65     		str	r2, [r3, #88]
+  91:../Board/K65TWR_GPIO.c ****     PORTB_PCR21 = PORT_PCR_MUX(1);
+ 307              		.loc 1 91 0
+ 308 0064 0F4B     		ldr	r3, .L14+8
+ 309 0066 4FF48072 		mov	r2, #256
+ 310 006a 5A65     		str	r2, [r3, #84]
+  92:../Board/K65TWR_GPIO.c ****     PORTB_PCR20 = PORT_PCR_MUX(1);
+ 311              		.loc 1 92 0
+ 312 006c 0D4B     		ldr	r3, .L14+8
+ 313 006e 4FF48072 		mov	r2, #256
+ 314 0072 1A65     		str	r2, [r3, #80]
+  93:../Board/K65TWR_GPIO.c ****     GPIOC_PCOR = GPIO_PIN(DB0_BIT)|GPIO_PIN(DB1_BIT)|GPIO_PIN(DB2_BIT)|GPIO_PIN(DB3_BIT);
+ 315              		.loc 1 93 0
+ 316 0074 0C4B     		ldr	r3, .L14+12
+ 317 0076 4FF47042 		mov	r2, #61440
+ 318 007a 9A60     		str	r2, [r3, #8]
+  94:../Board/K65TWR_GPIO.c ****     GPIOB_PCOR = GPIO_PIN(DB4_BIT)|GPIO_PIN(DB5_BIT)|GPIO_PIN(DB6_BIT)|GPIO_PIN(DB7_BIT);
+ 319              		.loc 1 94 0
+ 320 007c 0B4B     		ldr	r3, .L14+16
+ 321 007e 4FF47002 		mov	r2, #15728640
+ 322 0082 9A60     		str	r2, [r3, #8]
+  95:../Board/K65TWR_GPIO.c ****     GPIOC_PDDR = GPIO_PIN(DB0_BIT)|GPIO_PIN(DB1_BIT)|GPIO_PIN(DB2_BIT)|GPIO_PIN(DB3_BIT);
+ 323              		.loc 1 95 0
+ 324 0084 084B     		ldr	r3, .L14+12
+ 325 0086 4FF47042 		mov	r2, #61440
+ 326 008a 5A61     		str	r2, [r3, #20]
+  96:../Board/K65TWR_GPIO.c ****     GPIOB_PDDR = GPIO_PIN(DB4_BIT)|GPIO_PIN(DB5_BIT)|GPIO_PIN(DB6_BIT)|GPIO_PIN(DB7_BIT);
+ 327              		.loc 1 96 0
+ 328 008c 074B     		ldr	r3, .L14+16
+ 329 008e 4FF47002 		mov	r2, #15728640
+ 330 0092 5A61     		str	r2, [r3, #20]
+  97:../Board/K65TWR_GPIO.c **** }
+ 331              		.loc 1 97 0
+ 332 0094 BD46     		mov	sp, r7
+ 333              		@ sp needed
+ 334 0096 5DF8047B 		ldr	r7, [sp], #4
+ 335 009a 7047     		bx	lr
+ 336              	.L15:
+ 337              		.align	2
+ 338              	.L14:
+ 339 009c 00700440 		.word	1074032640
+ 340 00a0 00B00440 		.word	1074049024
+ 341 00a4 00A00440 		.word	1074044928
+ 342 00a8 80F00F40 		.word	1074786432
+ 343 00ac 40F00F40 		.word	1074786368
+ 344              		.cfi_endproc
+ 345              	.LFE120:
+ 347              		.text
+ 348              	.Letext0:
+ 349              		.file 2 "c:\\freescale\\kds_3.0.0\\toolchain\\lib\\gcc\\arm-none-eabi\\4.8.4\\include\\stdint-gcc.
+ 350              		.file 3 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/MK65F18.h"
+ 351              		.file 4 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\Sources/MCUType.h"
+ 352              		.file 5 "R:\\EE344\\Labs\\Lab3Repo\\Lab3\\CMSIS/core_cm4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 K65TWR_GPIO.c
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:21     .text.GpioSw3Init:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:26     .text.GpioSw3Init:00000000 GpioSw3Init
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:70     .text.GpioSw3Init:00000040 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:76     .text.GpioSw2Init:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:81     .text.GpioSw2Init:00000000 GpioSw2Init
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:124    .text.GpioSw2Init:00000040 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:130    .text.GpioLED8Init:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:135    .text.GpioLED8Init:00000000 GpioLED8Init
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:181    .text.GpioLED8Init:00000044 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:188    .text.GpioLED9Init:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:193    .text.GpioLED9Init:00000000 GpioLED9Init
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:239    .text.GpioLED9Init:00000044 $d
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:246    .text.GpioDBugBitsInit:00000000 $t
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:251    .text.GpioDBugBitsInit:00000000 GpioDBugBitsInit
+C:\Users\needlea2\AppData\Local\Temp\2\ccL3DE8N.s:339    .text.GpioDBugBitsInit:0000009c $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.984e0eb9c436e6355edc0c15c5d0e316
+                           .group:00000000 wm4.MK65F18.h.88.5a87102c5ae84e796ad9a9d4464add2f
+                           .group:00000000 wm4.stdintgcc.h.29.6d480f4ba0f60596e88234283d42444f
+                           .group:00000000 wm4.MK65F18.h.101.f25d722507d56a43c64dd0a4bd7a5491
+                           .group:00000000 wm4.core_cm4.h.43.2c09f0fcaaed3bb5f3b9ab18546b570c
+                           .group:00000000 wm4.core_cmInstr.h.39.c66a1c911732cf6be44e58f2bee25308
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.3619de371a4f0fc7a1d8fbc60105c36c
+                           .group:00000000 wm4.system_MK65F18.h.86.82b4026cc9cfc80560089b2cb91b3357
+                           .group:00000000 wm4.MK65F18.h.375.844d7b6b5fc479e2554e03026fdf0451
+                           .group:00000000 wm4.MCUType.h.16.8f8f3202c3b2c0f354d42b0ca7c7a208
+                           .group:00000000 wm4.K65TWR_GPIO.h.8.495b82b8aa63ca709fcf4830c2d45e3a
+
+NO UNDEFINED SYMBOLS
